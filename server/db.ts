@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, products, services, servicePackages, orders, orderItems, quotations, subscriptions, supportTickets } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -35,7 +35,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     };
     const updateSet: Record<string, unknown> = {};
 
-    const textFields = ["name", "email", "loginMethod"] as const;
+    const textFields = ["name", "email", "loginMethod", "phone"] as const;
     type TextField = (typeof textFields)[number];
 
     const assignNullable = (field: TextField) => {
@@ -89,4 +89,103 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Product queries
+export async function getAllProducts() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(products);
+}
+
+export async function getProductsByCategory(category: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(products).where(eq(products.category, category as any));
+}
+
+export async function getProductById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(products).where(eq(products.id, id)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+// Service queries
+export async function getAllServices() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(services);
+}
+
+export async function getServiceById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(services).where(eq(services.id, id)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+// Service package queries
+export async function getServicePackagesByServiceId(serviceId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(servicePackages).where(eq(servicePackages.serviceId, serviceId));
+}
+
+// Order queries
+export async function getOrdersByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(orders).where(eq(orders.userId, userId));
+}
+
+export async function getOrderById(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.select().from(orders).where(eq(orders.id, id)).limit(1);
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function getAllOrders() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(orders);
+}
+
+// Order items queries
+export async function getOrderItemsByOrderId(orderId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+}
+
+// Quotation queries
+export async function getQuotationsByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(quotations).where(eq(quotations.userId, userId));
+}
+
+export async function getAllQuotations() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(quotations);
+}
+
+// Subscription queries
+export async function getSubscriptionsByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(subscriptions).where(eq(subscriptions.userId, userId));
+}
+
+// Support ticket queries
+export async function getSupportTicketsByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(supportTickets).where(eq(supportTickets.userId, userId));
+}
+
+export async function getAllSupportTickets() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(supportTickets);
+}
