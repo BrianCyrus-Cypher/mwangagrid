@@ -5,12 +5,17 @@ import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import { Search, ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import ProductModal from "@/components/ProductModal";
+import { useCart } from "@/contexts/CartContext";
 
 export default function Products() {
   const [, navigate] = useLocation();
   const { data: products } = trpc.products.list.useQuery();
+  const { addItem } = useCart();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const categories = ["all", "routers", "cctv-cameras", "network-switches", "cables"];
 
@@ -21,13 +26,23 @@ export default function Products() {
     return matchesSearch && matchesCategory;
   }) || [];
 
-  const handleAddToCart = (product: any) => {
-    alert(`Added "${product.name}" to cart! (Demo mode)`);
+  const handleViewDetails = (product: any) => {
+    setSelectedProduct(product);
+    setModalOpen(true);
+  };
+
+  const handleQuickAdd = (product: any) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      category: product.category,
+    });
   };
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="bg-white border-b border-border">
+      <div className="bg-white dark:bg-slate-950 border-b border-border">
         <div className="container py-12">
           <h1 className="text-4xl font-bold text-foreground mb-2">Product Catalog</h1>
           <p className="text-foreground/60">Premium networking and security solutions</p>
@@ -66,26 +81,43 @@ export default function Products() {
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product: any) => (
-              <Card key={product.id} className="overflow-hidden hover:shadow-lg transition flex flex-col">
-                <div className="h-40 bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
-                  <div className="text-4xl">📦</div>
+              <Card key={product.id} className="overflow-hidden hover:shadow-lg transition flex flex-col group">
+                <div 
+                  className="h-40 bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center text-5xl cursor-pointer group-hover:scale-110 transition-transform"
+                  onClick={() => handleViewDetails(product)}
+                >
+                  📦
                 </div>
                 <div className="p-4 flex-1 flex flex-col">
-                  <h3 className="font-bold text-foreground mb-2 line-clamp-2">{product.name}</h3>
+                  <h3 
+                    className="font-bold text-foreground mb-2 line-clamp-2 cursor-pointer hover:text-accent transition"
+                    onClick={() => handleViewDetails(product)}
+                  >
+                    {product.name}
+                  </h3>
                   <p className="text-sm text-foreground/60 mb-4 flex-1 line-clamp-2">{product.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-accent">KES {product.price}</span>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-lg font-bold text-accent">KES {product.price.toLocaleString()}</span>
                     <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded capitalize">
                       {product.category.replace("-", " ")}
                     </span>
                   </div>
-                  <Button
-                    className="w-full mt-4"
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Add to Cart
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      className="flex-1"
+                      variant="outline"
+                      onClick={() => handleViewDetails(product)}
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      className="flex-1"
+                      onClick={() => handleQuickAdd(product)}
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-1" />
+                      Add
+                    </Button>
+                  </div>
                 </div>
               </Card>
             ))}
@@ -99,6 +131,8 @@ export default function Products() {
           </Card>
         )}
       </div>
+
+      <ProductModal product={selectedProduct} open={modalOpen} onOpenChange={setModalOpen} />
     </div>
   );
 }
