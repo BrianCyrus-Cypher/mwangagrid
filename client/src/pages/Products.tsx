@@ -1,114 +1,103 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
-import { ShoppingCart, Filter } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 
 export default function Products() {
-  const { user, isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [cart, setCart] = useState<any[]>([]);
+  const { data: products } = trpc.products.list.useQuery();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const { data: allProducts } = trpc.products.list.useQuery();
-  const products = selectedCategory
-    ? allProducts?.filter((p) => p.category === selectedCategory)
-    : allProducts;
+  const categories = ["all", "routers", "cctv-cameras", "network-switches", "cables"];
 
-  const categories = ["routers", "cctv_cameras", "network_switches", "cables"];
+  const filteredProducts = products?.filter((p: any) => {
+    const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          p.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  }) || [];
 
-  const addToCart = (product: any) => {
-    setCart([...cart, product]);
-    alert(`${product.name} added to cart!`);
+  const handleAddToCart = (product: any) => {
+    alert(`Added "${product.name}" to cart! (Demo mode)`);
   };
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <div className="bg-white border-b border-border">
         <div className="container py-12">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Products</h1>
-          <p className="text-foreground/60">Browse our premium technology products</p>
+          <h1 className="text-4xl font-bold text-foreground mb-2">Product Catalog</h1>
+          <p className="text-foreground/60">Premium networking and security solutions</p>
         </div>
       </div>
 
       <div className="container py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="md:col-span-1">
-            <div className="bg-white p-6 rounded-lg border border-border">
-              <div className="flex items-center gap-2 mb-6">
-                <Filter className="w-5 h-5 text-accent" />
-                <h3 className="font-bold text-foreground">Categories</h3>
-              </div>
-              <div className="space-y-3">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className={`block w-full text-left px-4 py-2 rounded transition ${
-                    selectedCategory === null
-                      ? "bg-accent text-white"
-                      : "hover:bg-muted text-foreground"
-                  }`}
-                >
-                  All Products
-                </button>
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`block w-full text-left px-4 py-2 rounded transition capitalize ${
-                      selectedCategory === cat
-                        ? "bg-accent text-white"
-                        : "hover:bg-muted text-foreground"
-                    }`}
-                  >
-                    {cat.replace(/_/g, " ")}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Search and Filters */}
+        <div className="mb-8">
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
           </div>
 
-          {/* Products Grid */}
-          <div className="md:col-span-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products?.map((product) => (
-                <Card key={product.id} className="overflow-hidden hover:shadow-lg transition">
-                  <div className="h-48 bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-accent/20 rounded-lg flex items-center justify-center mx-auto">
-                        <span className="text-2xl">📦</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="font-bold text-lg text-foreground mb-2">{product.name}</h3>
-                    <p className="text-sm text-foreground/60 mb-4 line-clamp-2">{product.description}</p>
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <span className="text-2xl font-bold text-accent">KES {product.price}</span>
-                        {product.discountPrice && (
-                          <span className="text-sm text-foreground/50 line-through ml-2">KES {product.discountPrice}</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        className="flex-1"
-                        onClick={() => addToCart(product)}
-                      >
-                        <ShoppingCart className="w-4 h-4 mr-2" />
-                        Add to Cart
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
+          <div className="flex gap-2 flex-wrap">
+            {categories.map((cat) => (
+              <Button
+                key={cat}
+                variant={selectedCategory === cat ? "default" : "outline"}
+                onClick={() => setSelectedCategory(cat)}
+                className="capitalize"
+              >
+                {cat === "all" ? "All Products" : cat.replace("-", " ")}
+              </Button>
+            ))}
           </div>
         </div>
+
+        {/* Products Grid */}
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((product: any) => (
+              <Card key={product.id} className="overflow-hidden hover:shadow-lg transition flex flex-col">
+                <div className="h-40 bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
+                  <div className="text-4xl">📦</div>
+                </div>
+                <div className="p-4 flex-1 flex flex-col">
+                  <h3 className="font-bold text-foreground mb-2 line-clamp-2">{product.name}</h3>
+                  <p className="text-sm text-foreground/60 mb-4 flex-1 line-clamp-2">{product.description}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-accent">KES {product.price}</span>
+                    <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded capitalize">
+                      {product.category.replace("-", " ")}
+                    </span>
+                  </div>
+                  <Button
+                    className="w-full mt-4"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    <ShoppingCart className="w-4 h-4 mr-2" />
+                    Add to Cart
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card className="p-12 text-center">
+            <p className="text-foreground/60 mb-4">No products found matching your search</p>
+            <Button variant="outline" onClick={() => { setSearchTerm(""); setSelectedCategory("all"); }}>
+              Clear Filters
+            </Button>
+          </Card>
+        )}
       </div>
     </div>
   );

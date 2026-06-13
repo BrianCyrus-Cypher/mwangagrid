@@ -4,6 +4,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import SiteLayout from "./components/SiteLayout";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Services from "./pages/Services";
@@ -17,20 +18,22 @@ import AdminDashboard from "./pages/AdminDashboard";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
-    <Switch>
-      <Route path={"/ "} component={Home} />
-      <Route path={"/products"} component={Products} />
-      <Route path={"/services"} component={Services} />
-      <Route path={"/cart"} component={Cart} />
-      <Route path={"/checkout"} component={Checkout} />
-      <Route path={"/quotation"} component={Quotation} />
-      <Route path={"/account"} component={Account} />
-      <Route path={"/contact"} component={Contact} />
-      <Route path={"/admin"} component={AdminDashboard} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <SiteLayout>
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path={"/products"} component={Products} />
+        <Route path={"/services"} component={Services} />
+        <Route path={"/cart"} component={Cart} />
+        <Route path={"/checkout"} component={Checkout} />
+        <Route path={"/quotation"} component={Quotation} />
+        <Route path={"/account"} component={Account} />
+        <Route path={"/contact"} component={Contact} />
+        <Route path={"/admin"} component={AdminDashboard} />
+        <Route path={"/404"} component={NotFound} />
+        {/* Final fallback route */}
+        <Route component={NotFound} />
+      </Switch>
+    </SiteLayout>
   );
 }
 
