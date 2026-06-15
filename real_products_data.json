@@ -1,0 +1,281 @@
+{
+  "solarEquipment": [
+    {
+      "id": 101,
+      "name": "ALPHA 1 - 1KW + 800Wh All-in-One Solar Generator",
+      "category": "solar-equipment",
+      "price": 45000,
+      "description": "Compact and portable 1KW solar generator with 800Wh battery capacity. Perfect for home backup power, camping, and emergency situations. Features built-in inverter and multiple output ports.",
+      "image": "https://claire.solar/public/uploads/all/Kf0jeSOPcikjRgLQJU6Y1qph2sDekfSP2TmAdWHF.jpg",
+      "specifications": {
+        "power": "1KW",
+        "battery": "800Wh",
+        "warranty": "2 years",
+        "type": "All-in-One Generator"
+      }
+    },
+    {
+      "id": 102,
+      "name": "DELTA 5 - 6KW + 5kWh Solar Home System",
+      "category": "solar-equipment",
+      "price": 125000,
+      "description": "Complete 6KW solar home system with 5kWh battery storage. Ideal for small to medium homes. Includes solar panels, inverter, battery, and installation support.",
+      "image": "https://claire.solar/public/uploads/all/NtuJLuQuhODQpi5G6UuQN8EC9xMaPiEyreyqLHgM.jpg",
+      "specifications": {
+        "power": "6KW",
+        "battery": "5kWh",
+        "warranty": "5 years",
+        "type": "Home System"
+      }
+    },
+    {
+      "id": 103,
+      "name": "DELTA 10 - 6KW + 10kWh Solar Home System",
+      "category": "solar-equipment",
+      "price": 185000,
+      "description": "Premium 6KW solar home system with 10kWh battery storage. Extended battery capacity for continuous power supply. Supports whole-home energy needs.",
+      "image": "https://claire.solar/public/uploads/all/Ue2JOqJWAhrvsjqKEJnLuNV4ZRuvadtwL3sDTrAD.jpg",
+      "specifications": {
+        "power": "6KW",
+        "battery": "10kWh",
+        "warranty": "5 years",
+        "type": "Home System"
+      }
+    },
+    {
+      "id": 104,
+      "name": "CLAIRE 480W ABS Solar Streetlight with Motion Sensor",
+      "category": "solar-equipment",
+      "price": 18000,
+      "description": "Energy-efficient 480W solar streetlight with integrated motion sensor. Perfect for outdoor lighting, parking areas, and street illumination. Automatic on/off with daylight sensor.",
+      "image": "https://claire.solar/public/uploads/all/Cvct8M3GkZ931mHAZHTMfII1uNe6P2vOIbd7l8C2.jpg",
+      "specifications": {
+        "power": "480W",
+        "type": "Solar Streetlight",
+        "features": "Motion Sensor, Daylight Sensor",
+        "warranty": "2 years"
+      }
+    },
+    {
+      "id": 105,
+      "name": "CLAIRE 600W ABS Solar Streetlight with Motion Sensor",
+      "category": "solar-equipment",
+      "price": 22000,
+      "description": "High-power 600W solar streetlight with advanced motion detection. Ideal for highways, commercial areas, and large outdoor spaces. Weather-resistant ABS housing.",
+      "image": "https://claire.solar/public/uploads/all/P2Lifr47ys8IzbMZQhDG2MEU6OPscwupb9D2kiNo.jpg",
+      "specifications": {
+        "power": "600W",
+        "type": "Solar Streetlight",
+        "features": "Motion Sensor, Daylight Sensor, Weather-Resistant",
+        "warranty": "2 years"
+      }
+    },
+    {
+      "id": 106,
+      "name": "DELTA 20 - 10KW + 20kWh Solar Home System",
+      "category": "solar-equipment",
+      "price": 285000,
+      "description": "Large-scale 10KW solar system with 20kWh battery storage. Designed for large homes and small commercial applications. Maximum energy independence.",
+      "image": "https://claire.solar/public/uploads/all/fXmXqOFwHD8cxJeiXLffNPvn0OaJjxKOtzYryNvc.jpg",
+      "specifications": {
+        "power": "10KW",
+        "battery": "20kWh",
+        "warranty": "5 years",
+        "type": "Home System"
+      }
+    }
+  ],
+  "cctvEquipment": [
+    {
+      "id": 201,
+      "name": "Reolink Argus 3 Pro 5MP Dual-Band Wi-Fi Battery Camera",
+      "category": "cctv-cameras",
+      "price": 28000,
+      "description": "Advanced 5MP wireless security camera with dual-band Wi-Fi and long battery life. Features 2K resolution, night vision, and motion detection. Perfect for outdoor surveillance.",
+      "image": "https://imaxcameras.com/wp-content/uploads/2024/01/reolink-argus-3-pro.jpg",
+      "specifications": {
+        "resolution": "5MP",
+        "type": "Wireless",
+        "nightVision": "Yes",
+        "motionDetection": "Yes",
+        "warranty": "1 year"
+      }
+    },
+    {
+      "id": 202,
+      "name": "Reolink E1 4MP PT Indoor Wi-Fi Security Camera",
+      "category": "cctv-cameras",
+      "price": 15000,
+      "description": "Indoor pan-tilt 4MP Wi-Fi camera with 360-degree coverage. Features smart motion tracking and night vision. Ideal for home and office surveillance.",
+      "image": "https://imaxcameras.com/wp-content/uploads/2024/01/reolink-e1.jpg",
+      "specifications": {
+        "resolution": "4MP",
+        "type": "Pan-Tilt",
+        "nightVision": "Yes",
+        "coverage": "360 degrees",
+        "warranty": "1 year"
+      }
+    },
+    {
+      "id": 203,
+      "name": "Uniview IPC94144SFW-X25-F40C 4MP+4MP 25X ColorHunter MultiView Dual-light Network PTZ Camera",
+      "category": "cctv-cameras",
+      "price": 95000,
+      "description": "Professional dual 4MP PTZ camera with 25X zoom and ColorHunter technology. Advanced dual-light system for superior night vision. Enterprise-grade security solution.",
+      "image": "https://imaxcameras.com/wp-content/uploads/2024/01/uniview-ptz.jpg",
+      "specifications": {
+        "resolution": "4MP + 4MP",
+        "type": "PTZ",
+        "zoom": "25X",
+        "nightVision": "Dual-light",
+        "warranty": "2 years"
+      }
+    },
+    {
+      "id": 204,
+      "name": "Uniview IPC3614LB-AF28K-DL2 4MP Fixed Dual-light Turret Network Camera",
+      "category": "cctv-cameras",
+      "price": 32000,
+      "description": "Professional 4MP turret camera with dual-light technology for 24/7 color imaging. Fixed lens design for reliable surveillance. Ideal for retail and commercial spaces.",
+      "image": "https://imaxcameras.com/wp-content/uploads/2024/01/uniview-turret.jpg",
+      "specifications": {
+        "resolution": "4MP",
+        "type": "Turret",
+        "nightVision": "Dual-light",
+        "warranty": "2 years",
+        "mounting": "Ceiling/Wall"
+      }
+    },
+    {
+      "id": 205,
+      "name": "Uniview IPC325LB-AF28-A2 4MP Fixed Dual-light Bullet NetWork Camera",
+      "category": "cctv-cameras",
+      "price": 28000,
+      "description": "Compact 4MP bullet camera with dual-light technology. Weather-resistant design for outdoor installation. Professional-grade image quality.",
+      "image": "https://imaxcameras.com/wp-content/uploads/2024/01/uniview-bullet.jpg",
+      "specifications": {
+        "resolution": "4MP",
+        "type": "Bullet",
+        "nightVision": "Dual-light",
+        "weatherResistant": "Yes",
+        "warranty": "2 years"
+      }
+    },
+    {
+      "id": 206,
+      "name": "Uniview IPC324LB-AF28-A2 4MP Fixed IR Dome Network Camera",
+      "category": "cctv-cameras",
+      "price": 25000,
+      "description": "Discreet 4MP dome camera with IR night vision. Ideal for indoor surveillance in banks, offices, and retail stores. Low-profile design blends seamlessly.",
+      "image": "https://imaxcameras.com/wp-content/uploads/2024/01/uniview-dome.jpg",
+      "specifications": {
+        "resolution": "4MP",
+        "type": "Dome",
+        "nightVision": "IR",
+        "warranty": "2 years",
+        "mounting": "Ceiling"
+      }
+    },
+    {
+      "id": 207,
+      "name": "Uniview IPC322LB-AF28-A2 2MP Fixed IR Dome Network Camera",
+      "category": "cctv-cameras",
+      "price": 18000,
+      "description": "Budget-friendly 2MP dome camera with IR night vision. Perfect for basic surveillance needs. Reliable performance for small businesses.",
+      "image": "https://imaxcameras.com/wp-content/uploads/2024/01/uniview-dome-2mp.jpg",
+      "specifications": {
+        "resolution": "2MP",
+        "type": "Dome",
+        "nightVision": "IR",
+        "warranty": "1 year",
+        "mounting": "Ceiling"
+      }
+    }
+  ],
+  "internetEquipment": [
+    {
+      "id": 301,
+      "name": "TP-Link Archer AX6000 Wi-Fi 6 Router",
+      "category": "routers",
+      "price": 12500,
+      "description": "High-speed AX6000 Wi-Fi 6 router with MU-MIMO technology. Supports multiple devices simultaneously. Ideal for homes and small offices with high bandwidth needs.",
+      "image": "https://via.placeholder.com/400x400?text=TP-Link+AX6000",
+      "specifications": {
+        "speed": "AX6000",
+        "standard": "Wi-Fi 6",
+        "ports": "4x Gigabit",
+        "warranty": "2 years"
+      }
+    },
+    {
+      "id": 302,
+      "name": "Cisco Meraki MX64 Cloud Managed Firewall",
+      "category": "network-switches",
+      "price": 45000,
+      "description": "Enterprise-grade cloud-managed firewall for business networks. Advanced security features and centralized management. Perfect for medium to large organizations.",
+      "image": "https://via.placeholder.com/400x400?text=Cisco+Meraki",
+      "specifications": {
+        "type": "Firewall",
+        "management": "Cloud-based",
+        "throughput": "1 Gbps",
+        "warranty": "1 year"
+      }
+    },
+    {
+      "id": 303,
+      "name": "Cat6 Ethernet Cable 100m",
+      "category": "cables",
+      "price": 3500,
+      "description": "High-quality Cat6 ethernet cable for reliable network connectivity. 100 meters length suitable for large installations. Supports up to 10 Gbps speeds.",
+      "image": "https://via.placeholder.com/400x400?text=Cat6+Cable",
+      "specifications": {
+        "type": "Cat6",
+        "length": "100m",
+        "speed": "10 Gbps",
+        "warranty": "1 year"
+      }
+    },
+    {
+      "id": 304,
+      "name": "Ubiquiti UniFi Dream Machine",
+      "category": "routers",
+      "price": 35000,
+      "description": "All-in-one network appliance combining router, switch, and security gateway. Unified management platform for enterprise networks. High performance and reliability.",
+      "image": "https://via.placeholder.com/400x400?text=Ubiquiti+Dream",
+      "specifications": {
+        "type": "All-in-One",
+        "management": "Unified",
+        "ports": "8x Gigabit",
+        "warranty": "2 years"
+      }
+    },
+    {
+      "id": 305,
+      "name": "Netgear Managed Switch GS110MX",
+      "category": "network-switches",
+      "price": 18000,
+      "description": "10-port managed gigabit switch with VLAN support. Professional-grade networking for businesses. Compact design for easy installation.",
+      "image": "https://via.placeholder.com/400x400?text=Netgear+Switch",
+      "specifications": {
+        "ports": "10x Gigabit",
+        "type": "Managed",
+        "features": "VLAN Support",
+        "warranty": "1 year"
+      }
+    },
+    {
+      "id": 306,
+      "name": "Fiber Optic Cable 1km Spool",
+      "category": "cables",
+      "price": 25000,
+      "description": "Premium single-mode fiber optic cable for long-distance high-speed connectivity. 1km spool for large network installations. Supports up to 100 Gbps.",
+      "image": "https://via.placeholder.com/400x400?text=Fiber+Optic",
+      "specifications": {
+        "type": "Single-Mode",
+        "length": "1km",
+        "speed": "100 Gbps",
+        "warranty": "2 years"
+      }
+    }
+  ]
+}

@@ -16,7 +16,7 @@ export default function Home() {
     {
       name: "John Mwangi",
       company: "Tech Solutions Ltd",
-      text: "Tunnelnet Technologies provided exceptional CCTV installation service. Professional, reliable, and affordable.",
+      text: "Mwanga Grid provided exceptional CCTV installation service. Professional, reliable, and affordable.",
       rating: 5,
     },
     {
@@ -42,7 +42,7 @@ export default function Home() {
             <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">TT</span>
             </div>
-            <span className="font-bold text-lg text-foreground">Tunnelnet Technologies</span>
+            <span className="font-bold text-lg text-foreground">Mwanga Grid</span>
           </div>
           <div className="flex items-center gap-4">
             <button onClick={() => navigate("/products")} className="text-sm text-foreground hover:text-accent transition">
@@ -117,7 +117,7 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-white">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose Tunnelnet Technologies?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose Mwanga Grid?</h2>
             <p className="text-lg text-foreground/60 max-w-2xl mx-auto">
               We deliver excellence through quality products, professional services, and dedicated customer support.
             </p>
@@ -267,7 +267,7 @@ export default function Home() {
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="font-bold text-foreground mb-4">Tunnelnet Technologies</h3>
+              <h3 className="font-bold text-foreground mb-4">Mwanga Grid</h3>
               <p className="text-sm text-foreground/60">Premium technology solutions for modern Kenya.</p>
             </div>
             <div>
@@ -297,7 +297,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-foreground/60">
-            <p>&copy; 2026 Tunnelnet Technologies. All rights reserved.</p>
+            <p>&copy; 2026 Mwanga Grid. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <button className="hover:text-accent transition">LinkedIn</button>
               <button className="hover:text-accent transition">Instagram</button>

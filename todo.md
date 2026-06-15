@@ -1,4 +1,4 @@
-# Tunnelnet Technologies E-Commerce Platform - TODO
+# Mwanga Grid E-Commerce Platform - TODO
 
 ## Phase 1: Project Setup & Database Schema
 - [x] Design and implement database schema (products, services, orders, customers, quotes, subscriptions)
@@ -49,5 +49,13 @@
 - [x] Integrate real product data from solar, CCTV, and internet equipment sources
 - [x] Add product images and detailed descriptions
 - [x] Test all new features and ensure smooth user experience
+
+## Phase 7: Demo Accessibility & Final Polish
+- [x] Enable dark/light theme toggle with proper CSS variables
+- [x] Make admin dashboard accessible without authentication (demo mode)
+- [x] Ensure all product data visible without login
+- [x] Test all pages and features in demo mode
+- [x] Verify theme toggle works across all pages
+- [x] Update all branding to Mwanga Grid throughout platform
 
 ## Completed Features

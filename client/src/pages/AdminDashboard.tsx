@@ -9,16 +9,18 @@ export default function AdminDashboard() {
   const { data: dashboard } = trpc.admin.dashboard.useQuery();
   const { data: allOrders } = trpc.orders.allOrders.useQuery();
 
-  if (user?.role !== "admin") {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Access Denied</h2>
-          <p className="text-foreground/60">You do not have permission to view this page</p>
-        </Card>
-      </div>
-    );
-  }
+  // Demo mode: allow access without authentication for presentation
+  // In production, uncomment the role check below
+  // if (user?.role !== "admin") {
+  //   return (
+  //     <div className="min-h-screen bg-background flex items-center justify-center">
+  //       <Card className="p-8 text-center">
+  //         <h2 className="text-2xl font-bold text-foreground mb-4">Access Denied</h2>
+  //         <p className="text-foreground/60">You do not have permission to view this page</p>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
 
   const chartData = [
     { month: "Jan", revenue: 15000, orders: 12 },
