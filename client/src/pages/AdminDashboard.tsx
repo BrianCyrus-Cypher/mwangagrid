@@ -40,6 +40,41 @@ export default function AdminDashboard() {
 
   const COLORS = ["#FF6B35", "#F7931E", "#FDB913", "#FFC72C"];
 
+  // Visitor statistics data
+  const visitorData = [
+    { day: "Mon", visitors: 2400, pageViews: 4200, bounceRate: 24 },
+    { day: "Tue", visitors: 3210, pageViews: 5100, bounceRate: 22 },
+    { day: "Wed", visitors: 2290, pageViews: 4800, bounceRate: 25 },
+    { day: "Thu", visitors: 3800, pageViews: 6200, bounceRate: 20 },
+    { day: "Fri", visitors: 4100, pageViews: 7100, bounceRate: 18 },
+    { day: "Sat", visitors: 3900, pageViews: 6800, bounceRate: 19 },
+    { day: "Sun", visitors: 4200, pageViews: 7400, bounceRate: 17 },
+  ];
+
+  // Conversion funnel data
+  const conversionData = [
+    { stage: "Visitors", value: 24500 },
+    { stage: "Product Views", value: 18200 },
+    { stage: "Cart Adds", value: 12100 },
+    { stage: "Checkouts", value: 8500 },
+    { stage: "Completed", value: 6800 },
+  ];
+
+  // Product category performance
+  const categoryData = [
+    { category: "Solar Equipment", sales: 28000, growth: 12 },
+    { category: "CCTV Systems", sales: 35000, growth: 18 },
+    { category: "Internet Equipment", sales: 22000, growth: 8 },
+  ];
+
+  // Customer acquisition data
+  const acquisitionData = [
+    { source: "Organic Search", customers: 1240, value: 18600 },
+    { source: "Direct", customers: 890, value: 13350 },
+    { source: "Social Media", customers: 720, value: 10800 },
+    { source: "Referral", customers: 450, value: 6750 },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <div className="bg-white border-b border-border">
@@ -95,6 +130,38 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
+        {/* Visitor Statistics */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <Card className="p-8">
+            <h2 className="text-xl font-bold text-foreground mb-6">Weekly Visitor Trends</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={visitorData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="day" stroke="var(--foreground)" />
+                <YAxis stroke="var(--foreground)" />
+                <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
+                <Legend />
+                <Line type="monotone" dataKey="visitors" stroke="#FF6B35" strokeWidth={2} name="Visitors" />
+                <Line type="monotone" dataKey="pageViews" stroke="#F7931E" strokeWidth={2} name="Page Views" />
+              </LineChart>
+            </ResponsiveContainer>
+          </Card>
+
+          <Card className="p-8">
+            <h2 className="text-xl font-bold text-foreground mb-6">Bounce Rate Trend</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={visitorData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="day" stroke="var(--foreground)" />
+                <YAxis stroke="var(--foreground)" />
+                <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
+                <Legend />
+                <Bar dataKey="bounceRate" fill="#FDB913" name="Bounce Rate (%)" />
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
+        </div>
+
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Revenue Chart */}
@@ -128,9 +195,63 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Top Products & Recent Orders */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Top Products */}
+        {/* Conversion Funnel & Category Performance */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <Card className="p-8">
+            <h2 className="text-xl font-bold text-foreground mb-6">Conversion Funnel</h2>
+            <div className="space-y-4">
+              {conversionData.map((item, index) => {
+                const percentage = Math.round((item.value / conversionData[0].value) * 100);
+                return (
+                  <div key={index}>
+                    <div className="flex justify-between mb-2">
+                      <span className="text-sm font-medium text-foreground">{item.stage}</span>
+                      <span className="text-sm font-bold text-accent">{item.value.toLocaleString()} ({percentage}%)</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-accent h-2 rounded-full" style={{ width: `${percentage}%` }}></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+
+          <Card className="p-8">
+            <h2 className="text-xl font-bold text-foreground mb-6">Category Performance</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={categoryData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="category" stroke="var(--foreground)" angle={-15} textAnchor="end" height={80} />
+                <YAxis stroke="var(--foreground)" />
+                <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
+                <Legend />
+                <Bar dataKey="sales" fill="var(--accent)" name="Sales (KES)" />
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
+        </div>
+
+        {/* Customer Acquisition & Top Products */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <Card className="p-8">
+            <h2 className="text-xl font-bold text-foreground mb-6">Customer Acquisition</h2>
+            <div className="space-y-4">
+              {acquisitionData.map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                  <div>
+                    <p className="font-medium text-foreground">{item.source}</p>
+                    <p className="text-xs text-foreground/60">{item.customers} customers</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-accent">KES {item.value.toLocaleString()}</p>
+                    <p className="text-xs text-foreground/60">Avg: KES {Math.round(item.value / item.customers)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
           <Card className="p-8">
             <h2 className="text-xl font-bold text-foreground mb-6">Top Products</h2>
             <ResponsiveContainer width="100%" height={300}>
@@ -144,7 +265,10 @@ export default function AdminDashboard() {
               </PieChart>
             </ResponsiveContainer>
           </Card>
+        </div>
 
+        {/* Top Products & Recent Orders */}
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           {/* Recent Orders */}
           <Card className="p-8">
             <h2 className="text-xl font-bold text-foreground mb-6">Recent Orders</h2>
