@@ -75,6 +75,31 @@ export default function AdminDashboard() {
     { source: "Referral", customers: 450, value: 6750 },
   ];
 
+  // Customer lifetime value segmentation
+  const customerSegments = [
+    { segment: "VIP (>KES 100K)", count: 45, avgLTV: 185000, growth: 12 },
+    { segment: "Premium (KES 50-100K)", count: 128, avgLTV: 72500, growth: 18 },
+    { segment: "Standard (KES 10-50K)", count: 342, avgLTV: 28000, growth: 22 },
+    { segment: "New (<KES 10K)", count: 1235, avgLTV: 4500, growth: 35 },
+  ];
+
+  // Geographic distribution
+  const geographicData = [
+    { region: "Nairobi", customers: 680, revenue: 285000, percentage: 42 },
+    { region: "Mombasa", customers: 320, revenue: 128000, percentage: 19 },
+    { region: "Kisumu", customers: 210, revenue: 84000, percentage: 12 },
+    { region: "Nakuru", customers: 185, revenue: 74000, percentage: 11 },
+    { region: "Other", customers: 225, revenue: 90000, percentage: 16 },
+  ];
+
+  // Repeat purchase rate by segment
+  const repeatPurchaseData = [
+    { segment: "VIP", repeatRate: 92, avgOrderFreq: 8.5 },
+    { segment: "Premium", repeatRate: 78, avgOrderFreq: 5.2 },
+    { segment: "Standard", repeatRate: 45, avgOrderFreq: 2.8 },
+    { segment: "New", repeatRate: 12, avgOrderFreq: 1.1 },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <div className="bg-white border-b border-border">
@@ -230,6 +255,92 @@ export default function AdminDashboard() {
               </BarChart>
             </ResponsiveContainer>
           </Card>
+        </div>
+
+        {/* Customer Segmentation Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Customer Segmentation & Lifetime Value</h2>
+          
+          {/* Customer Segments */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <Card className="p-8">
+              <h3 className="text-xl font-bold text-foreground mb-6">Customer Segments by LTV</h3>
+              <div className="space-y-4">
+                {customerSegments.map((seg, index) => (
+                  <div key={index} className="p-4 border border-border rounded-lg hover:bg-muted transition-colors">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-bold text-foreground">{seg.segment}</h4>
+                      <span className="text-xs font-bold text-accent bg-accent/10 px-2 py-1 rounded">+{seg.growth}%</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-foreground/60 mb-1">Customers</p>
+                        <p className="text-2xl font-bold text-foreground">{seg.count.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-foreground/60 mb-1">Avg LTV</p>
+                        <p className="text-2xl font-bold text-accent">KES {(seg.avgLTV / 1000).toFixed(0)}K</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <Card className="p-8">
+              <h3 className="text-xl font-bold text-foreground mb-6">Repeat Purchase Behavior</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={repeatPurchaseData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="segment" stroke="var(--foreground)" />
+                  <YAxis stroke="var(--foreground)" />
+                  <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
+                  <Legend />
+                  <Bar dataKey="repeatRate" fill="#FF6B35" name="Repeat Rate (%)" />
+                </BarChart>
+              </ResponsiveContainer>
+            </Card>
+          </div>
+
+          {/* Geographic Distribution */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <Card className="p-8">
+              <h3 className="text-xl font-bold text-foreground mb-6">Geographic Distribution</h3>
+              <div className="space-y-4">
+                {geographicData.map((geo, index) => (
+                  <div key={index}>
+                    <div className="flex justify-between mb-2">
+                      <div>
+                        <p className="font-medium text-foreground">{geo.region}</p>
+                        <p className="text-xs text-foreground/60">{geo.customers} customers</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-accent">KES {(geo.revenue / 1000).toFixed(0)}K</p>
+                        <p className="text-xs text-foreground/60">{geo.percentage}% of total</p>
+                      </div>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-accent h-2 rounded-full" style={{ width: `${geo.percentage}%` }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <Card className="p-8">
+              <h3 className="text-xl font-bold text-foreground mb-6">Regional Revenue Breakdown</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie data={geographicData} cx="50%" cy="50%" labelLine={false} label={({ region, percentage }) => `${region}: ${percentage}%`} outerRadius={80} fill="#8884d8" dataKey="revenue">
+                    {geographicData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value: any) => `KES ${(Number(value) / 1000).toFixed(0)}K`} />
+                </PieChart>
+              </ResponsiveContainer>
+            </Card>
+          </div>
         </div>
 
         {/* Customer Acquisition & Top Products */}
