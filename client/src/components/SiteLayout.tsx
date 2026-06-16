@@ -34,6 +34,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
             <button onClick={() => navigate("/services")} className="text-foreground/70 hover:text-accent transition">Services</button>
             <button onClick={() => navigate("/quotation")} className="text-foreground/70 hover:text-accent transition">Get Quote</button>
             <button onClick={() => navigate("/contact")} className="text-foreground/70 hover:text-accent transition">Contact</button>
+            <button onClick={() => navigate("/admin")} className="text-foreground/70 hover:text-accent transition font-medium">Admin</button>
           </div>
 
           {/* Right Side */}
@@ -63,11 +64,6 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
 
             {isAuthenticated ? (
               <div className="hidden sm:flex items-center gap-3">
-                {user?.role === "admin" && (
-                  <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>
-                    Admin
-                  </Button>
-                )}
                 <Button variant="outline" size="sm" onClick={() => navigate("/account")}>
                   {user?.name || "Account"}
                 </Button>
@@ -97,6 +93,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
               <button onClick={() => { navigate("/services"); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-foreground/70 hover:text-accent">Services</button>
               <button onClick={() => { navigate("/quotation"); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-foreground/70 hover:text-accent">Get Quote</button>
               <button onClick={() => { navigate("/contact"); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-foreground/70 hover:text-accent">Contact</button>
+              <button onClick={() => { navigate("/admin"); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-foreground/70 hover:text-accent font-medium">Admin</button>
               {isAuthenticated && (
                 <>
                   <button onClick={() => { navigate("/account"); setMobileMenuOpen(false); }} className="block w-full text-left py-2 text-foreground/70 hover:text-accent">My Account</button>
