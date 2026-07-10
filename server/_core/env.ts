@@ -23,8 +23,6 @@ const envSchema = z.object({
   MPESA_SHORTCODE: z.string().default("174379"),
   MPESA_ENV: z.enum(["sandbox", "production"]).default("production"),
   MPESA_CALLBACK_URL: z.string().optional(),
-  STRIPE_SECRET_KEY: z.string().optional(),
-  STRIPE_WEBHOOK_SECRET: z.string().optional(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -64,9 +62,5 @@ export const ENV = {
     shortcode: envVars.MPESA_SHORTCODE,
     environment: envVars.MPESA_ENV,
     callbackUrl: envVars.MPESA_CALLBACK_URL ?? "https://www.mwangagrid.co.ke/api/mpesa/callback",
-  },
-  stripe: {
-    secretKey: envVars.STRIPE_SECRET_KEY ?? "",
-    webhookSecret: envVars.STRIPE_WEBHOOK_SECRET ?? "",
   },
 };

@@ -16,7 +16,7 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 
 type CheckoutStep = "details" | "payment" | "processing" | "confirmation";
-type PaymentMethod = "mpesa" | "card";
+type PaymentMethod = "mpesa";
 
 export default function Checkout() {
   const { items, total, clearCart } = useCart();
@@ -26,7 +26,7 @@ export default function Checkout() {
   const [formData, setFormData] = useState({
     name: "", email: "", phone: "", address: "", county: "Nairobi", town: "Roysambu", postalCode: "00100",
   });
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mpesa");
+  const [paymentMethod] = useState<PaymentMethod>("mpesa");
   const [orderNumber, setOrderNumber] = useState(`MG-${Date.now()}`);
   const [orderId, setOrderId] = useState<number | null>(null);
   const [error, setError] = useState("");
@@ -218,9 +218,7 @@ export default function Checkout() {
                 <Loader2 className="mx-auto mb-4 h-16 w-16 animate-spin text-primary" />
                 <h2 className="mb-2 text-2xl font-bold text-foreground">Processing Payment</h2>
                 <p className="text-foreground/60 mb-2">
-                  {paymentMethod === "mpesa"
-                    ? "Check your phone and enter your M-Pesa PIN to complete payment."
-                    : "Processing your card payment..."}
+                  Check your phone and enter your M-Pesa PIN to complete payment.
                 </p>
                 <p className="text-sm text-foreground/40">Order: {orderNumber}</p>
                 {paymentMethod === "mpesa" && (
@@ -314,12 +312,8 @@ export default function Checkout() {
                 {paymentError && (
                   <div className="mb-4 rounded-lg bg-red-50 dark:bg-red-950 p-3 text-sm text-red-700 dark:text-red-300">{paymentError}</div>
                 )}
-                <div className="mb-8 space-y-4">
-                  <button type="button" onClick={() => setPaymentMethod("mpesa")}
-                    className={`w-full rounded-lg border-2 p-6 text-left transition ${
-                      paymentMethod === "mpesa" ? "border-accent bg-accent/5" : "border-border hover:border-accent/50"
-                    }`}
-                  >
+                <div className="mb-8">
+                  <div className="w-full rounded-lg border-2 border-accent bg-accent/5 p-6">
                     <div className="flex items-center gap-3">
                       <Smartphone className="h-6 w-6 text-accent" />
                       <div>
@@ -327,33 +321,18 @@ export default function Checkout() {
                         <p className="text-sm text-foreground/60">Pay with M-Pesa via STK push to {formData.phone}</p>
                       </div>
                     </div>
-                  </button>
-                  <button type="button" onClick={() => setPaymentMethod("card")}
-                    className={`w-full rounded-lg border-2 p-6 text-left transition ${
-                      paymentMethod === "card" ? "border-accent bg-accent/5" : "border-border hover:border-accent/50"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <CreditCard className="h-6 w-6 text-accent" />
-                      <div>
-                        <h3 className="font-bold text-foreground">Credit/Debit Card</h3>
-                        <p className="text-sm text-foreground/60">Pay securely with your card (Stripe)</p>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-                {paymentMethod === "mpesa" && (
-                  <div className="mb-6 rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
-                    <p className="text-sm text-blue-900 dark:text-blue-100">
-                      Click "Pay with M-Pesa" to receive an STK push prompt on {formData.phone}. Enter your PIN to complete payment.
-                    </p>
                   </div>
-                )}
+                </div>
+                <div className="mb-6 rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
+                  <p className="text-sm text-blue-900 dark:text-blue-100">
+                    Click "Pay with M-Pesa" to receive an STK push prompt on {formData.phone}. Enter your PIN to complete payment.
+                  </p>
+                </div>
                 <div className="flex gap-4">
                   <Button variant="outline" className="flex-1" onClick={() => setStep("details")}>Back</Button>
                   <Button className="flex-1" size="lg" onClick={handleCompletePayment} disabled={createOrderMut.isPending || mpesaInitMut.isPending}>
                     {createOrderMut.isPending || mpesaInitMut.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                    {paymentMethod === "mpesa" ? "Pay with M-Pesa" : "Pay with Card"}
+                    Pay with M-Pesa
                   </Button>
                 </div>
               </Card>

@@ -56,59 +56,6 @@ async function startServer() {
   });
   app.use("/api", limiter);
 
-  // Stripe webhook — MUST come before express.json()
-  app.post(
-    "/api/stripe/webhook",
-    express.raw({ type: "application/json" }),
-    async (req, res) => {
-      const sig = req.headers["stripe-signature"] as string;
-      if (!sig) {
-        res.status(400).json({ error: "Missing stripe-signature header" });
-        return;
-      }
-      try {
-        const { verifyWebhookSignature } = await import("../services/stripe");
-        const event = await verifyWebhookSignature(req.body as Buffer, sig);
-        const { getDb, getOrderById } = await import("../db");
-        const { orders } = await import("../../drizzle/schema");
-        const { eq } = await import("drizzle-orm");
-
-        if (event.type === "payment_intent.succeeded") {
-          const intent = event.data.object;
-          const orderNumber = intent.metadata?.orderNumber;
-          if (orderNumber) {
-            const db = await getDb();
-            if (db) {
-              await db
-                .update(orders)
-                .set({ paymentStatus: "completed", status: "confirmed" })
-                .where(eq(orders.orderNumber, orderNumber));
-            }
-          }
-        }
-
-        if (event.type === "payment_intent.payment_failed") {
-          const intent = event.data.object;
-          const orderNumber = intent.metadata?.orderNumber;
-          if (orderNumber) {
-            const db = await getDb();
-            if (db) {
-              await db
-                .update(orders)
-                .set({ paymentStatus: "failed" })
-                .where(eq(orders.orderNumber, orderNumber));
-            }
-          }
-        }
-
-        res.json({ received: true });
-      } catch (err) {
-        console.error("[Stripe Webhook] Error:", err);
-        res.status(400).json({ error: "Webhook verification failed" });
-      }
-    }
-  );
-
   // M-Pesa callback endpoint
   app.post("/api/mpesa/callback", express.json(), async (req, res) => {
     try {

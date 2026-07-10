@@ -52,7 +52,6 @@ import {
 import { getDb, getUserByEmail, createSessionRecord } from "./db";
 import { orders, orderItems, quotations, supportTickets, users } from "../drizzle/schema";
 import { sendVerificationEmail, sendPasswordResetEmail } from "./services/email";
-import { createPaymentIntent } from "./services/stripe";
 import { MPesaPaymentService, isMpesaConfigured } from "./services/mpesa";
 
 const FALLBACK_PRODUCTS = [
@@ -675,28 +674,6 @@ export const appRouter = router({
   }),
 
   payments: router({
-    createIntent: protectedProcedure
-      .input(
-        z.object({
-          amountKes: z.number().positive(),
-          orderNumber: z.string(),
-        })
-      )
-      .mutation(async ({ input, ctx }) => {
-        try {
-          const result = await createPaymentIntent(input.amountKes, {
-            orderNumber: input.orderNumber,
-            userId: String(ctx.user.id),
-            userEmail: ctx.user.email ?? "",
-          });
-          return { success: true, ...result };
-        } catch (err) {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: err instanceof Error ? err.message : "Failed to create payment intent",
-          });
-        }
-      }),
     mpesaInitiate: protectedProcedure
       .input(z.object({ phoneNumber: z.string(), amountKes: z.number().positive(), orderNumber: z.string() }))
       .mutation(async ({ input }) => {
