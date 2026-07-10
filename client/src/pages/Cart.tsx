@@ -42,13 +42,29 @@ export default function Cart() {
             <div className="space-y-4">
               {items.map((item) => (
                 <Card key={item.id} className="p-4 flex gap-4">
-                  <div className="w-24 h-24 bg-gradient-to-br from-accent/20 to-accent/5 rounded-lg flex items-center justify-center text-4xl flex-shrink-0">
-                    {item.image || "📦"}
+                  <div className="w-24 h-24 bg-gradient-to-br from-accent/20 to-accent/5 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {item.image ? (
+                      // If image is a URL use it; otherwise fallback to emoji (prevents showing filenames/words).
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="h-full w-full object-contain"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      <span className="text-4xl">📦</span>
+                    )}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-foreground mb-1">{item.name}</h3>
-                    <p className="text-sm text-foreground/60 mb-2">{item.category}</p>
-                    <p className="text-lg font-bold text-accent">KES {item.price.toLocaleString()}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-foreground mb-1 line-clamp-2">{item.name}</h3>
+                    <p className="text-sm text-foreground/60 mb-2 line-clamp-1 break-words">
+                      {item.category}
+                    </p>
+                    <p className="text-lg font-bold text-accent">
+                      KES {item.price.toLocaleString()}
+                    </p>
                   </div>
                   <div className="flex flex-col items-end justify-between">
                     <button
@@ -89,9 +105,10 @@ export default function Cart() {
                   <span>KES {total.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-foreground/70">
-                  <span>Shipping:</span>
-                  <span>KES 500</span>
+                  <span>Transport:</span>
+                  <span className="text-foreground/60">Calculated at checkout</span>
                 </div>
+
                 <div className="flex justify-between text-foreground/70">
                   <span>Tax (16%):</span>
                   <span>KES {Math.round(total * 0.16).toLocaleString()}</span>
@@ -100,8 +117,9 @@ export default function Cart() {
 
               <div className="flex justify-between items-center mb-6">
                 <span className="text-xl font-bold text-foreground">Total:</span>
+                {/* Transport/VAT are calculated during checkout based on location */}
                 <span className="text-3xl font-bold text-accent">
-                  KES {(total + 500 + Math.round(total * 0.16)).toLocaleString()}
+                  KES {(total + Math.round(total * 0.16)).toLocaleString()}
                 </span>
               </div>
 

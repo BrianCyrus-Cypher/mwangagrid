@@ -1,26 +1,79 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/trpc";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { TrendingUp, Package, Users, ShoppingCart } from "lucide-react";
+import {
+  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, PieChart, Pie, Cell,
+} from "recharts";
+import {
+  TrendingUp, Package, Users, ShoppingCart, MessageSquare, Download,
+  Clock, CheckCircle2, XCircle, AlertCircle, Search, Filter, RefreshCw, FileText,
+  Eye, Edit3, Ban, Plus,
+} from "lucide-react";
+import { useState, useRef } from "react";
+
+type Tab = "overview" | "orders" | "contacts" | "followups" | "analytics" | "products";
+
+const COLORS = ["#E07856", "#1a365d", "#84cc16", "#FDB913", "#6b7280"];
+
+const statusColor = (s: string) => {
+  const m: Record<string, string> = {
+    pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
+    confirmed: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+    shipped: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+    delivered: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+    cancelled: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
+    new: "bg-blue-100 text-blue-800", read: "bg-gray-100 text-gray-800",
+    replied: "bg-green-100 text-green-800", closed: "bg-gray-100 text-gray-500",
+    in_progress: "bg-purple-100 text-purple-800",
+    completed: "bg-green-100 text-green-800",
+  };
+  return m[s] || "bg-gray-100 text-gray-800";
+};
+
+function ConfirmDialog({ open, title, message, onConfirm, onCancel }: any) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={onCancel}>
+      <div className="bg-card p-6 rounded-xl shadow-xl max-w-sm w-full mx-4" onClick={e => e.stopPropagation()}>
+        <h3 className="text-lg font-bold text-foreground mb-2">{title}</h3>
+        <p className="text-sm text-foreground/60 mb-6">{message}</p>
+        <div className="flex gap-3 justify-end">
+          <Button variant="outline" onClick={onCancel}>Cancel</Button>
+          <Button onClick={onConfirm}>Confirm</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminDashboard() {
   const { user } = useAuth();
-  const { data: dashboard } = trpc.admin.dashboard.useQuery();
-  const { data: allOrders } = trpc.orders.allOrders.useQuery();
+  const utils = trpc.useUtils();
+  const [tab, setTab] = useState<Tab>("overview");
+  const [search, setSearch] = useState("");
+  const [confirm, setConfirm] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
 
-  // Demo mode: allow access without authentication for presentation
-  // In production, uncomment the role check below
-  // if (user?.role !== "admin") {
-  //   return (
-  //     <div className="min-h-screen bg-background flex items-center justify-center">
-  //       <Card className="p-8 text-center">
-  //         <h2 className="text-2xl font-bold text-foreground mb-4">Access Denied</h2>
-  //         <p className="text-foreground/60">You do not have permission to view this page</p>
-  //       </Card>
-  //     </div>
-  //   );
-  // }
+  const { data: dash } = trpc.admin.dashboard.useQuery(undefined, { enabled: true, retry: false });
+  const { data: orders } = trpc.admin.allOrders.useQuery(undefined, { enabled: true, retry: false });
+  const { data: contacts } = trpc.contact.list.useQuery(undefined, { enabled: true, retry: false });
+  const { data: followUps } = trpc.admin.followUps.list.useQuery(undefined, { enabled: true, retry: false });
+  const updateOrderMut = trpc.admin.updateOrderStatus.useMutation();
+  const updateContactMut = trpc.contact.updateStatus.useMutation();
+  const updateFollowUpMut = trpc.admin.followUps.update.useMutation();
+  const createProductMut = trpc.admin.products.create.useMutation();
+  const deleteProductMut = trpc.admin.products.delete.useMutation();
+  const { data: allProducts } = trpc.admin.products.list.useQuery(undefined, { enabled: true });
+  const { refetch: fetchOrdersCSV } = trpc.admin.export.ordersCSV.useQuery(undefined, { enabled: false });
+  const { refetch: fetchContactsCSV } = trpc.admin.export.contactsCSV.useQuery(undefined, { enabled: false });
+
+  const dashData = dash || {
+    totalRevenue: 0, totalOrders: 0, pendingOrders: 0, completedOrders: 0,
+    cancelledOrders: 0, totalUsers: 0, newContacts: 0, recentOrders: [], recentContacts: [],
+  };
 
   const chartData = [
     { month: "Jan", revenue: 15000, orders: 12 },
@@ -31,374 +84,418 @@ export default function AdminDashboard() {
     { month: "Jun", revenue: 48000, orders: 45 },
   ];
 
-  const topProducts = [
-    { name: "CCTV Camera", value: 35 },
-    { name: "Router", value: 28 },
-    { name: "Network Switch", value: 22 },
-    { name: "Cables", value: 15 },
-  ];
+  const downloadCSV = (data: string | undefined, filename: string) => {
+    if (!data) return;
+    const blob = new Blob([data], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  };
 
-  const COLORS = ["#FF6B35", "#F7931E", "#FDB913", "#FFC72C"];
+  const updateOrder = async (orderId: number, status: string) => {
+    await updateOrderMut.mutateAsync({ orderId, status: status as any });
+    utils.admin.allOrders.invalidate();
+    utils.admin.dashboard.invalidate();
+  };
 
-  // Visitor statistics data
-  const visitorData = [
-    { day: "Mon", visitors: 2400, pageViews: 4200, bounceRate: 24 },
-    { day: "Tue", visitors: 3210, pageViews: 5100, bounceRate: 22 },
-    { day: "Wed", visitors: 2290, pageViews: 4800, bounceRate: 25 },
-    { day: "Thu", visitors: 3800, pageViews: 6200, bounceRate: 20 },
-    { day: "Fri", visitors: 4100, pageViews: 7100, bounceRate: 18 },
-    { day: "Sat", visitors: 3900, pageViews: 6800, bounceRate: 19 },
-    { day: "Sun", visitors: 4200, pageViews: 7400, bounceRate: 17 },
-  ];
+  const updateContactStatus = async (id: number, status: string) => {
+    await updateContactMut.mutateAsync({ id, status: status as any });
+    utils.contact.list.invalidate();
+    utils.admin.dashboard.invalidate();
+  };
+  const updateFollowUpStatus = async (id: number, status: string) => {
+    await updateFollowUpMut.mutateAsync({ id, status: status as any });
+    utils.admin.followUps.list.invalidate();
+  };
+  const downloadOrdersCSV = async () => {
+    const { data } = await fetchOrdersCSV();
+    if (data) downloadCSV(data, "orders.csv");
+  };
+  const downloadContactsCSV = async () => {
+    const { data } = await fetchContactsCSV();
+    if (data) downloadCSV(data, "contacts.csv");
+  };
+  const filteredOrders = (orders || []).filter((o: any) =>
+    !search || o.orderNumber?.toLowerCase().includes(search.toLowerCase())
+  );
 
-  // Conversion funnel data
-  const conversionData = [
-    { stage: "Visitors", value: 24500 },
-    { stage: "Product Views", value: 18200 },
-    { stage: "Cart Adds", value: 12100 },
-    { stage: "Checkouts", value: 8500 },
-    { stage: "Completed", value: 6800 },
-  ];
-
-  // Product category performance
-  const categoryData = [
-    { category: "Solar Equipment", sales: 28000, growth: 12 },
-    { category: "CCTV Systems", sales: 35000, growth: 18 },
-    { category: "Internet Equipment", sales: 22000, growth: 8 },
-  ];
-
-  // Customer acquisition data
-  const acquisitionData = [
-    { source: "Organic Search", customers: 1240, value: 18600 },
-    { source: "Direct", customers: 890, value: 13350 },
-    { source: "Social Media", customers: 720, value: 10800 },
-    { source: "Referral", customers: 450, value: 6750 },
-  ];
-
-  // Customer lifetime value segmentation
-  const customerSegments = [
-    { segment: "VIP (>KES 100K)", count: 45, avgLTV: 185000, growth: 12 },
-    { segment: "Premium (KES 50-100K)", count: 128, avgLTV: 72500, growth: 18 },
-    { segment: "Standard (KES 10-50K)", count: 342, avgLTV: 28000, growth: 22 },
-    { segment: "New (<KES 10K)", count: 1235, avgLTV: 4500, growth: 35 },
-  ];
-
-  // Geographic distribution
-  const geographicData = [
-    { region: "Nairobi", customers: 680, revenue: 285000, percentage: 42 },
-    { region: "Mombasa", customers: 320, revenue: 128000, percentage: 19 },
-    { region: "Kisumu", customers: 210, revenue: 84000, percentage: 12 },
-    { region: "Nakuru", customers: 185, revenue: 74000, percentage: 11 },
-    { region: "Other", customers: 225, revenue: 90000, percentage: 16 },
-  ];
-
-  // Repeat purchase rate by segment
-  const repeatPurchaseData = [
-    { segment: "VIP", repeatRate: 92, avgOrderFreq: 8.5 },
-    { segment: "Premium", repeatRate: 78, avgOrderFreq: 5.2 },
-    { segment: "Standard", repeatRate: 45, avgOrderFreq: 2.8 },
-    { segment: "New", repeatRate: 12, avgOrderFreq: 1.1 },
-  ];
+  const filteredContacts = (contacts || []).filter((c: any) =>
+    !search || c.name?.toLowerCase().includes(search.toLowerCase()) || c.email?.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="bg-white border-b border-border">
-        <div className="container py-12">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Admin Dashboard</h1>
-          <p className="text-foreground/60">Sales analytics and business overview</p>
+      <div className="border-b border-border">
+        <div className="container py-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">Admin Panel</h1>
+              <p className="text-foreground/60 text-sm">Manage orders, contacts, follow-ups, and analytics</p>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => utils.admin.dashboard.invalidate()}>
+              <RefreshCw className="w-4 h-4 mr-1" /> Refresh
+            </Button>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {(["overview", "orders", "contacts", "followups", "analytics", "products"] as Tab[]).map(t => (
+              <button key={t} onClick={() => setTab(t)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition capitalize ${
+                  tab === t ? "bg-primary text-white" : "bg-muted text-foreground/70 hover:bg-muted/80"
+                }`}
+              >{t}</button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="container py-12">
-        {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-foreground/60 mb-1">Total Revenue</p>
-                <p className="text-3xl font-bold text-foreground">KES {dashboard?.totalRevenue?.toLocaleString()}</p>
-              </div>
-              <TrendingUp className="w-12 h-12 text-accent opacity-20" />
-            </div>
-          </Card>
+      <div className="container py-8">
+        {confirm && (
+          <ConfirmDialog
+            open
+            title={confirm.title}
+            message={confirm.message}
+            onConfirm={() => { confirm.onConfirm(); setConfirm(null); }}
+            onCancel={() => setConfirm(null)}
+          />
+        )}
 
-          <Card className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-foreground/60 mb-1">Total Orders</p>
-                <p className="text-3xl font-bold text-foreground">{dashboard?.totalOrders || 0}</p>
-              </div>
-              <ShoppingCart className="w-12 h-12 text-accent opacity-20" />
-            </div>
-          </Card>
-
-          <Card className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-foreground/60 mb-1">Avg Order Value</p>
-                <p className="text-3xl font-bold text-foreground">
-                  KES {dashboard?.totalOrders ? Math.round(dashboard.totalRevenue / dashboard.totalOrders) : 0}
-                </p>
-              </div>
-              <Package className="w-12 h-12 text-accent opacity-20" />
-            </div>
-          </Card>
-
-          <Card className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-foreground/60 mb-1">Growth Rate</p>
-                <p className="text-3xl font-bold text-accent">+24%</p>
-              </div>
-              <Users className="w-12 h-12 text-accent opacity-20" />
-            </div>
-          </Card>
-        </div>
-
-        {/* Visitor Statistics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Weekly Visitor Trends</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={visitorData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="day" stroke="var(--foreground)" />
-                <YAxis stroke="var(--foreground)" />
-                <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
-                <Legend />
-                <Line type="monotone" dataKey="visitors" stroke="#FF6B35" strokeWidth={2} name="Visitors" />
-                <Line type="monotone" dataKey="pageViews" stroke="#F7931E" strokeWidth={2} name="Page Views" />
-              </LineChart>
-            </ResponsiveContainer>
-          </Card>
-
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Bounce Rate Trend</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={visitorData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="day" stroke="var(--foreground)" />
-                <YAxis stroke="var(--foreground)" />
-                <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
-                <Legend />
-                <Bar dataKey="bounceRate" fill="#FDB913" name="Bounce Rate (%)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-        </div>
-
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Revenue Chart */}
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Revenue Trend</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="month" stroke="var(--foreground)" />
-                <YAxis stroke="var(--foreground)" />
-                <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
-                <Legend />
-                <Line type="monotone" dataKey="revenue" stroke="var(--accent)" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </Card>
-
-          {/* Orders Chart */}
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Orders Trend</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="month" stroke="var(--foreground)" />
-                <YAxis stroke="var(--foreground)" />
-                <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
-                <Legend />
-                <Bar dataKey="orders" fill="var(--accent)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-        </div>
-
-        {/* Conversion Funnel & Category Performance */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Conversion Funnel</h2>
-            <div className="space-y-4">
-              {conversionData.map((item, index) => {
-                const percentage = Math.round((item.value / conversionData[0].value) * 100);
-                return (
-                  <div key={index}>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-sm font-medium text-foreground">{item.stage}</span>
-                      <span className="text-sm font-bold text-accent">{item.value.toLocaleString()} ({percentage}%)</span>
+        {tab === "overview" && (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              {[
+                { label: "Revenue", value: `KES ${dashData.totalRevenue.toLocaleString()}`, icon: TrendingUp, color: "text-primary" },
+                { label: "Orders", value: dashData.totalOrders, icon: ShoppingCart, color: "text-blue-600" },
+                { label: "Users", value: dashData.totalUsers, icon: Users, color: "text-green-600" },
+                { label: "New Messages", value: dashData.newContacts, icon: MessageSquare, color: "text-purple-600" },
+              ].map(s => (
+                <Card key={s.label} className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-foreground/60 mb-1">{s.label}</p>
+                      <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div className="bg-accent h-2 rounded-full" style={{ width: `${percentage}%` }}></div>
-                    </div>
+                    <s.icon className={`w-8 h-8 ${s.color} opacity-20`} />
                   </div>
-                );
-              })}
+                </Card>
+              ))}
             </div>
-          </Card>
-
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Category Performance</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={categoryData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="category" stroke="var(--foreground)" angle={-15} textAnchor="end" height={80} />
-                <YAxis stroke="var(--foreground)" />
-                <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
-                <Legend />
-                <Bar dataKey="sales" fill="var(--accent)" name="Sales (KES)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-        </div>
-
-        {/* Customer Segmentation Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Customer Segmentation & Lifetime Value</h2>
-          
-          {/* Customer Segments */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <Card className="p-8">
-              <h3 className="text-xl font-bold text-foreground mb-6">Customer Segments by LTV</h3>
-              <div className="space-y-4">
-                {customerSegments.map((seg, index) => (
-                  <div key={index} className="p-4 border border-border rounded-lg hover:bg-muted transition-colors">
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-bold text-foreground">{seg.segment}</h4>
-                      <span className="text-xs font-bold text-accent bg-accent/10 px-2 py-1 rounded">+{seg.growth}%</span>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <Card className="p-6">
+                <h2 className="text-lg font-bold text-foreground mb-4">Orders by Status</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { label: "Pending", value: dashData.pendingOrders, color: "bg-yellow-500" },
+                    { label: "Delivered", value: dashData.completedOrders, color: "bg-green-500" },
+                    { label: "Cancelled", value: dashData.cancelledOrders, color: "bg-red-500" },
+                    { label: "Total", value: dashData.totalOrders, color: "bg-primary" },
+                  ].map(s => (
+                    <div key={s.label} className="p-3 border border-border rounded-lg text-center">
+                      <div className={`w-2 h-2 rounded-full ${s.color} mx-auto mb-1`} />
+                      <p className="text-lg font-bold text-foreground">{s.value}</p>
+                      <p className="text-xs text-foreground/60">{s.label}</p>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-xs text-foreground/60 mb-1">Customers</p>
-                        <p className="text-2xl font-bold text-foreground">{seg.count.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-foreground/60 mb-1">Avg LTV</p>
-                        <p className="text-2xl font-bold text-accent">KES {(seg.avgLTV / 1000).toFixed(0)}K</p>
-                      </div>
+                  ))}
+                </div>
+              </Card>
+              <Card className="p-6">
+                <h2 className="text-lg font-bold text-foreground mb-4">Revenue Trend</h2>
+                <ResponsiveContainer width="100%" height={200}>
+                  <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="month" stroke="var(--foreground)" tick={{ fontSize: 11 }} />
+                    <YAxis stroke="var(--foreground)" tick={{ fontSize: 11 }} />
+                    <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
+                    <Line type="monotone" dataKey="revenue" stroke="#E07856" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </Card>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="p-6">
+                <h2 className="text-lg font-bold text-foreground mb-4">Recent Orders</h2>
+                {dashData.recentOrders.length === 0 ? (
+                  <p className="text-sm text-foreground/60">No orders yet.</p>
+                ) : dashData.recentOrders.map((o: any) => (
+                  <div key={o.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{o.orderNumber}</p>
+                      <p className="text-xs text-foreground/40">{new Date(o.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusColor(o.status)}`}>{o.status}</span>
+                      <span className="text-sm font-bold text-primary">KES {Number(o.totalAmount).toLocaleString()}</span>
                     </div>
                   </div>
                 ))}
-              </div>
-            </Card>
+              </Card>
+              <Card className="p-6">
+                <h2 className="text-lg font-bold text-foreground mb-4">Recent Contacts</h2>
+                {dashData.recentContacts.length === 0 ? (
+                  <p className="text-sm text-foreground/60">No messages yet.</p>
+                ) : dashData.recentContacts.map((c: any) => (
+                  <div key={c.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{c.name}</p>
+                      <p className="text-xs text-foreground/40">{c.subject}</p>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusColor(c.status)}`}>{c.status}</span>
+                  </div>
+                ))}
+              </Card>
+            </div>
+          </>
+        )}
 
-            <Card className="p-8">
-              <h3 className="text-xl font-bold text-foreground mb-6">Repeat Purchase Behavior</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={repeatPurchaseData}>
+        {tab === "orders" && (
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-foreground">Order Management</h2>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40" />
+                  <Input placeholder="Search orders..." className="pl-9 w-64" value={search} onChange={e => setSearch(e.target.value)} />
+                </div>
+                <Button size="sm" variant="outline" onClick={downloadOrdersCSV}>
+                  <Download className="w-4 h-4 mr-1" /> CSV
+                </Button>
+              </div>
+            </div>
+            {filteredOrders.length === 0 ? (
+              <p className="text-sm text-foreground/60">No orders found.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-foreground/60">
+                      <th className="text-left py-3 font-medium">Order</th>
+                      <th className="text-left py-3 font-medium">Customer</th>
+                      <th className="text-left py-3 font-medium">Total</th>
+                      <th className="text-left py-3 font-medium">Payment</th>
+                      <th className="text-left py-3 font-medium">Status</th>
+                      <th className="text-left py-3 font-medium">Date</th>
+                      <th className="text-right py-3 font-medium">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredOrders.map((o: any) => (
+                      <tr key={o.id} className="border-b border-border/50 hover:bg-muted/30">
+                        <td className="py-3 font-medium text-foreground">{o.orderNumber}</td>
+                        <td className="py-3 text-foreground/70">#{o.userId}</td>
+                        <td className="py-3 text-primary font-medium">KES {Number(o.totalAmount).toLocaleString()}</td>
+                        <td className="py-3">
+                          <span className={`px-2 py-0.5 rounded text-xs ${statusColor(o.paymentStatus)}`}>{o.paymentStatus}</span>
+                        </td>
+                        <td className="py-3">
+                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusColor(o.status)}`}>{o.status}</span>
+                        </td>
+                        <td className="py-3 text-foreground/50 text-xs">{new Date(o.createdAt).toLocaleDateString()}</td>
+                        <td className="py-3 text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            {["confirmed", "shipped", "delivered"].map(s => (
+                              o.status === "pending" && s === "confirmed" || o.status === "confirmed" && s === "shipped" || o.status === "shipped" && s === "delivered" ? (
+                                <Button key={s} size="sm" variant="ghost" className="h-8 text-xs"
+                                  onClick={() => setConfirm({ title: `Mark as ${s}?`, message: `Update order ${o.orderNumber} to "${s}"`, onConfirm: () => updateOrder(o.id, s) })}>
+                                  <CheckCircle2 className="w-3 h-3 mr-1" />{s}
+                                </Button>
+                              ) : null
+                            ))}
+                            {o.status !== "cancelled" && o.status !== "delivered" && (
+                              <Button size="sm" variant="ghost" className="h-8 text-xs text-red-500"
+                                onClick={() => setConfirm({ title: "Cancel Order?", message: `Cancel order ${o.orderNumber}?`, onConfirm: () => updateOrder(o.id, "cancelled") })}>
+                                <XCircle className="w-3 h-3 mr-1" />Cancel
+                              </Button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Card>
+        )}
+
+        {tab === "contacts" && (
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-foreground">Contact Inquiries</h2>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40" />
+                  <Input placeholder="Search contacts..." className="pl-9 w-64" value={search} onChange={e => setSearch(e.target.value)} />
+                </div>
+                <Button size="sm" variant="outline" onClick={downloadContactsCSV}>
+                  <Download className="w-4 h-4 mr-1" /> CSV
+                </Button>
+              </div>
+            </div>
+            {filteredContacts.length === 0 ? (
+              <p className="text-sm text-foreground/60">No contacts yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {filteredContacts.map((c: any) => (
+                  <div key={c.id} className="p-4 border border-border rounded-lg">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <p className="font-bold text-foreground">{c.name}</p>
+                        <p className="text-xs text-foreground/60">{c.email} {c.phone && `| ${c.phone}`}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {c.inquiryType && <Badge variant="outline" className="text-xs">{c.inquiryType}</Badge>}
+                        <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusColor(c.status)}`}>{c.status}</span>
+                        <span className="text-xs text-foreground/40">{new Date(c.createdAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <p className="text-sm font-medium text-foreground mb-1">{c.subject}</p>
+                    <p className="text-sm text-foreground/60 line-clamp-2">{c.message}</p>
+                    {c.status === "new" && (
+                      <div className="mt-3 flex gap-2">
+                        <Button size="sm" variant="outline" className="text-xs h-8"
+                          onClick={() => { updateContactStatus(c.id, "replied"); }}>
+                          Mark Replied
+                        </Button>
+                        <Button size="sm" variant="ghost" className="text-xs h-8 text-red-500"
+                          onClick={() => { updateContactStatus(c.id, "closed"); }}>
+                          Close
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        )}
+
+        {tab === "followups" && (
+          <Card className="p-6">
+            <h2 className="text-xl font-bold text-foreground mb-6">Follow-Up Queue</h2>
+            {!followUps || followUps.length === 0 ? (
+              <p className="text-sm text-foreground/60">No follow-ups pending.</p>
+            ) : (
+              <div className="space-y-3">
+                {followUps.map((f: any) => (
+                  <div key={f.id} className="p-4 border border-border rounded-lg flex items-start justify-between">
+                    <div className="flex items-start gap-4">
+                      <div className={`mt-1 w-2 h-2 rounded-full ${
+                        f.priority === "high" ? "bg-red-500" : f.priority === "medium" ? "bg-yellow-500" : "bg-blue-500"
+                      }`} />
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge variant="outline" className="text-xs">{f.type?.replace(/_/g, " ")}</Badge>
+                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusColor(f.status)}`}>{f.status}</span>
+                        </div>
+                        {f.note && <p className="text-sm text-foreground/70">{f.note}</p>}
+                        <p className="text-xs text-foreground/40 mt-1">{new Date(f.createdAt).toLocaleString()}</p>
+                      </div>
+                    </div>
+                    {f.status !== "completed" && (
+                      <Button size="sm" variant="outline" className="text-xs h-8"
+                        onClick={() => setConfirm({
+                          title: "Complete follow-up?",
+                          message: "Mark this follow-up as completed.",
+                          onConfirm: () => updateFollowUpStatus(f.id, "completed"),
+                        })}>
+                        <CheckCircle2 className="w-3 h-3 mr-1" /> Complete
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        )}
+
+        {tab === "analytics" && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="p-6">
+              <h2 className="text-lg font-bold text-foreground mb-4">Monthly Revenue</h2>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                  <XAxis dataKey="segment" stroke="var(--foreground)" />
-                  <YAxis stroke="var(--foreground)" />
+                  <XAxis dataKey="month" stroke="var(--foreground)" tick={{ fontSize: 11 }} />
+                  <YAxis stroke="var(--foreground)" tick={{ fontSize: 11 }} />
                   <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
-                  <Legend />
-                  <Bar dataKey="repeatRate" fill="#FF6B35" name="Repeat Rate (%)" />
+                  <Bar dataKey="revenue" fill="#E07856" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </Card>
-          </div>
-
-          {/* Geographic Distribution */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card className="p-8">
-              <h3 className="text-xl font-bold text-foreground mb-6">Geographic Distribution</h3>
-              <div className="space-y-4">
-                {geographicData.map((geo, index) => (
-                  <div key={index}>
-                    <div className="flex justify-between mb-2">
-                      <div>
-                        <p className="font-medium text-foreground">{geo.region}</p>
-                        <p className="text-xs text-foreground/60">{geo.customers} customers</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-bold text-accent">KES {(geo.revenue / 1000).toFixed(0)}K</p>
-                        <p className="text-xs text-foreground/60">{geo.percentage}% of total</p>
-                      </div>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div className="bg-accent h-2 rounded-full" style={{ width: `${geo.percentage}%` }}></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-
-            <Card className="p-8">
-              <h3 className="text-xl font-bold text-foreground mb-6">Regional Revenue Breakdown</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie data={geographicData} cx="50%" cy="50%" labelLine={false} label={({ region, percentage }) => `${region}: ${percentage}%`} outerRadius={80} fill="#8884d8" dataKey="revenue">
-                    {geographicData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value: any) => `KES ${(Number(value) / 1000).toFixed(0)}K`} />
-                </PieChart>
+            <Card className="p-6">
+              <h2 className="text-lg font-bold text-foreground mb-4">Monthly Orders</h2>
+              <ResponsiveContainer width="100%" height={250}>
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="month" stroke="var(--foreground)" tick={{ fontSize: 11 }} />
+                  <YAxis stroke="var(--foreground)" tick={{ fontSize: 11 }} />
+                  <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }} />
+                  <Line type="monotone" dataKey="orders" stroke="#1a365d" strokeWidth={2} />
+                </LineChart>
               </ResponsiveContainer>
             </Card>
           </div>
-        </div>
+        )}
 
-        {/* Customer Acquisition & Top Products */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Customer Acquisition</h2>
-            <div className="space-y-4">
-              {acquisitionData.map((item, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                  <div>
-                    <p className="font-medium text-foreground">{item.source}</p>
-                    <p className="text-xs text-foreground/60">{item.customers} customers</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-accent">KES {item.value.toLocaleString()}</p>
-                    <p className="text-xs text-foreground/60">Avg: KES {Math.round(item.value / item.customers)}</p>
-                  </div>
-                </div>
-              ))}
+        {tab === "products" && (
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-foreground">Product Management</h2>
+              <Button size="sm" onClick={() => {
+                const name = prompt("Product name:");
+                if (!name) return;
+                const price = prompt("Price (KES):");
+                if (!price) return;
+                const cat = prompt("Category (optional):") || undefined;
+                createProductMut.mutateAsync({ name, price, category: cat }).then(() => {
+                  utils.admin.products.list.invalidate();
+                });
+              }}>
+                <Plus className="w-4 h-4 mr-1" /> Add Product
+              </Button>
             </div>
+            {!allProducts || allProducts.length === 0 ? (
+              <p className="text-sm text-foreground/60">No products yet.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-foreground/60">
+                      <th className="text-left py-3 font-medium">Name</th>
+                      <th className="text-left py-3 font-medium">Category</th>
+                      <th className="text-left py-3 font-medium">Price</th>
+                      <th className="text-left py-3 font-medium">Stock</th>
+                      <th className="text-right py-3 font-medium">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allProducts.map((p: any) => (
+                      <tr key={p.id} className="border-b border-border/50 hover:bg-muted/30">
+                        <td className="py-3 font-medium text-foreground">{p.name}</td>
+                        <td className="py-3 text-foreground/70">{p.category || "-"}</td>
+                        <td className="py-3 text-primary font-medium">KES {Number(p.price).toLocaleString()}</td>
+                        <td className="py-3 text-foreground/70">{p.stock ?? "-"}</td>
+                        <td className="py-3 text-right">
+                          <Button size="sm" variant="ghost" className="h-8 text-xs text-red-500"
+                            onClick={() => setConfirm({
+                              title: "Delete product?",
+                              message: `Delete "${p.name}"? This cannot be undone.`,
+                              onConfirm: async () => {
+                                await deleteProductMut.mutateAsync({ id: p.id });
+                                utils.admin.products.list.invalidate();
+                              },
+                            })}>
+                            <XCircle className="w-3 h-3 mr-1" /> Delete
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </Card>
-
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Top Products</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie data={topProducts} cx="50%" cy="50%" labelLine={false} label={({ name, value }) => `${name}: ${value}`} outerRadius={80} fill="#8884d8" dataKey="value">
-                  {topProducts.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </Card>
-        </div>
-
-        {/* Top Products & Recent Orders */}
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
-          {/* Recent Orders */}
-          <Card className="p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">Recent Orders</h2>
-            <div className="space-y-4">
-              {dashboard?.recentOrders?.map((order: any) => (
-                <div key={order.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
-                  <div>
-                    <p className="font-bold text-foreground">{order.orderNumber}</p>
-                    <p className="text-sm text-foreground/60">{new Date(order.createdAt).toLocaleDateString()}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-accent">KES {order.totalAmount}</p>
-                    <p className="text-xs text-foreground/60 capitalize">{order.status}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
+        )}
       </div>
     </div>
   );

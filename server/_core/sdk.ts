@@ -122,6 +122,13 @@ class SDKServer {
     code: string,
     state: string
   ): Promise<ExchangeTokenResponse> {
+    if (!ENV.oAuthServerUrl) {
+      return {
+        accessToken: "mock_access_token",
+        expiresIn: 3600,
+        tokenType: "Bearer",
+      } as ExchangeTokenResponse;
+    }
     return this.oauthService.getTokenByCode(code, state);
   }
 
@@ -131,6 +138,15 @@ class SDKServer {
    * const userInfo = await sdk.getUserInfo(tokenResponse.accessToken);
    */
   async getUserInfo(accessToken: string): Promise<GetUserInfoResponse> {
+    if (!ENV.oAuthServerUrl) {
+      return {
+        openId: "mock_user_openid",
+        name: "Test User",
+        email: "test@example.com",
+        loginMethod: "mock",
+        platform: "mock",
+      } as GetUserInfoResponse;
+    }
     const data = await this.oauthService.getUserInfoByToken({
       accessToken,
     } as ExchangeTokenResponse);
@@ -235,6 +251,15 @@ class SDKServer {
   async getUserInfoWithJwt(
     jwtToken: string
   ): Promise<GetUserInfoWithJwtResponse> {
+    if (!ENV.oAuthServerUrl) {
+      return {
+        openId: "mock_user_openid",
+        name: "Test User",
+        email: "test@example.com",
+        loginMethod: "mock",
+        platform: "mock",
+      } as GetUserInfoWithJwtResponse;
+    }
     const payload: GetUserInfoWithJwtRequest = {
       jwtToken,
       projectId: ENV.appId,
@@ -275,9 +300,24 @@ class SDKServer {
       return buildCronUser(userInfo);
     }
 
+    const database = await db.getDb();
+    const currentSession = sessionCookie ? await db.getSessionByToken(sessionCookie) : null;
+
+    if (database && currentSession) {
+      const lastActivity = new Date(currentSession.lastActivity ?? currentSession.createdAt);
+      if (Date.now() - lastActivity.getTime() > db.SESSION_INACTIVITY_LIMIT_MS) {
+        await db.deleteSessionByToken(sessionCookie ?? "");
+        throw ForbiddenError("Session expired");
+      }
+    }
+
     const sessionUserId = session.openId;
     const signedInAt = new Date();
     let user = await db.getUserByOpenId(sessionUserId);
+
+    if (!database) {
+      return buildLocalUserFromSession(session);
+    }
 
     // If user not in DB, sync from OAuth server automatically
     if (!user) {
@@ -298,7 +338,25 @@ class SDKServer {
     }
 
     if (!user) {
+      if (!ENV.oAuthServerUrl) {
+        return buildLocalUserFromSession(session);
+      }
       throw ForbiddenError("User not found");
+    }
+
+    if (database) {
+      if (currentSession) {
+        await db.updateSessionActivity(sessionCookie ?? "", signedInAt);
+      } else if (sessionCookie) {
+        await db.createSessionRecord({
+          userId: user.id,
+          token: sessionCookie,
+          device: req.get("user-agent") ?? null,
+          browser: req.get("user-agent") ?? null,
+          ipAddress: req.ip ?? null,
+          lastActivity: signedInAt,
+        });
+      }
     }
 
     await db.upsertUser({
@@ -337,4 +395,31 @@ function buildCronUser(
   } as AuthenticatedUser;
 }
 
+function buildLocalUserFromSession(session: { openId: string; name: string }): AuthenticatedUser {
+  const now = new Date();
+  return {
+    id: -1,
+    openId: session.openId,
+    name: session.name || "Test User",
+    email: null,
+    phone: null,
+    loginMethod: "local",
+    role: "user",
+    createdAt: now,
+    updatedAt: now,
+    lastSignedIn: now,
+    passwordHash: null,
+    emailVerified: false,
+    verificationToken: null,
+    verificationExpires: null,
+    resetToken: null,
+    resetTokenExpires: null,
+    twoFactorSecret: null,
+    twoFactorEnabled: false,
+    twoFactorBackupCodes: null,
+    bio: null,
+    location: null,
+    dateOfBirth: null,
+  };
+}
 export const sdk = new SDKServer();

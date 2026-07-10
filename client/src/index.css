@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-heading: 'Poppins', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -42,76 +44,89 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ── Light Theme ── */
 :root {
-  --primary: oklch(0.6 0.15 30);
+  /* Mwanga Grid brand: Orange, Dark Blue, Lime Green */
+  --accent:             oklch(0.68 0.14 42);
+  --accent-foreground:  oklch(1 0 0);
+  --primary:            oklch(0.68 0.14 42);
   --primary-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(0.55 0.15 30);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --chart-1: oklch(0.65 0.15 30);
-  --chart-2: oklch(0.6 0.15 30);
-  --chart-3: oklch(0.55 0.15 30);
-  --chart-4: oklch(0.5 0.15 30);
-  --chart-5: oklch(0.45 0.15 30);
-  --radius: 0.65rem;
-  --background: oklch(0.99 0.001 0);
-  --foreground: oklch(0.2 0.01 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.01 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.01 0);
-  --secondary: oklch(0.95 0.01 0);
-  --secondary-foreground: oklch(0.3 0.01 0);
-  --muted: oklch(0.92 0.01 0);
-  --muted-foreground: oklch(0.5 0.01 0);
-  --accent: oklch(0.6 0.15 30);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --ring:               oklch(0.68 0.14 42);
+
+  --background:         oklch(0.975 0.005 240);
+  --foreground:         oklch(0.18 0.01 240);
+  --card:               oklch(1 0 0);
+  --card-foreground:    oklch(0.18 0.01 240);
+  --popover:            oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.01 240);
+  --secondary:          oklch(0.94 0.01 240);
+  --secondary-foreground: oklch(0.24 0.01 240);
+  --muted:              oklch(0.93 0.01 240);
+  --muted-foreground:   oklch(0.48 0.01 240);
+  --destructive:        oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.9 0.01 0);
-  --input: oklch(0.9 0.01 0);
-  --ring: oklch(0.6 0.15 30);
-  --sidebar: oklch(0.99 0.001 0);
-  --sidebar-foreground: oklch(0.2 0.01 0);
-  --sidebar-accent: oklch(0.6 0.15 30);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.9 0.01 0);
-  --sidebar-ring: oklch(0.6 0.15 30);
+  --border:             oklch(0.87 0.01 240);
+  --input:              oklch(0.87 0.01 240);
+  --radius:             0.65rem;
+
+  /* Charts — Mwanga Grid palette */
+  --chart-1: oklch(0.68 0.14 42);
+  --chart-2: oklch(0.30 0.07 260);
+  --chart-3: oklch(0.75 0.16 140);
+  --chart-4: oklch(0.60 0.10 220);
+  --chart-5: oklch(0.55 0.12 80);
+
+  /* Sidebar */
+  --sidebar:                    oklch(0.985 0.003 240);
+  --sidebar-foreground:         oklch(0.15 0.01 240);
+  --sidebar-primary:            oklch(0.68 0.14 42);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent:             oklch(0.30 0.07 260);
+  --sidebar-accent-foreground:  oklch(1 0 0);
+  --sidebar-border:             oklch(0.88 0.01 240);
+  --sidebar-ring:               oklch(0.68 0.14 42);
 }
 
+/* ── Dark Theme ── */
 .dark {
-  --primary: oklch(0.65 0.15 30);
-  --primary-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(0.6 0.15 30);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --background: oklch(0.12 0.01 0);
-  --foreground: oklch(0.92 0.01 0);
-  --card: oklch(0.16 0.01 0);
-  --card-foreground: oklch(0.92 0.01 0);
-  --popover: oklch(0.16 0.01 0);
-  --popover-foreground: oklch(0.92 0.01 0);
-  --secondary: oklch(0.2 0.01 0);
-  --secondary-foreground: oklch(0.8 0.01 0);
-  --muted: oklch(0.25 0.01 0);
-  --muted-foreground: oklch(0.7 0.01 0);
-  --accent: oklch(0.65 0.15 30);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  --accent:             oklch(0.72 0.12 42);
+  --accent-foreground:  oklch(0.1 0 0);
+  --primary:            oklch(0.72 0.12 42);
+  --primary-foreground: oklch(0.1 0 0);
+  --ring:               oklch(0.72 0.12 42);
+
+  --background:         oklch(0.095 0.01 240);
+  --foreground:         oklch(0.96 0.01 240);
+  --card:               oklch(0.135 0.01 240);
+  --card-foreground:    oklch(0.96 0.01 240);
+  --popover:            oklch(0.135 0.01 240);
+  --popover-foreground: oklch(0.96 0.01 240);
+  --secondary:          oklch(0.185 0.01 240);
+  --secondary-foreground: oklch(0.88 0.01 240);
+  --muted:              oklch(0.20 0.01 240);
+  --muted-foreground:   oklch(0.70 0.01 240);
+  --destructive:        oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.25 0.01 0);
-  --input: oklch(0.25 0.01 0);
-  --ring: oklch(0.65 0.15 30);
-  --chart-1: oklch(0.65 0.15 30);
-  --chart-2: oklch(0.6 0.15 30);
-  --chart-3: oklch(0.55 0.15 30);
-  --chart-4: oklch(0.5 0.15 30);
-  --chart-5: oklch(0.45 0.15 30);
-  --sidebar: oklch(0.16 0.01 0);
-  --sidebar-foreground: oklch(0.92 0.01 0);
-  --sidebar-accent: oklch(0.65 0.15 30);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.25 0.01 0);
-  --sidebar-ring: oklch(0.65 0.15 30);
+  --border:             oklch(0.26 0.01 240);
+  --input:              oklch(0.26 0.01 240);
+
+  --chart-1: oklch(0.72 0.12 42);
+  --chart-2: oklch(0.40 0.07 260);
+  --chart-3: oklch(0.78 0.14 140);
+  --chart-4: oklch(0.65 0.10 220);
+  --chart-5: oklch(0.60 0.10 80);
+
+  --sidebar:                    oklch(0.15 0.01 240);
+  --sidebar-foreground:         oklch(0.94 0.01 240);
+  --sidebar-primary:            oklch(0.72 0.12 42);
+  --sidebar-primary-foreground: oklch(0.1 0 0);
+  --sidebar-accent:             oklch(0.40 0.07 260);
+  --sidebar-accent-foreground:  oklch(1 0 0);
+  --sidebar-border:             oklch(0.24 0.01 240);
+  --sidebar-ring:               oklch(0.72 0.12 42);
 }
+
+
 
 @layer base {
   * {
@@ -119,7 +134,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(circle at top left, color-mix(in oklab, var(--accent) 12%, transparent), transparent 30%),
+      radial-gradient(circle at top right, color-mix(in oklab, var(--primary) 10%, transparent), transparent 24%);
+    background-attachment: fixed;
   }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
