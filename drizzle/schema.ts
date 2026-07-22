@@ -1,18 +1,85 @@
-import { pgTable, serial, integer, decimal, text, timestamp, varchar, boolean, pgEnum, jsonb } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  integer,
+  decimal,
+  text,
+  timestamp,
+  varchar,
+  boolean,
+  pgEnum,
+  jsonb,
+} from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("role", ["user", "admin"]);
 export const paymentMethodEnum = pgEnum("paymentMethod", ["mpesa", "card"]);
-export const paymentStatusEnum = pgEnum("paymentStatus", ["pending", "completed", "failed"]);
-export const orderStatusEnum = pgEnum("orderStatus", ["pending", "confirmed", "shipped", "delivered", "cancelled"]);
-export const quotationStatusEnum = pgEnum("quotationStatus", ["pending", "approved", "rejected", "converted"]);
-export const subscriptionStatusEnum = pgEnum("subscriptionStatus", ["active", "paused", "cancelled"]);
-export const ticketStatusEnum = pgEnum("ticketStatus", ["open", "in_progress", "resolved", "closed"]);
-export const ticketPriorityEnum = pgEnum("ticketPriority", ["low", "medium", "high"]);
-export const contactStatusEnum = pgEnum("contactStatus", ["new", "read", "replied", "closed"]);
-export const inquiryTypeEnum = pgEnum("inquiryType", ["product", "service", "installation", "support", "other"]);
-export const followUpStatusEnum = pgEnum("followUpStatus", ["pending", "in_progress", "completed", "cancelled"]);
-export const followUpPriorityEnum = pgEnum("followUpPriority", ["low", "medium", "high"]);
-export const followUpTypeEnum = pgEnum("followUpType", ["new_order", "new_quotation", "new_inquiry", "support_ticket", "status_update", "payment_issue"]);
+export const paymentStatusEnum = pgEnum("paymentStatus", [
+  "pending",
+  "completed",
+  "failed",
+]);
+export const orderStatusEnum = pgEnum("orderStatus", [
+  "pending",
+  "confirmed",
+  "en-route",
+  "shipped",
+  "delivered",
+  "cancelled",
+]);
+export const quotationStatusEnum = pgEnum("quotationStatus", [
+  "pending",
+  "approved",
+  "rejected",
+  "converted",
+]);
+export const subscriptionStatusEnum = pgEnum("subscriptionStatus", [
+  "active",
+  "paused",
+  "cancelled",
+]);
+export const ticketStatusEnum = pgEnum("ticketStatus", [
+  "open",
+  "in_progress",
+  "resolved",
+  "closed",
+]);
+export const ticketPriorityEnum = pgEnum("ticketPriority", [
+  "low",
+  "medium",
+  "high",
+]);
+export const contactStatusEnum = pgEnum("contactStatus", [
+  "new",
+  "read",
+  "replied",
+  "closed",
+]);
+export const inquiryTypeEnum = pgEnum("inquiryType", [
+  "product",
+  "service",
+  "installation",
+  "support",
+  "other",
+]);
+export const followUpStatusEnum = pgEnum("followUpStatus", [
+  "pending",
+  "in_progress",
+  "completed",
+  "cancelled",
+]);
+export const followUpPriorityEnum = pgEnum("followUpPriority", [
+  "low",
+  "medium",
+  "high",
+]);
+export const followUpTypeEnum = pgEnum("followUpType", [
+  "new_order",
+  "new_quotation",
+  "new_inquiry",
+  "support_ticket",
+  "status_update",
+  "payment_issue",
+]);
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -67,9 +134,11 @@ export const products = pgTable("products", {
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   discountPrice: decimal("discountPrice", { precision: 10, scale: 2 }),
   stock: integer("stock").default(0).notNull(),
-  image: varchar("image", { length: 500 }),
+  image: text("image"),
   sku: varchar("sku", { length: 100 }).unique(),
   warranty: varchar("warranty", { length: 100 }),
+  specifications: text("specifications"),
+  featured: boolean("featured").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
@@ -82,6 +151,9 @@ export const services = pgTable("services", {
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
   serviceType: varchar("serviceType", { length: 100 }).notNull(),
+  startingPrice: decimal("startingPrice", { precision: 10, scale: 2 }),
+  isActive: boolean("isActive").default(true).notNull(),
+  featured: boolean("featured").default(false).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
@@ -111,7 +183,9 @@ export const orders = pgTable("orders", {
   totalAmount: decimal("totalAmount", { precision: 10, scale: 2 }).notNull(),
   deliveryLocation: text("deliveryLocation"),
   paymentMethod: paymentMethodEnum("paymentMethod"),
-  paymentStatus: paymentStatusEnum("paymentStatus").default("pending").notNull(),
+  paymentStatus: paymentStatusEnum("paymentStatus")
+    .default("pending")
+    .notNull(),
   paymentReference: varchar("paymentReference", { length: 100 }),
   paymentDetails: text("paymentDetails"),
   estimatedDelivery: timestamp("estimatedDelivery"),
@@ -139,7 +213,9 @@ export type InsertOrderItem = typeof orderItems.$inferInsert;
 export const quotations = pgTable("quotations", {
   id: serial("id").primaryKey(),
   userId: integer("userId").notNull(),
-  quotationNumber: varchar("quotationNumber", { length: 50 }).unique().notNull(),
+  quotationNumber: varchar("quotationNumber", { length: 50 })
+    .unique()
+    .notNull(),
   description: text("description"),
   items: text("items"),
   totalAmount: decimal("totalAmount", { precision: 10, scale: 2 }).notNull(),

@@ -15,5 +15,9 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["server/**/*.test.ts", "server/**/*.spec.ts"],
+    env: {
+      DATABASE_URL: "postgresql://test:test@localhost:5432/test",
+      NODE_ENV: "test",
+    },
   },
 });

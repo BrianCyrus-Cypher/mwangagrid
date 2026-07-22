@@ -19,7 +19,10 @@ export async function hashPassword(password: string): Promise<string> {
 /**
  * Verifies a password against a stored hash created by hashPassword.
  */
-export async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
+export async function verifyPassword(
+  password: string,
+  storedHash: string
+): Promise<boolean> {
   const [algorithm, salt, hash] = storedHash.split(".");
   if (algorithm !== "scrypt" || !salt || !hash) {
     return false;

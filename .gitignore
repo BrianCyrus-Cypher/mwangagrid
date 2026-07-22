@@ -46,6 +46,9 @@ pids
 *.pid.lock
 *.bak
 
+# Uploads (user-generated files)
+uploads/
+
 # Coverage directory used by tools like istanbul
 coverage/
 *.lcov

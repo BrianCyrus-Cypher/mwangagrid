@@ -30,7 +30,8 @@ export const STATIC_PRODUCTS: Product[] = [
     price: 45000,
     description:
       "Compact and portable 1KW solar generator with 800Wh battery capacity. Perfect for home backup power, camping, and emergency situations. Features built-in inverter and multiple output ports.",
-    image: "https://claire.solar/public/uploads/all/Kf0jeSOPcikjRgLQJU6Y1qph2sDekfSP2TmAdWHF.jpg",
+    image:
+      "https://claire.solar/public/uploads/all/Kf0jeSOPcikjRgLQJU6Y1qph2sDekfSP2TmAdWHF.jpg",
     inStock: true,
     specifications: {
       Power: "1KW",
@@ -46,7 +47,8 @@ export const STATIC_PRODUCTS: Product[] = [
     price: 125000,
     description:
       "Complete 6KW solar home system with 5kWh battery storage. Ideal for small to medium homes. Includes solar panels, inverter, battery, and installation support.",
-    image: "https://claire.solar/public/uploads/all/NtuJLuQuhODQpi5G6UuQN8EC9xMaPiEyreyqLHgM.jpg",
+    image:
+      "https://claire.solar/public/uploads/all/NtuJLuQuhODQpi5G6UuQN8EC9xMaPiEyreyqLHgM.jpg",
     inStock: true,
     specifications: {
       Power: "6KW",
@@ -62,7 +64,8 @@ export const STATIC_PRODUCTS: Product[] = [
     price: 185000,
     description:
       "Premium 6KW solar home system with 10kWh battery storage. Extended battery capacity for continuous power supply. Supports whole-home energy needs.",
-    image: "https://claire.solar/public/uploads/all/Ue2JOqJWAhrvsjqKEJnLuNV4ZRuvadtwL3sDTrAD.jpg",
+    image:
+      "https://claire.solar/public/uploads/all/Ue2JOqJWAhrvsjqKEJnLuNV4ZRuvadtwL3sDTrAD.jpg",
     inStock: true,
     specifications: {
       Power: "6KW",
@@ -78,7 +81,8 @@ export const STATIC_PRODUCTS: Product[] = [
     price: 18000,
     description:
       "Energy-efficient 480W solar streetlight with integrated motion sensor. Perfect for outdoor lighting, parking areas, and street illumination.",
-    image: "https://claire.solar/public/uploads/all/Cvct8M3GkZ931mHAZHTMfII1uNe6P2vOIbd7l8C2.jpg",
+    image:
+      "https://claire.solar/public/uploads/all/Cvct8M3GkZ931mHAZHTMfII1uNe6P2vOIbd7l8C2.jpg",
     inStock: true,
     specifications: {
       Power: "480W",
@@ -94,7 +98,8 @@ export const STATIC_PRODUCTS: Product[] = [
     price: 22000,
     description:
       "High-power 600W solar streetlight with advanced motion detection. Ideal for highways and commercial areas. Weather-resistant ABS housing.",
-    image: "https://claire.solar/public/uploads/all/P2Lifr47ys8IzbMZQhDG2MEU6OPscwupb9D2kiNo.jpg",
+    image:
+      "https://claire.solar/public/uploads/all/P2Lifr47ys8IzbMZQhDG2MEU6OPscwupb9D2kiNo.jpg",
     inStock: true,
     specifications: {
       Power: "600W",
@@ -110,7 +115,8 @@ export const STATIC_PRODUCTS: Product[] = [
     price: 285000,
     description:
       "Large-scale 10KW solar system with 20kWh battery storage. Designed for large homes and small commercial applications.",
-    image: "https://claire.solar/public/uploads/all/fXmXqOFwHD8cxJeiXLffNPvn0OaJjxKOtzYryNvc.jpg",
+    image:
+      "https://claire.solar/public/uploads/all/fXmXqOFwHD8cxJeiXLffNPvn0OaJjxKOtzYryNvc.jpg",
     inStock: true,
     specifications: {
       Power: "10KW",
@@ -125,10 +131,10 @@ export const STATIC_PRODUCTS: Product[] = [
     id: 201,
     name: "Reolink Argus 3 Pro 5MP Dual-Band Wi-Fi Battery Camera",
     category: "cctv-cameras",
-    price: 28000,
+    price: 9000,
     description:
       "Advanced 5MP wireless security camera with dual-band Wi-Fi and long battery life. 2K resolution, colour night vision, and smart motion detection.",
-    image: "https://images.reolink.com/wp-content/uploads/2023/01/argus-3-pro-product.png",
+    image: "",
     inStock: true,
     specifications: {
       Resolution: "5MP (2K)",
@@ -142,10 +148,10 @@ export const STATIC_PRODUCTS: Product[] = [
     id: 202,
     name: "Reolink E1 4MP Pan-Tilt Indoor Wi-Fi Camera",
     category: "cctv-cameras",
-    price: 15000,
+    price: 3000,
     description:
       "Indoor pan-tilt 4MP Wi-Fi camera with 360° coverage. Features smart motion tracking and colour night vision. Ideal for home and office surveillance.",
-    image: "https://images.reolink.com/wp-content/uploads/2021/09/e1-outdoor-pro-product.png",
+    image: "",
     inStock: true,
     specifications: {
       Resolution: "4MP",
@@ -159,7 +165,7 @@ export const STATIC_PRODUCTS: Product[] = [
     id: 203,
     name: "Uniview 4MP+4MP 25X ColorHunter PTZ Camera",
     category: "cctv-cameras",
-    price: 95000,
+    price: 52800,
     description:
       "Professional dual 4MP PTZ camera with 25X zoom and ColorHunter technology. Advanced dual-light system for superior night imaging.",
     image: "https://www.uniview.com/uploadfile/2023/1220/20231220081504_28.jpg",
@@ -176,7 +182,7 @@ export const STATIC_PRODUCTS: Product[] = [
     id: 204,
     name: "Uniview 4MP Fixed Dual-light Turret Camera",
     category: "cctv-cameras",
-    price: 32000,
+    price: 4500,
     description:
       "Professional 4MP turret camera with dual-light technology for 24/7 colour imaging. Fixed lens for reliable retail and commercial surveillance.",
     image: "https://www.uniview.com/uploadfile/2023/0810/20230810095527_79.jpg",
@@ -193,7 +199,7 @@ export const STATIC_PRODUCTS: Product[] = [
     id: 205,
     name: "Uniview 4MP Fixed Dual-light Bullet Camera",
     category: "cctv-cameras",
-    price: 28000,
+    price: 4650,
     description:
       "Compact 4MP bullet camera with dual-light technology. Weather-resistant design for outdoor installation.",
     image: "https://www.uniview.com/uploadfile/2023/0810/20230810095442_21.jpg",
@@ -210,7 +216,7 @@ export const STATIC_PRODUCTS: Product[] = [
     id: 206,
     name: "Uniview 4MP Fixed IR Dome Network Camera",
     category: "cctv-cameras",
-    price: 25000,
+    price: 4000,
     description:
       "Discreet 4MP dome camera with IR night vision. Ideal for indoor surveillance in banks, offices, and retail stores.",
     image: "https://www.uniview.com/uploadfile/2023/0104/20230104064319_97.jpg",
@@ -227,7 +233,7 @@ export const STATIC_PRODUCTS: Product[] = [
     id: 207,
     name: "Uniview 2MP Fixed IR Dome Network Camera",
     category: "cctv-cameras",
-    price: 18000,
+    price: 2700,
     description:
       "Budget-friendly 2MP dome camera with IR night vision. Perfect for basic surveillance needs in small businesses.",
     image: "https://www.uniview.com/uploadfile/2023/0104/20230104064409_46.jpg",
@@ -241,6 +247,72 @@ export const STATIC_PRODUCTS: Product[] = [
     },
   },
 
+  // Test Product (1 KES)
+  {
+    id: 999,
+    name: "Test Product — 1 KES",
+    category: "solar-equipment",
+    price: 1,
+    description:
+      "Testing product priced at 1 KES. Use this to verify M-Pesa STK push and checkout flow end-to-end.",
+    image:
+      "https://claire.solar/public/uploads/all/Kf0jeSOPcikjRgLQJU6Y1qph2sDekfSP2TmAdWHF.jpg",
+    inStock: true,
+    specifications: {
+      Purpose: "Testing only",
+      Price: "KES 1",
+    },
+  },
+  // Internet Equipment
+  {
+    id: 307,
+    name: "FibeHome GPON ONT + Wi-Fi 6 Router",
+    category: "routers",
+    price: 4500,
+    description:
+      "Fiber-to-home GPON ONT with built-in Wi-Fi 6 router. Perfect for FTTH installations. Supports speeds up to 1 Gbps.",
+    image:
+      "https://cdn.shopify.com/s/files/1/0659/6529/7599/files/fiberhome_ont_router.jpg",
+    inStock: true,
+    specifications: {
+      Type: "GPON ONT + Router",
+      Standard: "Wi-Fi 6 (802.11ax)",
+      Ports: "2x Gigabit LAN, 1x FXS (VoIP)",
+      Warranty: "1 year",
+    },
+  },
+  {
+    id: 308,
+    name: "MikroTik hAP ax3 Wi-Fi 6 Router",
+    category: "routers",
+    price: 8500,
+    description:
+      "Dual-band Wi-Fi 6 router powered by RouterOS. Five Gigabit Ethernet ports. Ideal for ISPs and prosumer home networks.",
+    image: "https://mikrotik.com/img/products/hap-ax3/overview.png",
+    inStock: true,
+    specifications: {
+      Speed: "AX6000",
+      CPU: "IPQ-6010 1.8 GHz",
+      Ports: "5x Gigabit LAN",
+      OS: "RouterOS L4",
+    },
+  },
+  {
+    id: 309,
+    name: "Ubiquiti UniFi 6 Pro Access Point",
+    category: "routers",
+    price: 14500,
+    description:
+      "Enterprise-grade Wi-Fi 6 access point capable of 300+ simultaneous clients. Ideal for offices, hotels, and large venues.",
+    image: "https://store.ui.com/cdn/shop/products/UF-U6-PRO-BK-01_800x.jpg",
+    inStock: true,
+    specifications: {
+      Speed: "AX5400",
+      Standard: "Wi-Fi 6 (802.11ax)",
+      "Max Clients": "300+",
+      PoE: "802.3at (included)",
+    },
+  },
   // Routers / Internet Equipment
   {
     id: 301,
@@ -249,7 +321,8 @@ export const STATIC_PRODUCTS: Product[] = [
     price: 12500,
     description:
       "High-speed AX6000 Wi-Fi 6 router with MU-MIMO technology. Supports multiple devices simultaneously. Ideal for homes and small offices.",
-    image: "https://static.tp-link.com/upload/product-overview/2022/202207/20220712_165005_636351264506884413.jpg",
+    image:
+      "https://static.tp-link.com/upload/product-overview/2022/202207/20220712_165005_636351264506884413.jpg",
     inStock: true,
     specifications: {
       Speed: "AX6000",
@@ -313,7 +386,8 @@ export const STATIC_PRODUCTS: Product[] = [
     price: 18000,
     description:
       "10-port managed gigabit switch with VLAN support. Professional-grade networking for businesses. Compact design for easy installation.",
-    image: "https://www.netgear.com/images/Products/Switches/ManagedSwitches/GS110MX_hero_side.png",
+    image:
+      "https://www.netgear.com/images/Products/Switches/ManagedSwitches/GS110MX_hero_side.png",
     inStock: true,
     specifications: {
       Ports: "10x Gigabit",
@@ -400,5 +474,20 @@ export const STATIC_SERVICES: Service[] = [
     ],
     startingPrice: 8000,
     icon: "🔧",
+  },
+  {
+    id: 5,
+    name: "Fiber Optic & TV Installation",
+    description:
+      "Professional fiber optic termination, splicing, and DSTV/GOTV/Zuku dish mounting. End-to-end signal testing and quality assurance.",
+    features: [
+      "Fiber termination & splicing",
+      "Dish mounting & alignment",
+      "Indoor/outdoor cabling",
+      "Signal strength testing",
+      "1-year workmanship warranty",
+    ],
+    startingPrice: 5000,
+    icon: "📡",
   },
 ];

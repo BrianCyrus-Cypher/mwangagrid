@@ -1,6 +1,11 @@
 import { Camera, Headphones, Network, Sun, Wifi } from "lucide-react";
 
-export type ServiceCategory = "internet" | "cctv" | "solar" | "network" | "support";
+export type ServiceCategory =
+  | "internet"
+  | "cctv"
+  | "solar"
+  | "network"
+  | "support";
 
 export type ServicePackage = {
   id: number;
@@ -78,8 +83,14 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 1500,
     billing: "monthly",
     leadTime: "24-72 hours after coverage confirmation",
-    coverageNote: "Best for Roysambu, Zimmerman, Githurai, Kahawa West and Kasarani homes.",
-    features: ["Unlimited home browsing", "Standard router setup", "Basic streaming and video calls", "WhatsApp support"],
+    coverageNote:
+      "Best for Roysambu, Zimmerman, Githurai, Kahawa West and Kasarani homes.",
+    features: [
+      "Unlimited home browsing",
+      "Standard router setup",
+      "Basic streaming and video calls",
+      "WhatsApp support",
+    ],
   },
   {
     id: 1002,
@@ -91,8 +102,14 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     billing: "monthly",
     leadTime: "24-72 hours after coverage confirmation",
     popular: true,
-    coverageNote: "Recommended for apartments along Thika Road from Nairobi town to Githurai.",
-    features: ["Unlimited home internet", "Dual-band router configuration", "Streaming and online classes", "Installation survey included"],
+    coverageNote:
+      "Recommended for apartments along Thika Road from Nairobi town to Githurai.",
+    features: [
+      "Unlimited home internet",
+      "Dual-band router configuration",
+      "Streaming and online classes",
+      "Installation survey included",
+    ],
   },
   {
     id: 1003,
@@ -103,8 +120,14 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 4500,
     billing: "monthly",
     leadTime: "2-4 business days after coverage confirmation",
-    coverageNote: "For shops, salons, clinics and offices around Nairobi CBD, Kasarani, Roysambu and Githurai.",
-    features: ["Priority support", "Router and access-point optimisation", "POS and CCTV remote-viewing ready", "Static LAN planning"],
+    coverageNote:
+      "For shops, salons, clinics and offices around Nairobi CBD, Kasarani, Roysambu and Githurai.",
+    features: [
+      "Priority support",
+      "Router and access-point optimisation",
+      "POS and CCTV remote-viewing ready",
+      "Static LAN planning",
+    ],
   },
   {
     id: 1004,
@@ -115,7 +138,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 6500,
     billing: "monthly",
     leadTime: "2-5 business days after coverage confirmation",
-    features: ["High-throughput office connectivity", "Mesh or access-point planning", "Usage and uptime guidance", "Monthly support check-in"],
+    features: [
+      "High-throughput office connectivity",
+      "Mesh or access-point planning",
+      "Usage and uptime guidance",
+      "Monthly support check-in",
+    ],
   },
   {
     id: 2001,
@@ -126,7 +154,13 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 24900,
     billing: "one-off",
     leadTime: "Same day to 2 days",
-    features: ["4 HD cameras", "4-channel DVR", "500GB-1TB surveillance storage", "Mobile phone viewing setup", "Basic cabling and commissioning"],
+    features: [
+      "4 HD cameras",
+      "4-channel DVR",
+      "500GB-1TB surveillance storage",
+      "Mobile phone viewing setup",
+      "Basic cabling and commissioning",
+    ],
   },
   {
     id: 2002,
@@ -138,7 +172,13 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     billing: "one-off",
     leadTime: "1-3 business days",
     popular: true,
-    features: ["8 HD cameras", "8-channel DVR/NVR", "1TB surveillance storage", "Remote viewing and user training", "Shop or office coverage plan"],
+    features: [
+      "8 HD cameras",
+      "8-channel DVR/NVR",
+      "1TB surveillance storage",
+      "Remote viewing and user training",
+      "Shop or office coverage plan",
+    ],
   },
   {
     id: 2003,
@@ -149,7 +189,13 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 80650,
     billing: "one-off",
     leadTime: "2-5 business days",
-    features: ["16-camera multi-zone coverage", "16-channel recorder", "2TB+ storage planning", "Remote viewing for managers", "Structured cabling estimate"],
+    features: [
+      "16-camera multi-zone coverage",
+      "16-channel recorder",
+      "2TB+ storage planning",
+      "Remote viewing for managers",
+      "Structured cabling estimate",
+    ],
   },
   {
     id: 3001,
@@ -160,7 +206,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 85000,
     billing: "one-off",
     leadTime: "2-4 business days",
-    features: ["Lights, TV, router and phone charging", "Inverter and battery kit", "Basic roof or wall assessment", "Installation and commissioning"],
+    features: [
+      "Lights, TV, router and phone charging",
+      "Inverter and battery kit",
+      "Basic roof or wall assessment",
+      "Installation and commissioning",
+    ],
   },
   {
     id: 3002,
@@ -172,7 +223,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     billing: "one-off",
     leadTime: "3-7 business days",
     popular: true,
-    features: ["Hybrid inverter", "Lithium battery-ready design", "Solar array and protection gear", "Professional installation included"],
+    features: [
+      "Hybrid inverter",
+      "Lithium battery-ready design",
+      "Solar array and protection gear",
+      "Professional installation included",
+    ],
   },
   {
     id: 3003,
@@ -183,7 +239,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 355000,
     billing: "one-off",
     leadTime: "4-10 business days",
-    features: ["5kVA hybrid inverter", "5kWh lithium storage", "Solar mounting and cabling", "Supports fridge, TV, lights, Wi-Fi and small appliances"],
+    features: [
+      "5kVA hybrid inverter",
+      "5kWh lithium storage",
+      "Solar mounting and cabling",
+      "Supports fridge, TV, lights, Wi-Fi and small appliances",
+    ],
   },
   {
     id: 3004,
@@ -194,7 +255,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 570000,
     billing: "one-off",
     leadTime: "5-12 business days",
-    features: ["10kWh lithium storage", "High-efficiency solar panels", "Surge protection and commissioning", "Designed for larger homes and offices"],
+    features: [
+      "10kWh lithium storage",
+      "High-efficiency solar panels",
+      "Surge protection and commissioning",
+      "Designed for larger homes and offices",
+    ],
   },
   {
     id: 4001,
@@ -205,7 +271,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 18000,
     billing: "one-off",
     leadTime: "Same day to 2 days",
-    features: ["Router placement", "Coverage testing", "Password and guest network setup", "Device connection checks"],
+    features: [
+      "Router placement",
+      "Coverage testing",
+      "Password and guest network setup",
+      "Device connection checks",
+    ],
   },
   {
     id: 4002,
@@ -216,7 +287,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 45000,
     billing: "one-off",
     leadTime: "2-5 business days",
-    features: ["Router, switch and access point planning", "Cat6 cabling estimate", "Printer/POS/CCTV LAN setup", "Documentation handover"],
+    features: [
+      "Router, switch and access point planning",
+      "Cat6 cabling estimate",
+      "Printer/POS/CCTV LAN setup",
+      "Documentation handover",
+    ],
   },
   {
     id: 5001,
@@ -227,7 +303,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     price: 12000,
     billing: "monthly",
     leadTime: "Starts after onboarding visit",
-    features: ["One preventive visit per month", "Remote support", "CCTV/network health checks", "Priority technician scheduling"],
+    features: [
+      "One preventive visit per month",
+      "Remote support",
+      "CCTV/network health checks",
+      "Priority technician scheduling",
+    ],
   },
 ];
 
@@ -241,10 +322,16 @@ export const KENYA_COUNTIES: CountyTown[] = [
   { county: "Garissa", towns: ["Garissa", "Dadaab", "Hulugho"] },
   { county: "Homa Bay", towns: ["Homa Bay", "Oyugis", "Mbita"] },
   { county: "Isiolo", towns: ["Isiolo", "Merti", "Garbatulla"] },
-  { county: "Kajiado", towns: ["Kajiado", "Kitengela", "Ngong", "Ongata Rongai"] },
+  {
+    county: "Kajiado",
+    towns: ["Kajiado", "Kitengela", "Ngong", "Ongata Rongai"],
+  },
   { county: "Kakamega", towns: ["Kakamega", "Mumias", "Butere"] },
   { county: "Kericho", towns: ["Kericho", "Litein", "Londiani"] },
-  { county: "Kiambu", towns: ["Kiambu", "Ruiru", "Thika", "Juja", "Kikuyu", "Limuru"] },
+  {
+    county: "Kiambu",
+    towns: ["Kiambu", "Ruiru", "Thika", "Juja", "Kikuyu", "Limuru"],
+  },
   { county: "Kilifi", towns: ["Kilifi", "Malindi", "Watamu", "Mariakani"] },
   { county: "Kirinyaga", towns: ["Kerugoya", "Kutus", "Sagana"] },
   { county: "Kisii", towns: ["Kisii", "Ogembo", "Suneka"] },
@@ -253,7 +340,10 @@ export const KENYA_COUNTIES: CountyTown[] = [
   { county: "Kwale", towns: ["Kwale", "Ukunda", "Msambweni"] },
   { county: "Laikipia", towns: ["Nanyuki", "Nyahururu", "Rumuruti"] },
   { county: "Lamu", towns: ["Lamu", "Mpeketoni", "Hindi"] },
-  { county: "Machakos", towns: ["Machakos", "Athi River", "Mlolongo", "Kangundo"] },
+  {
+    county: "Machakos",
+    towns: ["Machakos", "Athi River", "Mlolongo", "Kangundo"],
+  },
   { county: "Makueni", towns: ["Wote", "Makindu", "Sultan Hamud"] },
   { county: "Mandera", towns: ["Mandera", "Elwak", "Takaba"] },
   { county: "Marsabit", towns: ["Marsabit", "Moyale", "Laisamis"] },
@@ -261,7 +351,22 @@ export const KENYA_COUNTIES: CountyTown[] = [
   { county: "Migori", towns: ["Migori", "Rongo", "Awendo"] },
   { county: "Mombasa", towns: ["Mombasa", "Nyali", "Likoni", "Changamwe"] },
   { county: "Murang'a", towns: ["Murang'a", "Kenol", "Kangema"] },
-  { county: "Nairobi", towns: ["CBD", "Westlands", "Kilimani", "Upper Hill", "Kasarani", "Roysambu", "Zimmerman", "Githurai", "Kahawa West", "Garden Estate", "Roasters"] },
+  {
+    county: "Nairobi",
+    towns: [
+      "CBD",
+      "Westlands",
+      "Kilimani",
+      "Upper Hill",
+      "Kasarani",
+      "Roysambu",
+      "Zimmerman",
+      "Githurai",
+      "Kahawa West",
+      "Garden Estate",
+      "Roasters",
+    ],
+  },
   { county: "Nakuru", towns: ["Nakuru", "Naivasha", "Gilgil", "Molo"] },
   { county: "Nandi", towns: ["Kapsabet", "Nandi Hills", "Mosoriot"] },
   { county: "Narok", towns: ["Narok", "Kilgoris", "Suswa"] },
@@ -378,7 +483,36 @@ export function getTownsForCounty(county: string) {
 }
 
 export function isInternetCoverageTown(town: string) {
-  return ["cbd", "pangani", "roasters", "garden estate", "kasarani", "roysambu", "zimmerman", "githurai", "kahawa west", "kahawa wendani", "kahawa sukari"].includes(
-    town.toLowerCase()
-  );
+  return [
+    "cbd",
+    "upper hill",
+    "upperhill",
+    "pangani",
+    "roasters",
+    "garden estate",
+    "kasarani",
+    "roysambu",
+    "zimmerman",
+    "githurai",
+    "kahawa west",
+    "kahawa wendani",
+    "kahawa sukari",
+  ].includes(town.toLowerCase());
+}
+
+export function getInternetCoverageTowns() {
+  return [
+    { name: "Upper Hill", desc: "CBD vicinity — fibre backbone available" },
+    { name: "CBD", desc: "Central business district" },
+    { name: "Pangani", desc: "Along Thika Road" },
+    { name: "Roasters", desc: "Mwanga Grid primary corridor" },
+    { name: "Garden Estate", desc: "Off Thika Road" },
+    { name: "Kasarani", desc: "Along Thika Road" },
+    { name: "Roysambu", desc: "Thika Road junction" },
+    { name: "Zimmerman", desc: "Thika Road belt" },
+    { name: "Githurai", desc: "Eastern coverage limit" },
+    { name: "Kahawa West", desc: "Kahawa area" },
+    { name: "Kahawa Wendani", desc: "Kahawa area" },
+    { name: "Kahawa Sukari", desc: "Kahawa area" },
+  ];
 }

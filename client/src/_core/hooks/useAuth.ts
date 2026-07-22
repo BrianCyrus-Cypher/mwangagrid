@@ -64,12 +64,7 @@ export function useAuth(options?: UseAuthOptions) {
     if (current === redirectPath) return;
 
     window.location.href = redirectPath;
-  }, [
-    redirectOnUnauthenticated,
-    redirectPath,
-    meQuery.isLoading,
-    state.user,
-  ]);
+  }, [redirectOnUnauthenticated, redirectPath, meQuery.isLoading, state.user]);
 
   return {
     ...state,

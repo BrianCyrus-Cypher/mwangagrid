@@ -16,6 +16,7 @@ import { Calculator, Loader2, MapPin } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
+import { toast } from "sonner";
 
 function getInitialPackageId() {
   if (typeof window === "undefined") return SERVICE_PACKAGES[0]?.id ?? 0;
@@ -40,8 +41,12 @@ export default function Quotation() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const selectedPackage = getPackageById(Number(formData.packageId)) ?? SERVICE_PACKAGES[0];
-  const towns = useMemo(() => getTownsForCounty(formData.county), [formData.county]);
+  const selectedPackage =
+    getPackageById(Number(formData.packageId)) ?? SERVICE_PACKAGES[0];
+  const towns = useMemo(
+    () => getTownsForCounty(formData.county),
+    [formData.county]
+  );
   const transportZone = useMemo(
     () => getTransportFee(formData.county, formData.town),
     [formData.county, formData.town]
@@ -49,7 +54,11 @@ export default function Quotation() {
   const vat = Math.round(selectedPackage.price * 0.16);
   const quoteTotal = selectedPackage.price + transportZone.fee + vat;
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = event.target;
     setFormData(prev => {
       if (name === "county") {
@@ -158,7 +167,7 @@ export default function Quotation() {
       window.setTimeout(() => navigate("/account"), 900);
     } catch (err) {
       console.error(err);
-      alert("Failed to submit quotation (demo). Please try again.");
+      toast.error("Failed to submit quotation. Please try again.");
       setSubmitting(false);
     }
   };
@@ -169,9 +178,12 @@ export default function Quotation() {
         <div className="container py-12">
           <Card className="mx-auto max-w-lg p-10 text-center">
             <Calculator className="mx-auto mb-4 h-12 w-12 text-accent" />
-            <h1 className="mb-2 text-2xl font-bold text-foreground">Quotation submitted</h1>
+            <h1 className="mb-2 text-2xl font-bold text-foreground">
+              Quotation submitted
+            </h1>
             <p className="text-muted-foreground">
-              Mwanga Grid will confirm coverage, transport and final installation details before dispatch.
+              Mwanga Grid will confirm coverage, transport and final
+              installation details before dispatch.
             </p>
           </Card>
         </div>
@@ -183,9 +195,12 @@ export default function Quotation() {
     <div className="min-h-screen bg-background">
       <div className="border-b border-border bg-white dark:bg-slate-950">
         <div className="container py-12">
-          <h1 className="mb-2 text-4xl font-bold text-foreground">Request a Quote</h1>
+          <h1 className="mb-2 text-4xl font-heading font-bold text-foreground">
+            Request a Quote
+          </h1>
           <p className="text-foreground/60">
-            Build a service quotation with package price, transport estimate and site location.
+            Build a service quotation with package price, transport estimate and
+            site location.
           </p>
         </div>
       </div>
@@ -196,22 +211,68 @@ export default function Quotation() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">Name</label>
-                  <Input name="name" value={formData.name} onChange={handleChange} placeholder="Customer name" required />
+                  <label
+                    htmlFor="quote-name"
+                    className="mb-2 block text-sm font-medium text-foreground"
+                  >
+                    Name
+                  </label>
+                  <Input
+                    id="quote-name"
+                    autoComplete="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Customer name"
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">Phone</label>
-                  <Input name="phone" value={formData.phone} onChange={handleChange} placeholder="0712 345 678" required />
+                  <label
+                    htmlFor="quote-phone"
+                    className="mb-2 block text-sm font-medium text-foreground"
+                  >
+                    Phone
+                  </label>
+                  <Input
+                    id="quote-phone"
+                    autoComplete="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="0712 345 678"
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">Email</label>
-                  <Input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" />
+                  <label
+                    htmlFor="quote-email"
+                    className="mb-2 block text-sm font-medium text-foreground"
+                  >
+                    Email
+                  </label>
+                  <Input
+                    id="quote-email"
+                    autoComplete="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                  />
                 </div>
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-foreground">Service Package</label>
+                <label
+                  htmlFor="quote-package"
+                  className="mb-2 block text-sm font-medium text-foreground"
+                >
+                  Service Package
+                </label>
                 <select
+                  id="quote-package"
+                  autoComplete="off"
                   name="packageId"
                   value={formData.packageId}
                   onChange={handleChange}
@@ -219,7 +280,8 @@ export default function Quotation() {
                 >
                   {SERVICE_PACKAGES.map(pkg => (
                     <option key={pkg.id} value={pkg.id}>
-                      {pkg.serviceName} - {pkg.name} ({formatKes(pkg.price)}{pkg.billing === "monthly" ? "/mo" : ""})
+                      {pkg.serviceName} - {pkg.name} ({formatKes(pkg.price)}
+                      {pkg.billing === "monthly" ? "/mo" : ""})
                     </option>
                   ))}
                 </select>
@@ -227,36 +289,61 @@ export default function Quotation() {
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">County</label>
+                  <label
+                    htmlFor="quote-county"
+                    className="mb-2 block text-sm font-medium text-foreground"
+                  >
+                    County
+                  </label>
                   <select
+                    id="quote-county"
+                    autoComplete="address-level1"
                     name="county"
                     value={formData.county}
                     onChange={handleChange}
                     className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   >
                     {KENYA_COUNTIES.map(item => (
-                      <option key={item.county} value={item.county}>{item.county}</option>
+                      <option key={item.county} value={item.county}>
+                        {item.county}
+                      </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-foreground">Town / Area</label>
+                  <label
+                    htmlFor="quote-town"
+                    className="mb-2 block text-sm font-medium text-foreground"
+                  >
+                    Town / Area
+                  </label>
                   <select
+                    id="quote-town"
+                    autoComplete="address-level2"
                     name="town"
                     value={formData.town}
                     onChange={handleChange}
                     className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   >
                     {towns.map(town => (
-                      <option key={town} value={town}>{town}</option>
+                      <option key={town} value={town}>
+                        {town}
+                      </option>
                     ))}
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-foreground">Project Description</label>
+                <label
+                  htmlFor="quote-description"
+                  className="mb-2 block text-sm font-medium text-foreground"
+                >
+                  Project Description
+                </label>
                 <Textarea
+                  id="quote-description"
+                  autoComplete="off"
                   name="description"
                   placeholder="Describe your site, expected users, cameras, appliances, internet needs or business workflow..."
                   value={formData.description}
@@ -267,8 +354,15 @@ export default function Quotation() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-foreground">Extra Items or Notes</label>
+                <label
+                  htmlFor="quote-items"
+                  className="mb-2 block text-sm font-medium text-foreground"
+                >
+                  Extra Items or Notes
+                </label>
                 <Textarea
+                  id="quote-items"
+                  autoComplete="off"
                   name="items"
                   placeholder="Example: extra camera, pole mount, cabling distance, battery preference, router location..."
                   value={formData.items}
@@ -281,17 +375,29 @@ export default function Quotation() {
                 <h3 className="mb-2 font-bold text-foreground">Quote flow</h3>
                 <ul className="space-y-2 text-sm text-foreground/70">
                   <li>Submit package and site location.</li>
-                  <li>Team confirms internet coverage, CCTV/solar scope and transport.</li>
-                  <li>Client receives a final quote before installation dispatch.</li>
+                  <li>
+                    Team confirms internet coverage, CCTV/solar scope and
+                    transport.
+                  </li>
+                  <li>
+                    Client receives a final quote before installation dispatch.
+                  </li>
                 </ul>
               </div>
 
               <div className="flex gap-4">
                 <Button type="submit" className="flex-1" disabled={submitting}>
-                  {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                  {submitting ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : null}
                   {submitting ? "Submitting..." : "Submit Quote Request"}
                 </Button>
-                <Button type="button" variant="outline" className="flex-1" onClick={() => navigate("/services")}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => navigate("/services")}
+                >
                   Back to Packages
                 </Button>
               </div>
@@ -301,22 +407,34 @@ export default function Quotation() {
           <Card className="h-fit p-6">
             <div className="mb-5 flex items-center gap-2">
               <Calculator className="h-5 w-5 text-accent" />
-              <h2 className="text-xl font-bold text-foreground">Live Estimate</h2>
+              <h2 className="text-xl font-bold text-foreground">
+                Live Estimate
+              </h2>
             </div>
 
             <div className="mb-5 rounded-lg border border-border p-4">
-              <p className="text-sm font-semibold text-accent">{selectedPackage.serviceName}</p>
-              <h3 className="mt-1 text-lg font-bold text-foreground">{selectedPackage.name}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{selectedPackage.leadTime}</p>
+              <p className="text-sm font-semibold text-accent">
+                {selectedPackage.serviceName}
+              </p>
+              <h3 className="mt-1 text-lg font-bold text-foreground">
+                {selectedPackage.name}
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {selectedPackage.leadTime}
+              </p>
             </div>
 
             <div className="mb-5 flex gap-2 rounded-lg bg-muted p-3 text-sm text-muted-foreground">
               <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" />
-              <span>{formData.town}, {formData.county} - {transportZone.note}</span>
+              <span>
+                {formData.town}, {formData.county} - {transportZone.note}
+              </span>
             </div>
 
             {selectedPackage.serviceId === "internet" ? (
-              <p className={`mb-5 rounded-lg p-3 text-sm ${isInternetCoverageTown(formData.town) ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
+              <p
+                className={`mb-5 rounded-lg p-3 text-sm ${isInternetCoverageTown(formData.town) ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}
+              >
                 {isInternetCoverageTown(formData.town)
                   ? "Internet survey is inside the Nairobi-Roysambu-Githurai demo corridor."
                   : "Internet package selected outside primary coverage. Quote will require manual confirmation."}
@@ -326,11 +444,15 @@ export default function Quotation() {
             <div className="space-y-3 border-b border-border pb-5 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Package</span>
-                <span className="font-semibold">{formatKes(selectedPackage.price)}</span>
+                <span className="font-semibold">
+                  {formatKes(selectedPackage.price)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Transport</span>
-                <span className="font-semibold">{formatKes(transportZone.fee)}</span>
+                <span className="font-semibold">
+                  {formatKes(transportZone.fee)}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">VAT estimate</span>
@@ -340,7 +462,9 @@ export default function Quotation() {
 
             <div className="mt-5 flex items-center justify-between">
               <span className="font-bold text-foreground">Estimated quote</span>
-              <span className="text-2xl font-bold text-accent">{formatKes(quoteTotal)}</span>
+              <span className="text-2xl font-bold text-accent">
+                {formatKes(quoteTotal)}
+              </span>
             </div>
           </Card>
         </div>

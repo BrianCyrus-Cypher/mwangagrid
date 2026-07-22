@@ -28,7 +28,9 @@ function getConfig(): MPesaConfig {
 }
 
 export function isMpesaConfigured(): boolean {
-  return Boolean(ENV.mpesa.consumerKey && ENV.mpesa.consumerSecret && ENV.mpesa.passkey);
+  return Boolean(
+    ENV.mpesa.consumerKey && ENV.mpesa.consumerSecret && ENV.mpesa.passkey
+  );
 }
 
 export function normalizeKenyanPhone(phone: string): string {

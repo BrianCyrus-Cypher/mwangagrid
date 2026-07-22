@@ -6,8 +6,13 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 
 export default function VerifyEmailPage() {
-  const token = useMemo(() => new URLSearchParams(window.location.search).get("token"), []);
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  const token = useMemo(
+    () => new URLSearchParams(window.location.search).get("token"),
+    []
+  );
+  const [status, setStatus] = useState<"loading" | "success" | "error">(
+    "loading"
+  );
   const [errorMessage, setErrorMessage] = useState("");
 
   const verifyMutation = trpc.auth.verifyEmail.useMutation();
@@ -19,15 +24,18 @@ export default function VerifyEmailPage() {
       return;
     }
 
-    verifyMutation.mutate({ token }, {
-      onSuccess: () => {
-        setStatus("success");
-      },
-      onError: (err) => {
-        setStatus("error");
-        setErrorMessage(err.message || "Failed to verify email.");
+    verifyMutation.mutate(
+      { token },
+      {
+        onSuccess: () => {
+          setStatus("success");
+        },
+        onError: err => {
+          setStatus("error");
+          setErrorMessage(err.message || "Failed to verify email.");
+        },
       }
-    });
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
@@ -45,9 +53,12 @@ export default function VerifyEmailPage() {
           {status === "success" && (
             <>
               <CheckCircle2 className="h-16 w-16 text-emerald-500" />
-              <CardTitle className="text-2xl text-emerald-600 dark:text-emerald-400">Email Verified!</CardTitle>
+              <CardTitle className="text-2xl text-emerald-600 dark:text-emerald-400">
+                Email Verified!
+              </CardTitle>
               <p className="text-muted-foreground">
-                Your email has been successfully verified. You now have full access to your account.
+                Your email has been successfully verified. You now have full
+                access to your account.
               </p>
               <Link href="/account">
                 <Button className="w-full mt-4">Go to Account</Button>
@@ -58,12 +69,14 @@ export default function VerifyEmailPage() {
           {status === "error" && (
             <>
               <XCircle className="h-16 w-16 text-destructive" />
-              <CardTitle className="text-2xl text-destructive">Verification Failed</CardTitle>
-              <p className="text-muted-foreground">
-                {errorMessage}
-              </p>
+              <CardTitle className="text-2xl text-destructive">
+                Verification Failed
+              </CardTitle>
+              <p className="text-muted-foreground">{errorMessage}</p>
               <Link href="/">
-                <Button variant="outline" className="w-full mt-4">Return Home</Button>
+                <Button variant="outline" className="w-full mt-4">
+                  Return Home
+                </Button>
               </Link>
             </>
           )}

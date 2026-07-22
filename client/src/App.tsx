@@ -1,16 +1,17 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import React, { Suspense } from "react";
-import { Route, Switch } from "wouter";
+import React, { Suspense, useEffect } from "react";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import SiteLayout from "./components/SiteLayout";
 import { useAuth } from "./_core/hooks/useAuth";
-import { Spinner } from "./components/ui/spinner";
+import { PageLoader } from "./components/ui/page-loader";
 import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
 import { getLoginUrl } from "./const";
+import { PageTransition } from "./components/PageTransition";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Products = React.lazy(() => import("./pages/Products"));
@@ -24,44 +25,79 @@ const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 const VerifyEmail = React.lazy(() => import("./pages/VerifyEmail"));
 const Account = React.lazy(() => import("./pages/Account"));
 const Contact = React.lazy(() => import("./pages/Contact"));
+const FAQ = React.lazy(() => import("./pages/FAQ"));
+const Terms = React.lazy(() => import("./pages/Terms"));
+const Privacy = React.lazy(() => import("./pages/Privacy"));
 const AdminDashboard = React.lazy(() => import("./pages/AdminDashboard"));
+const AdminLogin = React.lazy(() => import("./pages/AdminLogin"));
+const Animations = React.lazy(() => import("./pages/Animations"));
 
-function PageLoader() {
-  return (
-    <div className="min-h-[60vh] bg-background flex items-center justify-center">
-      <div className="flex items-center gap-3 text-muted-foreground">
-        <Spinner className="h-5 w-5" />
-        <span>Loading secure area...</span>
+const PUBLIC_ROUTES = [
+  "/",
+  "/auth",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email",
+  "/animations",
+  "/404",
+  "/admin-login",
+];
+
+function RouteGuard({ children }: { children: React.ReactNode }) {
+  const { user, loading, isAuthenticated } = useAuth();
+  const [location] = useLocation();
+
+  if (loading) return <PageLoader />;
+
+  if (!isAuthenticated && !PUBLIC_ROUTES.includes(location)) {
+    const returnTo = encodeURIComponent(location);
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <Card className="w-full max-w-md p-8 text-center border-border/70 shadow-md">
+          <h1 className="text-2xl font-bold text-foreground mb-2">
+            Sign in required
+          </h1>
+          <p className="text-sm text-muted-foreground mb-6">
+            Create an account or sign in to access this page.
+          </p>
+          <Button
+            className="w-full mb-3"
+            onClick={() => (window.location.href = getLoginUrl(returnTo))}
+          >
+            Sign In
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => (window.location.href = getLoginUrl(returnTo))}
+          >
+            Create Account
+          </Button>
+        </Card>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <>{children}</>;
 }
 
-function ProtectedRoute({
-  children,
-  adminOnly = false,
-}: {
-  children: React.ReactNode;
-  adminOnly?: boolean;
-}) {
+function AdminRoute({ children }: { children: React.ReactNode }) {
   const { user, loading, isAuthenticated } = useAuth();
+  const [location] = useLocation();
 
   if (loading) return <PageLoader />;
 
   if (!isAuthenticated) {
-    const returnTo =
-      typeof window !== "undefined"
-        ? `${window.location.pathname}${window.location.search}`
-        : "/";
-
     return (
       <div className="min-h-[60vh] bg-background flex items-center justify-center px-4">
         <Card className="w-full max-w-md p-8 text-center border-border/70 shadow-md">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Sign in required</h1>
-          <p className="text-sm text-muted-foreground mb-6">
-            Please sign in to continue to this page.
-          </p>
-          <Button className="w-full" onClick={() => (window.location.href = getLoginUrl(returnTo))}>
+          <h1 className="text-2xl font-bold text-foreground mb-2">
+            Sign in required
+          </h1>
+          <Button
+            className="w-full"
+            onClick={() => (window.location.href = getLoginUrl(location))}
+          >
             Sign in
           </Button>
         </Card>
@@ -69,15 +105,18 @@ function ProtectedRoute({
     );
   }
 
-  if (adminOnly && user?.role !== "admin") {
+  if (user?.role !== "admin") {
     return (
       <div className="min-h-[60vh] bg-background flex items-center justify-center px-4">
         <Card className="w-full max-w-md p-8 text-center border-border/70 shadow-md">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Admin access required</h1>
-          <p className="text-sm text-muted-foreground mb-6">
-            This dashboard is only available to administrator accounts.
-          </p>
-          <Button variant="outline" className="w-full" onClick={() => (window.location.href = getLoginUrl("/admin"))}>
+          <h1 className="text-2xl font-bold text-foreground mb-2">
+            Admin access required
+          </h1>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => (window.location.href = getLoginUrl("/admin"))}
+          >
             Switch account
           </Button>
         </Card>
@@ -88,60 +127,110 @@ function ProtectedRoute({
   return <>{children}</>;
 }
 
-function Router() {
-  // make sure to consider if you need authentication for certain routes
-  return (
-    <SiteLayout>
-      <Suspense fallback={<PageLoader />}>
-        <Switch>
-          <Route path={"/"} component={Home} />
-          <Route path={"/products"} component={Products} />
-          <Route path={"/services"} component={Services} />
-          <Route path={"/cart"} component={Cart} />
-          <Route path={"/checkout"}>
-            <ProtectedRoute>
-              <Checkout />
-            </ProtectedRoute>
-          </Route>
-          <Route path={"/quotation"} component={Quotation} />
-          <Route path={"/auth"} component={Auth} />
-          <Route path={"/forgot-password"} component={ForgotPassword} />
-          <Route path={"/reset-password"} component={ResetPassword} />
-          <Route path={"/verify-email"} component={VerifyEmail} />
-          <Route path={"/account"}>
-            <ProtectedRoute>
-              <Account />
-            </ProtectedRoute>
-          </Route>
-          <Route path={"/contact"} component={Contact} />
-          <Route path={"/admin"}>
-            <ProtectedRoute adminOnly>
-              <AdminDashboard />
-            </ProtectedRoute>
-          </Route>
-          <Route path={"/404"} component={NotFound} />
-          {/* Final fallback route */}
-          <Route component={NotFound} />
-        </Switch>
-      </Suspense>
-    </SiteLayout>
-  );
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  return null;
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
+function Router() {
+  return (
+    <Switch>
+      <Route path={"/admin-login"} component={AdminLogin} />
+      <Route>
+        <ScrollToTop />
+        <SiteLayout>
+          <PageTransition>
+            <Suspense fallback={<PageLoader />}>
+              <Switch>
+                <Route path={"/animations"} component={Animations} />
+                <Route path={"/auth"} component={Auth} />
+                <Route path={"/forgot-password"} component={ForgotPassword} />
+                <Route path={"/reset-password"} component={ResetPassword} />
+                <Route path={"/verify-email"} component={VerifyEmail} />
+                <Route path={"/404"} component={NotFound} />
+                <Route path={"/"} component={Home} />
+                <Route path={"/products"}>
+                  <RouteGuard>
+                    <Products />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/services"}>
+                  <RouteGuard>
+                    <Services />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/cart"}>
+                  <RouteGuard>
+                    <Cart />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/checkout"}>
+                  <RouteGuard>
+                    <Checkout />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/quotation"}>
+                  <RouteGuard>
+                    <Quotation />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/contact"}>
+                  <RouteGuard>
+                    <Contact />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/faq"}>
+                  <RouteGuard>
+                    <FAQ />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/terms"}>
+                  <RouteGuard>
+                    <Terms />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/privacy"}>
+                  <RouteGuard>
+                    <Privacy />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/account"}>
+                  <RouteGuard>
+                    <Account />
+                  </RouteGuard>
+                </Route>
+                <Route path={"/admin"}>
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                </Route>
+                <Route component={NotFound} />
+              </Switch>
+            </Suspense>
+          </PageTransition>
+        </SiteLayout>
+      </Route>
+    </Switch>
+  );
+}
 
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        switchable
-      >
+      <ThemeProvider defaultTheme="light" switchable>
         <TooltipProvider>
-          <Toaster />
+          <Toaster
+            richColors
+            closeButton
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              className: "border border-border/70 shadow-lg",
+            }}
+          />
           <Router />
         </TooltipProvider>
       </ThemeProvider>

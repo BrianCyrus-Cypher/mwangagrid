@@ -1,4 +1,4 @@
-import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG } from '@shared/const';
+import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG } from "@shared/const";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import type { TrpcContext } from "./context";
@@ -7,15 +7,16 @@ const t = initTRPC.context<TrpcContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
     // Log unexpected errors
-    if (error.code === 'INTERNAL_SERVER_ERROR') {
-      console.error('🚨 [TRPC Error]', error);
+    if (error.code === "INTERNAL_SERVER_ERROR") {
+      console.error("🚨 [TRPC Error]", error);
     }
     return {
       ...shape,
       data: {
         ...shape.data,
         // Optional: you can strip stack traces here in production if not handled globally
-        stack: process.env.NODE_ENV === 'production' ? undefined : shape.data.stack,
+        stack:
+          process.env.NODE_ENV === "production" ? undefined : shape.data.stack,
       },
     };
   },
@@ -45,7 +46,7 @@ export const adminProcedure = t.procedure.use(
   t.middleware(async opts => {
     const { ctx, next } = opts;
 
-    if (!ctx.user || ctx.user.role !== 'admin') {
+    if (!ctx.user || ctx.user.role !== "admin") {
       throw new TRPCError({ code: "FORBIDDEN", message: NOT_ADMIN_ERR_MSG });
     }
 
@@ -55,5 +56,5 @@ export const adminProcedure = t.procedure.use(
         user: ctx.user,
       },
     });
-  }),
+  })
 );

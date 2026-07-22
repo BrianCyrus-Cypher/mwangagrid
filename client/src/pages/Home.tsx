@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ProductCardSkeleton } from "@/components/ProductCardSkeleton";
+import { Logo } from "@/components/Logo";
+import CinematicHero from "@/components/CinematicHero";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
+import { useCart } from "@/contexts/CartContext";
 import {
   ArrowRight,
   Shield,
@@ -17,72 +21,75 @@ import {
   Mail,
   MapPin,
   ChevronRight,
+  ShoppingCart,
 } from "lucide-react";
-import { useState, useEffect } from "react";
-
-function LoadingCard() {
-  return (
-    <Card className="overflow-hidden border-border/70 shadow-md">
-      <div className="h-48 animate-pulse bg-gradient-to-br from-muted via-muted/80 to-muted/60" />
-      <div className="p-5 space-y-3">
-        <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
-        <div className="h-4 w-full animate-pulse rounded bg-muted/80" />
-        <div className="h-4 w-5/6 animate-pulse rounded bg-muted/80" />
-        <div className="flex items-center justify-between pt-2">
-          <div className="h-5 w-24 animate-pulse rounded bg-muted" />
-          <div className="h-4 w-12 animate-pulse rounded bg-muted" />
-        </div>
-      </div>
-    </Card>
-  );
-}
-
-const HERO_SLIDES = [
-  {
-    headline: "Solar Power Solutions for a Brighter Kenya",
-    sub: "From portable generators to whole-home solar systems — we power your world reliably and affordably.",
-    cta: "Shop Solar",
-    link: "/products",
-    accent: "from-amber-500 to-orange-600",
-    icon: Sun,
-  },
-  {
-    headline: "Professional CCTV & Security Systems",
-    sub: "High-definition cameras, 24/7 monitoring, and expert installation for homes and businesses across Kenya.",
-    cta: "View Cameras",
-    link: "/products",
-    accent: "from-blue-500 to-indigo-600",
-    icon: Camera,
-  },
-  {
-    headline: "Enterprise-Grade Networking Equipment",
-    sub: "Wi-Fi 6 routers, managed switches, fiber optic cabling — everything you need for a fast, reliable network.",
-    cta: "Browse Products",
-    link: "/products",
-    accent: "from-emerald-500 to-teal-600",
-    icon: Network,
-  },
-];
+import { useState } from "react";
+import { useDelayedLoading } from "@/hooks/useDelayedLoading";
 
 const CATEGORIES = [
-  { label: "Solar Equipment", slug: "solar-equipment", icon: Sun, color: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" },
-  { label: "CCTV Cameras", slug: "cctv-cameras", icon: Camera, color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
-  { label: "Routers", slug: "routers", icon: Wifi, color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
-  { label: "Network Switches", slug: "network-switches", icon: Network, color: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
+  {
+    label: "Solar Equipment",
+    slug: "solar-equipment",
+    icon: Sun,
+    color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  },
+  {
+    label: "CCTV Cameras",
+    slug: "cctv-cameras",
+    icon: Camera,
+    color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  },
+  {
+    label: "Routers",
+    slug: "routers",
+    icon: Wifi,
+    color:
+      "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+  },
+  {
+    label: "Network Switches",
+    slug: "network-switches",
+    icon: Network,
+    color:
+      "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  },
 ];
 
 const TESTIMONIALS = [
-  { name: "John Mwangi", company: "Tech Solutions Ltd", text: "Mwanga Grid provided exceptional CCTV installation service. Professional, reliable, and great value.", rating: 5 },
-  { name: "Sarah Kipchoge", company: "Retail Hub Kenya", text: "Their solar and network setup transformed our business operations completely. Highly recommended!", rating: 5 },
-  { name: "David Omondi", company: "Security First", text: "Quality products and outstanding customer support. We've been a loyal customer for over 2 years.", rating: 5 },
+  {
+    name: "John Mwangi",
+    company: "Tech Solutions Ltd",
+    text: "Mwanga Grid provided exceptional CCTV installation service. Professional, reliable, and great value.",
+    rating: 5,
+  },
+  {
+    name: "Sarah Kipchoge",
+    company: "Retail Hub Kenya",
+    text: "Their solar and network setup transformed our business operations completely. Highly recommended!",
+    rating: 5,
+  },
+  {
+    name: "David Omondi",
+    company: "Security First",
+    text: "Quality products and outstanding customer support. We've been a loyal customer for over 2 years.",
+    rating: 5,
+  },
 ];
 
-function CategoryIcon({ icon: Icon, color, label }: { icon: any; color: string; label: string }) {
+function CategoryIcon({
+  icon: Icon,
+  color,
+  label,
+}: {
+  icon: any;
+  color: string;
+  label: string;
+}) {
   const [, navigate] = useLocation();
   return (
     <button
       onClick={() => navigate("/products")}
-      className={`flex flex-col items-center gap-3 p-6 rounded-2xl ${color} hover:scale-105 transition-transform duration-200 cursor-pointer border border-transparent hover:border-current/20`}
+      className={`flex flex-col items-center gap-2 sm:gap-3 p-4 sm:p-6 rounded-2xl ${color} hover:scale-105 transition-all duration-300 cursor-pointer border border-transparent hover:border-current/30 card-hover`}
     >
       <Icon className="w-10 h-10" />
       <span className="font-semibold text-sm">{label}</span>
@@ -92,136 +99,102 @@ function CategoryIcon({ icon: Icon, color, label }: { icon: any; color: string; 
 
 export default function Home() {
   const [, navigate] = useLocation();
-  const { data: products, isLoading: productsLoading } = trpc.products.list.useQuery();
-  const { data: services, isLoading: servicesLoading } = trpc.services.list.useQuery();
+  const { data: products, isLoading: productsLoading } =
+    trpc.products.featured.useQuery();
+  const { data: services, isLoading: servicesLoading } =
+    trpc.services.featured.useQuery();
+  const { addItem } = useCart();
 
-
-
-  const [slide, setSlide] = useState(0);
-
-
-
-
-
-  useEffect(() => {
-    const t = setInterval(() => setSlide(s => (s + 1) % HERO_SLIDES.length), 5000);
-    return () => clearInterval(t);
-  }, []);
-
-  const featuredProducts = products?.slice(0, 4) || [];
-  const current = HERO_SLIDES[slide];
-  const HeroIcon = current.icon;
-  const featuredProductCards = productsLoading
+  const featuredProducts = products || [];
+  const showProductsSkeleton = useDelayedLoading(productsLoading, 1000);
+  const showServicesSkeleton = useDelayedLoading(servicesLoading, 1000);
+  const featuredProductCards = showProductsSkeleton
     ? Array.from({ length: 4 }, (_, index) => ({ id: `loading-${index}` }))
     : featuredProducts;
 
   return (
     <div className="min-h-screen bg-background">
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden">
-        <div className={`bg-gradient-to-br ${current.accent} transition-all duration-700`}>
-          <div className="container py-24 md:py-36">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div className="space-y-8 text-white">
-                {/* Slide Dots */}
-                <div className="flex gap-2">
-                  {HERO_SLIDES.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setSlide(i)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${i === slide ? "w-8 bg-white" : "w-4 bg-white/40"}`}
-                    />
-                  ))}
-                </div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
-                  {current.headline}
-                </h1>
-                <p className="text-lg text-white/85 max-w-lg">
-                  {current.sub}
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <Button
-                    size="lg"
-                    className="bg-white text-gray-900 hover:bg-white/90 font-bold shadow-lg"
-                    onClick={() => navigate(current.link)}
-                  >
-                    {current.cta} <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-white text-white hover:bg-white/10"
-                    onClick={() => navigate("/quotation")}
-                  >
-                    Get a Free Quote
-                  </Button>
-                </div>
-
-                {/* Stats */}
-                <div className="flex gap-8 pt-4 border-t border-white/20">
-                  {[
-                    { value: "5,000+", label: "Happy Customers" },
-                    { value: "10+", label: "Years Experience" },
-                    { value: "24/7", label: "Support" },
-                  ].map((stat) => (
-                    <div key={stat.label}>
-                      <p className="text-2xl font-bold">{stat.value}</p>
-                      <p className="text-sm text-white/70">{stat.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Hero Image */}
-              <div className="hidden md:flex items-center justify-center">
-                <div className="w-72 h-72 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center shadow-2xl border border-white/20">
-                  <HeroIcon className="w-40 h-40 text-white/90" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Wave divider */}
-        <div className="h-16 bg-background" style={{ clipPath: "ellipse(55% 100% at 50% 0%)" }} />
-      </section>
+      <CinematicHero />
 
       {/* ── Categories ── */}
-      <section className="py-16 bg-background">
+      <section className="py-10 md:py-16 bg-background">
         <div className="container">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-foreground mb-2">Shop by Category</h2>
-            <p className="text-foreground/60">Everything you need for power, security, and connectivity</p>
+            <h2 className="text-3xl font-heading font-bold text-foreground mb-2">
+              Shop by Category
+            </h2>
+            <p className="text-foreground/60">
+              Everything you need for power, security, and connectivity
+            </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {CATEGORIES.map((cat) => (
-              <CategoryIcon key={cat.slug} icon={cat.icon} color={cat.color} label={cat.label} />
+            {CATEGORIES.map(cat => (
+              <CategoryIcon
+                key={cat.slug}
+                icon={cat.icon}
+                color={cat.color}
+                label={cat.label}
+              />
             ))}
           </div>
         </div>
       </section>
 
       {/* ── Value Props ── */}
-      <section className="py-16 bg-muted/40">
+      <section className="py-10 md:py-16 bg-muted/40">
         <div className="container">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Why Choose Mwanga Grid?</h2>
-            <p className="text-lg text-foreground/60 max-w-2xl mx-auto">
-              We deliver excellence through quality products, professional services, and dedicated customer support.
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              Why Choose Mwanga Grid?
+            </h2>
+            <p className="text-lg text-foreground/65 max-w-2xl mx-auto">
+              We deliver excellence through quality products, professional
+              services, and dedicated customer support.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: Sun, title: "Solar Solutions", desc: "Premium solar systems for homes and businesses — from portable generators to whole-home setups.", color: "text-orange-600 bg-orange-100 dark:bg-orange-900/30" },
-              { icon: Shield, title: "CCTV & Security", desc: "Professional-grade cameras and 24/7 monitoring for complete peace of mind.", color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30" },
-              { icon: Network, title: "Enterprise Networking", desc: "Wi-Fi 6, managed switches, fiber — everything for a fast, reliable network.", color: "text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30" },
+              {
+                icon: Sun,
+                title: "Solar Solutions",
+                desc: "Premium solar systems for homes and businesses — from portable generators to whole-home setups.",
+                color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30",
+                price: "from KES 18,000",
+              },
+              {
+                icon: Shield,
+                title: "CCTV & Security",
+                desc: "Professional-grade cameras and 24/7 monitoring for complete peace of mind.",
+                color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30",
+                price: "from KES 2,700",
+              },
+              {
+                icon: Network,
+                title: "Enterprise Networking",
+                desc: "Wi-Fi 6, managed switches, fiber — everything for a fast, reliable network.",
+                color: "text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30",
+                price: "from KES 3,500",
+              },
             ].map((item, i) => (
-              <Card key={i} className="p-8 text-center hover:shadow-xl transition-shadow duration-300 border-0 shadow-md">
-                <div className={`w-16 h-16 rounded-2xl ${item.color} flex items-center justify-center mx-auto mb-6`}>
-                  <item.icon className="w-8 h-8" />
+              <Card
+                key={i}
+                className="p-4 sm:p-8 text-center border-0 shadow-md group card-hover"
+              >
+                <div
+                  className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl ${item.color} flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300`}
+                >
+                  <item.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <h3 className="font-bold text-xl text-foreground mb-3">{item.title}</h3>
-                <p className="text-foreground/60 leading-relaxed">{item.desc}</p>
+                <h3 className="font-heading font-bold text-base sm:text-xl text-foreground mb-2 sm:mb-3">
+                  {item.title}
+                </h3>
+                <p className="text-xs sm:text-base text-foreground/60 leading-relaxed mb-3 sm:mb-4">
+                  {item.desc}
+                </p>
+                <span className="text-sm font-bold text-accent">
+                  {item.price}
+                </span>
               </Card>
             ))}
           </div>
@@ -229,54 +202,93 @@ export default function Home() {
       </section>
 
       {/* ── Featured Products ── */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container">
+      <section className="py-10 md:py-24 bg-background">
+        <div className="container min-h-[420px]">
           <div className="flex items-center justify-between mb-12">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Featured Products</h2>
-              <p className="text-foreground/60">Top-selling technology solutions</p>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">
+                Featured Products
+              </h2>
+              <p className="text-foreground/60">
+                Top-selling technology solutions
+              </p>
             </div>
-            <Button variant="outline" onClick={() => navigate("/products")} className="hidden md:flex">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/products")}
+              className="hidden md:flex"
+            >
               View All <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProductCards.map((product: any) =>
               productsLoading ? (
-                <LoadingCard key={product.id} />
+                <ProductCardSkeleton key={product.id} />
               ) : (
                 <Card
                   key={product.id}
-                  className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col border-border/70 shadow-md bg-card/95 backdrop-blur-sm"
+                  className="overflow-hidden cursor-pointer group flex flex-col border-border/70 shadow-md bg-card/95 card-hover"
                   onClick={() => navigate("/products")}
                 >
-                  <div className="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 overflow-hidden flex items-center justify-center">
+                  <div className="relative h-36 sm:h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 overflow-hidden flex items-center justify-center">
                     {product.imageUrl ? (
                       <img
                         src={product.imageUrl}
                         alt={product.name}
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 p-4"
+                        loading="lazy"
+                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 p-4"
                         onError={(e: any) => {
                           e.target.style.display = "none";
                           e.target.nextSibling.style.display = "flex";
                         }}
                       />
                     ) : null}
-                    <div className="hidden w-full h-full items-center justify-center text-5xl">📦</div>
+                    <div className="hidden w-full h-full items-center justify-center text-5xl">
+                      📦
+                    </div>
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300" />
                   </div>
-                  <div className="p-5 flex-1 flex flex-col">
-                    <h3 className="font-bold text-foreground mb-2 line-clamp-2 group-hover:text-accent transition-colors">
+                  <div className="p-3 sm:p-5 flex-1 flex flex-col">
+                    <h3 className="font-heading font-bold text-sm sm:text-base text-foreground mb-1 sm:mb-2 line-clamp-2 group-hover:text-accent transition-colors">
                       {product.name}
                     </h3>
-                    <p className="text-sm text-foreground/60 mb-4 flex-1 line-clamp-2">{product.description}</p>
+                    <p className="text-xs sm:text-sm text-foreground/60 mb-2 sm:mb-4 flex-1 line-clamp-2 leading-relaxed">
+                      {product.description}
+                    </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-accent">
+                      <span className="text-base sm:text-lg font-bold text-accent">
                         KES {(product.price || 0).toLocaleString()}
                       </span>
-                      <span className="flex items-center gap-1 text-xs text-foreground/50 hover:text-accent transition-colors">
-                        View <ChevronRight className="w-3 h-3" />
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {product.inStock !== false && (
+                          <span className="text-[10px] text-green-600 font-medium hidden sm:inline-flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping-subtle" />{" "}
+                            In Stock
+                          </span>
+                        )}
+                        <span className="flex items-center gap-1 text-xs text-foreground/50 hover:text-accent transition-colors">
+                          View <ChevronRight className="w-3 h-3" />
+                        </span>
+                      </div>
                     </div>
+                    <Button
+                      size="sm"
+                      className="mt-3 w-full bg-primary text-white hover:bg-primary/90"
+                      onClick={e => {
+                        e.stopPropagation();
+                        addItem({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.imageUrl,
+                          category: product.category,
+                        });
+                      }}
+                    >
+                      <ShoppingCart className="w-3.5 h-3.5 mr-1" /> Add to Cart
+                    </Button>
                   </div>
                 </Card>
               )
@@ -291,40 +303,81 @@ export default function Home() {
       </section>
 
       {/* ── Services ── */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+      <section className="py-10 md:py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
         <div className="container">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Services</h2>
-            <p className="text-white/70 max-w-xl mx-auto">Professional installation and support services by certified technicians</p>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+              Professional Services
+            </h2>
+            <p className="text-white/70 max-w-xl mx-auto">
+              Expert installation and support by certified technicians —
+              delivered across Kenya
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {(servicesLoading
-              ? Array.from({ length: 4 }, (_, index) => ({ id: `loading-${index}` }))
-              : services && services.length > 0 ? services : [
-              { id: 1, name: "CCTV Installation", description: "Professional CCTV camera installation for homes and businesses. Site survey to commissioning handled end-to-end." },
-              { id: 2, name: "Internet & Network Setup", description: "End-to-end network infrastructure setup including routing, switching, and Wi-Fi optimisation." },
-              { id: 3, name: "Solar System Installation", description: "Turn-key solar power solutions from site assessment through installation and after-sales support." },
-              { id: 4, name: "IT Support & Maintenance", description: "Ongoing managed IT support for SMEs — hardware, software, and network troubleshooting." },
-            ])?.map((service: any) =>
+            {(showServicesSkeleton
+              ? Array.from({ length: 4 }, (_, index) => ({
+                  id: `loading-${index}`,
+                }))
+              : services && services.length > 0
+                ? services
+                : [
+                    {
+                      id: 1,
+                      name: "CCTV Installation",
+                      description:
+                        "Professional CCTV camera installation for homes and businesses. Site survey to commissioning handled end-to-end.",
+                    },
+                    {
+                      id: 2,
+                      name: "Internet & Network Setup",
+                      description:
+                        "End-to-end network infrastructure setup including routing, switching, and Wi-Fi optimisation.",
+                    },
+                    {
+                      id: 3,
+                      name: "Solar System Installation",
+                      description:
+                        "Turn-key solar power solutions from site assessment through installation and after-sales support.",
+                    },
+                    {
+                      id: 4,
+                      name: "IT Support & Maintenance",
+                      description:
+                        "Ongoing managed IT support for SMEs — hardware, software, and network troubleshooting.",
+                    },
+                  ]
+            )?.map((service: any) =>
               service.name ? (
                 <Card
                   key={service.id}
-                  className="p-8 bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-colors cursor-pointer"
+                  className="p-4 sm:p-8 bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all duration-300 cursor-pointer card-hover"
                   onClick={() => navigate("/services")}
                 >
-                  <h3 className="text-xl font-bold text-white mb-3">{service.name}</h3>
-                  <p className="text-white/70 mb-5 leading-relaxed">{service.description}</p>
-                  <Button variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10">
+                  <h3 className="text-base sm:text-xl font-heading font-bold text-white mb-2 sm:mb-3">
+                    {service.name}
+                  </h3>
+                  <p className="text-xs sm:text-base text-white/70 mb-3 sm:mb-5 leading-relaxed">
+                    {service.description}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-white/30 text-white hover:bg-white/10"
+                  >
                     Learn More <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Card>
               ) : (
-                <Card key={service.id} className="p-8 bg-white/10 border-white/15">
+                <Card
+                  key={service.id}
+                  className="p-8 bg-white/10 border-white/15"
+                >
                   <div className="space-y-4">
-                    <div className="h-6 w-2/3 animate-pulse rounded bg-white/20" />
-                    <div className="h-4 w-full animate-pulse rounded bg-white/10" />
-                    <div className="h-4 w-5/6 animate-pulse rounded bg-white/10" />
-                    <div className="h-10 w-36 animate-pulse rounded-lg bg-white/15" />
+                    <div className="h-6 w-2/3 animate-shimmer rounded" />
+                    <div className="h-4 w-full animate-shimmer rounded" />
+                    <div className="h-4 w-5/6 animate-shimmer rounded" />
+                    <div className="h-10 w-36 animate-shimmer rounded-lg" />
                   </div>
                 </Card>
               )
@@ -334,24 +387,43 @@ export default function Home() {
       </section>
 
       {/* ── Testimonials ── */}
-      <section className="py-16 md:py-24 bg-background">
+      <section className="py-10 md:py-24 bg-background">
         <div className="container">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">What Our Customers Say</h2>
-            <p className="text-foreground/60">Trusted by thousands across Kenya</p>
+            <div className="inline-flex items-center gap-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm px-3 py-1 rounded-full mb-4">
+              <Star className="w-4 h-4 fill-current" /> 4.9 / 5.0
+            </div>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              What Our Customers Say
+            </h2>
+            <p className="text-foreground/60">
+              Trusted by 5,000+ happy customers across Kenya
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {TESTIMONIALS.map((t, i) => (
-              <Card key={i} className="p-8 hover:shadow-xl transition-shadow duration-300 border-0 shadow-md">
-                <div className="flex gap-1 mb-4">
+              <Card
+                key={i}
+                className="p-4 sm:p-8 border-0 shadow-md card-hover"
+              >
+                <div className="flex gap-1 mb-3 sm:mb-4">
                   {[...Array(t.rating)].map((_, j) => (
-                    <Star key={j} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                    <Star
+                      key={j}
+                      className="w-4 h-4 sm:w-5 sm:h-5 fill-blue-400 text-blue-400"
+                    />
                   ))}
                 </div>
-                <p className="text-foreground/70 mb-6 leading-relaxed italic">"{t.text}"</p>
+                <p className="text-xs sm:text-base text-foreground/70 mb-4 sm:mb-6 leading-relaxed italic">
+                  "{t.text}"
+                </p>
                 <div>
-                  <p className="font-bold text-foreground">{t.name}</p>
-                  <p className="text-sm text-foreground/50">{t.company}</p>
+                  <p className="font-bold text-sm sm:text-base text-foreground">
+                    {t.name}
+                  </p>
+                  <p className="text-xs sm:text-sm text-foreground/50">
+                    {t.company}
+                  </p>
                 </div>
               </Card>
             ))}
@@ -360,21 +432,47 @@ export default function Home() {
       </section>
 
       {/* ── Trust Badges ── */}
-      <section className="py-12 bg-muted/40">
+      <section className="py-10 md:py-16 bg-muted/40">
         <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-heading font-bold text-foreground mb-2">
+              Why Customers Trust Us
+            </h2>
+            <p className="text-foreground/60">
+              Real reasons businesses choose Mwanga Grid
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { icon: CheckCircle2, title: "ISO 9001 Certified", desc: "Quality management" },
-              { icon: Shield, title: "Bank-Level Security", desc: "Safe & secure platform" },
-              { icon: Users, title: "10+ Years Experience", desc: "Trusted since 2015" },
-              { icon: Zap, title: "99.9% Uptime", desc: "Reliable service" },
+              {
+                icon: Shield,
+                title: "Quality Assured",
+                desc: "Genuine products from verified suppliers with warranty",
+              },
+              {
+                icon: Users,
+                title: "1,000+ Projects",
+                desc: "Completed for homes & businesses since 2015",
+              },
+              {
+                icon: Zap,
+                title: "Free Delivery Nairobi",
+                desc: "Same-day installation within CBD & suburbs",
+              },
+              {
+                icon: CheckCircle2,
+                title: "24/7 After-Sales",
+                desc: "Ongoing support & maintenance you can rely on",
+              },
             ].map((item, i) => (
-              <div key={i} className="text-center">
-                <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <item.icon className="w-6 h-6 text-accent" />
+              <div key={i} className="text-center p-4 card-hover rounded-xl">
+                <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <item.icon className="w-7 h-7 text-accent" />
                 </div>
-                <h3 className="font-bold text-foreground mb-1 text-sm">{item.title}</h3>
-                <p className="text-xs text-foreground/50">{item.desc}</p>
+                <h3 className="font-heading font-bold text-foreground mb-1">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-foreground/50">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -382,35 +480,68 @@ export default function Home() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-20 bg-gradient-to-r from-accent to-accent/80">
-        <div className="container text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Get Started?</h2>
-          <p className="text-lg text-white/80 mb-8 max-w-xl mx-auto">
-            Browse our products, explore services, or contact our team for a custom quote.
+      <section className="py-12 md:py-20 bg-gradient-to-r from-blue-600 to-blue-800 relative overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 25% 50%, #1C2B3C 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+        <div className="container text-center relative z-10">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
+            Ready to Power Up?
+          </h2>
+          <p className="text-lg text-white/75 mb-8 max-w-xl mx-auto">
+            Get expert advice, free quotations, and same-day delivery in
+            Nairobi.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button size="lg" className="bg-white text-gray-900 hover:bg-white/90 font-bold shadow-lg" onClick={() => navigate("/products")}>
-              Shop Products
+            <Button
+              size="lg"
+              className="bg-white text-blue-700 hover:bg-white/90 font-bold shadow-lg text-base px-8"
+              onClick={() => navigate("/products")}
+            >
+              Shop Products <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10" onClick={() => navigate("/quotation")}>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white/40 text-white hover:bg-white/10 text-base px-8"
+              onClick={() => navigate("/quotation")}
+            >
               Request Free Quote
             </Button>
+            <a
+              href="tel:+254750110836"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-white/10 border border-white/25 text-white hover:bg-white/15 transition text-sm font-medium"
+            >
+              <Phone className="w-4 h-4" /> Call Now
+            </a>
           </div>
         </div>
       </section>
 
       {/* ── Contact Strip ── */}
-      <section className="py-8 bg-foreground text-white">
+      <section className="py-8 bg-muted/80 dark:bg-accent/10 text-foreground border-t border-border">
         <div className="container">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 text-sm text-white/70">
-            <a href="tel:+254111321211" className="flex items-center gap-2 hover:text-white transition-colors">
-              <Phone className="w-4 h-4" /> +254 111 321 211
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 text-sm text-foreground/70">
+            <a
+              href="tel:+254750110836"
+              className="flex items-center gap-2 hover:text-accent transition-colors"
+            >
+              <Phone className="w-4 h-4" /> +254 750 110 836
             </a>
-            <a href="mailto:cheidaniells@gmail.com" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a
+              href="mailto:cheidaniells@gmail.com"
+              className="flex items-center gap-2 hover:text-accent transition-colors"
+            >
               <Mail className="w-4 h-4" /> cheidaniells@gmail.com
             </a>
             <span className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" /> Roasters, Next to Naivasha Mountain Mall
+              <MapPin className="w-4 h-4" /> Roasters, Next to Naivasha Mountain
+              Mall
             </span>
           </div>
         </div>

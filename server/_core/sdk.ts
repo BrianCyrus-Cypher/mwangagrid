@@ -30,11 +30,8 @@ const GET_USER_INFO_WITH_JWT_PATH = `/webdev.v1.WebDevAuthPublicService/GetUserI
 
 class OAuthService {
   constructor(private client: ReturnType<typeof axios.create>) {
-    console.log("[OAuth] Initialized with baseURL:", ENV.oAuthServerUrl);
-    if (!ENV.oAuthServerUrl) {
-      console.error(
-        "[OAuth] ERROR: OAUTH_SERVER_URL is not configured! Set OAUTH_SERVER_URL environment variable."
-      );
+    if (ENV.oAuthServerUrl) {
+      console.log("[OAuth] Initialized with baseURL:", ENV.oAuthServerUrl);
     }
   }
 
@@ -123,11 +120,7 @@ class SDKServer {
     state: string
   ): Promise<ExchangeTokenResponse> {
     if (!ENV.oAuthServerUrl) {
-      return {
-        accessToken: "mock_access_token",
-        expiresIn: 3600,
-        tokenType: "Bearer",
-      } as ExchangeTokenResponse;
+      throw new Error("OAuth server is not configured");
     }
     return this.oauthService.getTokenByCode(code, state);
   }
@@ -139,13 +132,7 @@ class SDKServer {
    */
   async getUserInfo(accessToken: string): Promise<GetUserInfoResponse> {
     if (!ENV.oAuthServerUrl) {
-      return {
-        openId: "mock_user_openid",
-        name: "Test User",
-        email: "test@example.com",
-        loginMethod: "mock",
-        platform: "mock",
-      } as GetUserInfoResponse;
+      throw new Error("OAuth server is not configured");
     }
     const data = await this.oauthService.getUserInfoByToken({
       accessToken,
@@ -217,7 +204,6 @@ class SDKServer {
     cookieValue: string | undefined | null
   ): Promise<{ openId: string; appId: string; name: string } | null> {
     if (!cookieValue) {
-      console.warn("[Auth] Missing session cookie");
       return null;
     }
 
@@ -252,13 +238,7 @@ class SDKServer {
     jwtToken: string
   ): Promise<GetUserInfoWithJwtResponse> {
     if (!ENV.oAuthServerUrl) {
-      return {
-        openId: "mock_user_openid",
-        name: "Test User",
-        email: "test@example.com",
-        loginMethod: "mock",
-        platform: "mock",
-      } as GetUserInfoWithJwtResponse;
+      throw new Error("OAuth server is not configured");
     }
     const payload: GetUserInfoWithJwtRequest = {
       jwtToken,
@@ -301,11 +281,18 @@ class SDKServer {
     }
 
     const database = await db.getDb();
-    const currentSession = sessionCookie ? await db.getSessionByToken(sessionCookie) : null;
+    const currentSession = sessionCookie
+      ? await db.getSessionByToken(sessionCookie)
+      : null;
 
     if (database && currentSession) {
-      const lastActivity = new Date(currentSession.lastActivity ?? currentSession.createdAt);
-      if (Date.now() - lastActivity.getTime() > db.SESSION_INACTIVITY_LIMIT_MS) {
+      const lastActivity = new Date(
+        currentSession.lastActivity ?? currentSession.createdAt
+      );
+      if (
+        Date.now() - lastActivity.getTime() >
+        db.SESSION_INACTIVITY_LIMIT_MS
+      ) {
         await db.deleteSessionByToken(sessionCookie ?? "");
         throw ForbiddenError("Session expired");
       }
@@ -395,7 +382,10 @@ function buildCronUser(
   } as AuthenticatedUser;
 }
 
-function buildLocalUserFromSession(session: { openId: string; name: string }): AuthenticatedUser {
+function buildLocalUserFromSession(session: {
+  openId: string;
+  name: string;
+}): AuthenticatedUser {
   const now = new Date();
   return {
     id: -1,

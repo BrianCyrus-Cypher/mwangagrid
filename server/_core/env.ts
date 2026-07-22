@@ -1,10 +1,13 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
   PORT: z.string().default("3000"),
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  JWT_SECRET: z.string().default("mwangagrid_secret_key_development"),
+  SESSION_SECRET: z.string().optional(),
+  JWT_SECRET: z.string().min(1, "JWT_SECRET is required"),
   VITE_APP_ID: z.string().optional(),
   VITE_SUPABASE_URL: z.string().optional(),
   VITE_SUPABASE_ANON_KEY: z.string().optional(),
@@ -28,7 +31,7 @@ const envSchema = z.object({
 const parsedEnv = envSchema.safeParse(process.env);
 
 if (!parsedEnv.success) {
-  console.error("❌ Invalid environment variables:");
+  console.error("Invalid environment variables:");
   console.error(JSON.stringify(parsedEnv.error.format(), null, 2));
   process.exit(1);
 }
@@ -39,7 +42,7 @@ const smtpPort = envVars.SMTP_PORT ? parseInt(envVars.SMTP_PORT, 10) : 587;
 
 export const ENV = {
   appId: envVars.VITE_APP_ID ?? "",
-  cookieSecret: envVars.JWT_SECRET,
+  cookieSecret: envVars.SESSION_SECRET || envVars.JWT_SECRET,
   databaseUrl: envVars.DATABASE_URL,
   supabaseUrl: envVars.VITE_SUPABASE_URL ?? "",
   supabaseAnonKey: envVars.VITE_SUPABASE_ANON_KEY ?? "",
@@ -61,6 +64,8 @@ export const ENV = {
     passkey: envVars.MPESA_PASSKEY ?? "",
     shortcode: envVars.MPESA_SHORTCODE,
     environment: envVars.MPESA_ENV,
-    callbackUrl: envVars.MPESA_CALLBACK_URL ?? "https://www.mwangagrid.co.ke/api/mpesa/callback",
+    callbackUrl:
+      envVars.MPESA_CALLBACK_URL ??
+      "https://www.mwangagrid.co.ke/api/mpesa/callback",
   },
 };
