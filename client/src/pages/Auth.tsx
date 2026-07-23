@@ -131,7 +131,7 @@ export default function AuthPage() {
           </div>
         ))}
         {/* Gradient overlays — fixed dark so images stay visible in all themes */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-black/20 lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-slate-950/95" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-black/20 lg:bg-gradient-to-r lg:from-transparent lg:via-slate-950/30 lg:to-slate-950/95" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent lg:from-transparent" />
         {/* Slide indicators */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 lg:left-auto lg:right-6 lg:translate-x-0 flex gap-1.5 z-10">
@@ -163,8 +163,8 @@ export default function AuthPage() {
         {/* Accent-tinted background */}
         <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.06] via-background to-primary/[0.04]" />
         <div className="absolute inset-0 bg-gradient-to-r from-accent/[0.03] via-transparent to-primary/[0.03]" />
-        {/* Fade from image panel into form */}
-        <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-slate-950/30 to-transparent pointer-events-none lg:block hidden" />
+        {/* Fade from image panel into form — wide enough to fully blur the split */}
+        <div className="absolute inset-y-0 left-0 w-80 bg-gradient-to-r from-slate-950/50 via-slate-950/20 to-transparent pointer-events-none lg:block hidden" />
         <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-accent/[0.04] to-transparent pointer-events-none lg:hidden" />
 
         <div className="w-full max-w-md relative z-10">
