@@ -130,9 +130,9 @@ export default function AuthPage() {
             />
           </div>
         ))}
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-background/90" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/30 to-transparent lg:from-transparent" />
+        {/* Gradient overlays — fixed dark so images stay visible in all themes */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-slate-900/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent lg:from-transparent" />
         {/* Slide indicators */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 lg:left-auto lg:right-6 lg:translate-x-0 flex gap-1.5 z-10">
           {SLideshow_IMAGES.map((_, i) => (
