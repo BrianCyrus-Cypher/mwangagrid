@@ -159,10 +159,13 @@ export default function AuthPage() {
       </div>
 
       {/* ── Form Panel ── */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8 lg:py-0 relative overflow-hidden bg-gradient-to-br from-muted/30 via-background to-muted/50">
-        {/* Concentrated color accents */}
-        <div className="absolute -top-20 -right-20 w-72 h-72 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-32 -left-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="flex-1 flex items-center justify-center px-4 py-8 lg:py-0 relative overflow-hidden">
+        {/* Accent-tinted background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.06] via-background to-primary/[0.04]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-accent/[0.03] via-transparent to-primary/[0.03]" />
+        {/* Fade from image panel into form */}
+        <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-slate-950/30 to-transparent pointer-events-none lg:block hidden" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-accent/[0.04] to-transparent pointer-events-none lg:hidden" />
 
         <div className="w-full max-w-md relative z-10">
           {/* Back button */}
