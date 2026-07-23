@@ -6,7 +6,7 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Phone, Sun, Camera, Network } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useLocation } from "wouter";
 
 const SLIDES = [
@@ -15,24 +15,18 @@ const SLIDES = [
     sub: "From portable generators to whole-home solar systems — we power your world reliably and affordably.",
     cta: "Shop Solar",
     link: "/products",
-    icon: Sun,
-    color: "#3B82F6",
   },
   {
     headline: "Professional CCTV & Security Systems",
     sub: "High-definition cameras, 24/7 monitoring, and expert installation for homes and businesses across Kenya.",
     cta: "View Cameras",
     link: "/products",
-    icon: Camera,
-    color: "#60A5FA",
   },
   {
     headline: "Enterprise-Grade Networking Equipment",
     sub: "Wi-Fi 6 routers, managed switches, fiber optic cabling — everything you need for a fast, reliable network.",
     cta: "Browse Products",
     link: "/products",
-    icon: Network,
-    color: "#93C5FD",
   },
 ];
 
@@ -59,7 +53,6 @@ export default function CinematicHero() {
   }, []);
 
   const current = SLIDES[slide];
-  const HeroIcon = current.icon;
 
   return (
     <div
@@ -98,13 +91,6 @@ export default function CinematicHero() {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="min-h-[300px]"
             >
-              <span className="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-white/10 text-white font-medium text-sm mb-6 border border-white/20">
-                <HeroIcon
-                  className="w-4 h-4"
-                  style={{ color: current.color }}
-                />
-                {current.cta}
-              </span>
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 text-white">
                 {current.headline}
               </h1>
@@ -130,12 +116,6 @@ export default function CinematicHero() {
             >
               Get Free Quote
             </Button>
-            <a
-              href="tel:+254750110836"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-white/10 border border-white/25 text-white hover:bg-white/15 transition text-sm font-medium backdrop-blur-sm"
-            >
-              <Phone className="w-4 h-4" /> Call Now
-            </a>
           </div>
 
           {/* Stats */}
