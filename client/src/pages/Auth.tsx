@@ -159,11 +159,10 @@ export default function AuthPage() {
       </div>
 
       {/* ── Form Panel ── */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8 lg:py-0 relative overflow-hidden">
-        {/* Decorative gradient accents */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-accent/3 to-transparent rounded-full pointer-events-none" />
+      <div className="flex-1 flex items-center justify-center px-4 py-8 lg:py-0 relative overflow-hidden bg-gradient-to-br from-muted/30 via-background to-muted/50">
+        {/* Concentrated color accents */}
+        <div className="absolute -top-20 -right-20 w-72 h-72 bg-accent/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-32 -left-20 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="w-full max-w-md relative z-10">
           {/* Back button */}
@@ -176,7 +175,7 @@ export default function AuthPage() {
           </button>
 
           <div className="mb-8">
-            <div className="w-12 h-1 rounded-full bg-accent mb-4" />
+            <div className="w-14 h-1.5 rounded-full bg-gradient-to-r from-accent to-primary mb-5" />
             <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-foreground">
               {mode === "signin" ? "Welcome back" : "Create account"}
             </h1>
@@ -188,13 +187,13 @@ export default function AuthPage() {
           </div>
 
           {/* Mode tabs */}
-          <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted/50 p-1 mb-6">
+          <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted/60 p-1 mb-6">
             <button
               type="button"
-              className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+              className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
                 mode === "signin"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-accent text-white shadow-md shadow-accent/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
               }`}
               onClick={() => switchMode("signin")}
             >
@@ -202,10 +201,10 @@ export default function AuthPage() {
             </button>
             <button
               type="button"
-              className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+              className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
                 mode === "signup"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-accent text-white shadow-md shadow-accent/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
               }`}
               onClick={() => switchMode("signup")}
             >
@@ -308,7 +307,7 @@ export default function AuthPage() {
             )}
 
             <Button
-              className="w-full h-11 text-base font-semibold bg-accent text-white hover:bg-accent/90 transition-all"
+              className="w-full h-12 text-base font-bold bg-accent text-white hover:bg-accent/90 shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:shadow-accent/30 hover:scale-[1.02] active:scale-[0.98]"
               onClick={submit}
               disabled={loading || !canSubmit}
             >
