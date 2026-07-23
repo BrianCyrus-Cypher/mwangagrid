@@ -131,8 +131,8 @@ export default function AuthPage() {
           </div>
         ))}
         {/* Gradient overlays — fixed dark so images stay visible in all themes */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-slate-900/90" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent lg:from-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-black/20 lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-slate-950/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent lg:from-transparent" />
         {/* Slide indicators */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 lg:left-auto lg:right-6 lg:translate-x-0 flex gap-1.5 z-10">
           {SLideshow_IMAGES.map((_, i) => (
@@ -147,20 +147,25 @@ export default function AuthPage() {
             />
           ))}
         </div>
-        {/* Branding overlay on image */}
-        <div className="absolute top-6 left-6 lg:top-10 lg:left-10 z-10">
+        {/* Branding overlay on image — with dark scrim for readability */}
+        <div className="absolute top-6 left-6 lg:top-10 lg:left-10 z-10 bg-black/40 backdrop-blur-sm rounded-2xl px-5 py-4 border border-white/10">
           <h2 className="text-2xl lg:text-3xl font-black text-white tracking-tight drop-shadow-lg">
             Mwanga Grid
           </h2>
-          <p className="text-sm lg:text-base text-white/70 mt-1 max-w-xs">
+          <p className="text-sm lg:text-base text-white/80 mt-1 max-w-xs leading-relaxed">
             Powering Kenya with solar, security & networking solutions.
           </p>
         </div>
       </div>
 
       {/* ── Form Panel ── */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8 lg:py-0">
-        <div className="w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center px-4 py-8 lg:py-0 relative overflow-hidden">
+        {/* Decorative gradient accents */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-accent/3 to-transparent rounded-full pointer-events-none" />
+
+        <div className="w-full max-w-md relative z-10">
           {/* Back button */}
           <button
             onClick={() => navigate(returnTo)}
@@ -171,10 +176,11 @@ export default function AuthPage() {
           </button>
 
           <div className="mb-8">
+            <div className="w-12 h-1 rounded-full bg-accent mb-4" />
             <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-foreground">
               {mode === "signin" ? "Welcome back" : "Create account"}
             </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
               {mode === "signin"
                 ? "Sign in to access your account and orders."
                 : "Join Mwanga Grid to shop solar, CCTV & networking products."}
