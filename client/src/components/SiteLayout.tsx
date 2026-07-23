@@ -244,28 +244,30 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                 Session
               </div>
             ) : isAuthenticated ? (
-              <div className="hidden sm:flex items-center gap-3 min-w-0">
-                <Button
-                  variant="outline"
-                  size="sm"
+              <div className="hidden sm:flex items-center gap-2 min-w-0">
+                <button
                   onClick={() => navigate("/account")}
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-xl text-foreground/80 hover:text-foreground hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-white/15 hover:border-white/25 shadow-none hover:shadow-[0_2px_15px_rgba(0,0,0,0.04)] transition-all duration-300"
                 >
                   {user?.name || "Account"}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => logout()}>
+                </button>
+                <button
+                  onClick={() => logout()}
+                  className="p-2 rounded-xl text-foreground/60 hover:text-foreground hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300"
+                >
                   <LogOut className="w-4 h-4" />
-                </Button>
+                </button>
               </div>
             ) : (
-              <Button
-                size="sm"
+              <button
                 onClick={() =>
                   (window.location.href = getLoginUrl(currentReturnTo))
                 }
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl bg-accent/90 text-white hover:bg-accent backdrop-blur-sm border border-accent/30 hover:border-accent/50 shadow-md shadow-accent/15 hover:shadow-lg hover:shadow-accent/25 transition-all duration-300"
               >
-                <LogIn className="w-4 h-4 mr-2" />
+                <LogIn className="w-4 h-4" />
                 Login
-              </Button>
+              </button>
             )}
 
             {/* Mobile Menu Button */}
