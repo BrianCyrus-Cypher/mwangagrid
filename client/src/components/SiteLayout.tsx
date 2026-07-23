@@ -32,7 +32,8 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 dark:bg-background/60 backdrop-blur-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)]">
+      <nav className="sticky top-0 z-50 border-b border-white/15 bg-white/10 dark:bg-white/5 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.06)]">
+        <div className="absolute inset-0 bg-gradient-to-r from-accent/[0.03] via-transparent to-primary/[0.03] pointer-events-none" />
         <div className="container relative py-3 sm:py-4 flex items-center justify-between">
           <div
             className="flex items-center gap-2 cursor-pointer shrink-0"
@@ -177,32 +178,32 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
           <div className="hidden md:flex items-center gap-1 min-w-0">
             <button
               onClick={() => navigate("/products")}
-              className="relative px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-lg hover:bg-muted/60 transition-all"
+              className="relative px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-xl hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 shadow-none hover:shadow-[0_2px_15px_rgba(0,0,0,0.04)] transition-all duration-300"
             >
               Products
             </button>
             <button
               onClick={() => navigate("/services")}
-              className="relative px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-lg hover:bg-muted/60 transition-all"
+              className="relative px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-xl hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 shadow-none hover:shadow-[0_2px_15px_rgba(0,0,0,0.04)] transition-all duration-300"
             >
               Services
             </button>
             <button
               onClick={() => navigate("/quotation")}
-              className="relative px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-lg hover:bg-muted/60 transition-all"
+              className="relative px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-xl hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 shadow-none hover:shadow-[0_2px_15px_rgba(0,0,0,0.04)] transition-all duration-300"
             >
               Get Quote
             </button>
             <button
               onClick={() => navigate("/contact")}
-              className="relative px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-lg hover:bg-muted/60 transition-all"
+              className="relative px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground rounded-xl hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 shadow-none hover:shadow-[0_2px_15px_rgba(0,0,0,0.04)] transition-all duration-300"
             >
               Contact
             </button>
             {user?.role === "admin" ? (
               <button
                 onClick={() => navigate("/admin")}
-                className="relative px-3 py-2 text-sm font-medium text-accent hover:text-accent/80 rounded-lg hover:bg-accent/10 transition-all"
+                className="relative px-3 py-2 text-sm font-medium text-accent hover:text-accent/80 rounded-xl hover:bg-accent/10 backdrop-blur-sm border border-transparent hover:border-accent/20 shadow-none hover:shadow-[0_2px_15px_rgba(0,0,0,0.04)] transition-all duration-300"
               >
                 Admin
               </button>
@@ -214,7 +215,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 hover:bg-muted rounded-lg transition text-foreground"
+              className="p-2 hover:bg-white/15 dark:hover:bg-white/10 rounded-xl backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300 text-foreground"
               title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
             >
               {theme === "light" ? (
@@ -227,7 +228,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
             {/* Cart */}
             <button
               onClick={() => navigate("/cart")}
-              className="relative p-2 hover:bg-muted rounded-lg transition text-foreground"
+              className="relative p-2 hover:bg-white/15 dark:hover:bg-white/10 rounded-xl backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300 text-foreground"
             >
               <ShoppingCart className="w-5 h-5 text-foreground" />
               {itemCount > 0 && (
@@ -269,7 +270,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden inline-flex items-center justify-center p-2 hover:bg-muted rounded-lg transition text-foreground shrink-0"
+              className="md:hidden inline-flex items-center justify-center p-2 hover:bg-white/15 dark:hover:bg-white/10 rounded-xl backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300 text-foreground shrink-0"
               onClick={() => setMobileMenuOpen(v => !v)}
               aria-label="Open menu"
             >
@@ -292,14 +293,14 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
 
         {/* Mobile Menu (absolute dropdown to avoid layout shift) */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute left-0 right-0 top-full z-50 border-b border-border/50 bg-background/95 dark:bg-background/95 backdrop-blur-2xl shadow-lg">
+          <div className="md:hidden absolute left-0 right-0 top-full z-50 border-b border-white/15 bg-white/15 dark:bg-white/5 backdrop-blur-xl shadow-lg">
             <div className="container py-4 space-y-1">
               <button
                 onClick={() => {
                   navigate("/products");
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted/60 transition-all"
+                className="block w-full text-left rounded-xl px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300"
               >
                 Products
               </button>
@@ -308,7 +309,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                   navigate("/services");
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted/60 transition-all"
+                className="block w-full text-left rounded-xl px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300"
               >
                 Services
               </button>
@@ -317,7 +318,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                   navigate("/quotation");
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted/60 transition-all"
+                className="block w-full text-left rounded-xl px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300"
               >
                 Get Quote
               </button>
@@ -326,12 +327,12 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                   navigate("/contact");
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted/60 transition-all"
+                className="block w-full text-left rounded-xl px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300"
               >
                 Contact
               </button>
 
-              <div className="border-t border-border/50 my-2" />
+              <div className="border-t border-white/10 my-2" />
 
               {isAuthenticated ? (
                 <>
@@ -340,7 +341,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                       navigate("/account");
                       setMobileMenuOpen(false);
                     }}
-                    className="block w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-muted/60 transition-all"
+                    className="block w-full text-left rounded-xl px-4 py-2.5 text-sm font-medium text-foreground/80 hover:text-foreground hover:bg-white/15 dark:hover:bg-white/10 backdrop-blur-sm border border-transparent hover:border-white/15 transition-all duration-300"
                   >
                     My Account
                   </button>
@@ -351,7 +352,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                         navigate("/admin");
                         setMobileMenuOpen(false);
                       }}
-                      className="block w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium text-accent hover:text-accent/80 hover:bg-accent/10 transition-all"
+                      className="block w-full text-left rounded-xl px-4 py-2.5 text-sm font-medium text-accent hover:text-accent/80 hover:bg-accent/10 backdrop-blur-sm border border-transparent hover:border-accent/20 transition-all duration-300"
                     >
                       Admin Dashboard
                     </button>
@@ -362,7 +363,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                       logout();
                       setMobileMenuOpen(false);
                     }}
-                    className="block w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-all"
+                    className="block w-full text-left rounded-xl px-4 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 backdrop-blur-sm border border-transparent hover:border-destructive/20 transition-all duration-300"
                   >
                     Logout
                   </button>
@@ -372,7 +373,7 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
                   onClick={() => {
                     window.location.href = getLoginUrl(currentReturnTo);
                   }}
-                  className="block w-full text-left rounded-lg px-4 py-2.5 text-sm font-medium bg-accent text-white hover:bg-accent/90 transition-all mt-1"
+                  className="block w-full text-left rounded-xl px-4 py-2.5 text-sm font-semibold bg-accent text-white hover:bg-accent/90 shadow-md shadow-accent/20 backdrop-blur-sm transition-all duration-300 mt-1"
                 >
                   Sign in
                 </button>
