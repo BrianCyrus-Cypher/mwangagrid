@@ -354,10 +354,10 @@ Empower customers to discover, compare, and purchase premium solar, CCTV, and in
 
 ## 9. Approval & Sign-Off
 
-| Role          | Name                     | Signature          | Date       |
-| ------------- | ------------------------ | ------------------ | ---------- |
-| Product Owner | Brian Ngatia             | ********\_******** | **\_\_\_** |
-| Client        | Mr. Daniel (Mwanga Grid) | ********\_******** | **\_\_\_** |
+| Role          | Name                     | Signature                  | Date       |
+| ------------- | ------------------------ | -------------------------- | ---------- |
+| Product Owner | Brian Ngatia             | **\*\*\*\***\_**\*\*\*\*** | **\_\_\_** |
+| Client        | Mr. Daniel (Mwanga Grid) | **\*\*\*\***\_**\*\*\*\*** | **\_\_\_** |
 
 ---
 

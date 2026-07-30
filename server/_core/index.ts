@@ -13,6 +13,7 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { registerUploadRoutes } from "../services/upload";
+
 import {
   isSafaricomCallback,
   sanitize,
@@ -338,10 +339,11 @@ ${urls
 
   // Seed fallback data on startup
   try {
-    const { seedProductsIfEmpty, seedServicesIfEmpty } = await import("../db");
+    const { seedProductsIfEmpty, seedServicesIfEmpty, ensureServicePackages } = await import("../db");
     const { FALLBACK_PRODUCTS, FALLBACK_SERVICES } = await import("../routers");
     await seedProductsIfEmpty(FALLBACK_PRODUCTS);
     await seedServicesIfEmpty(FALLBACK_SERVICES);
+    await ensureServicePackages(FALLBACK_SERVICES);
     console.log("[Seed] Fallback products & services checked");
   } catch (e) {
     console.warn("[Seed] Non-blocking seed error:", e);

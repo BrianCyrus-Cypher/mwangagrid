@@ -507,6 +507,31 @@ export async function seedServicesIfEmpty(fallback: any[]) {
   return await db.select().from(services);
 }
 
+export async function ensureServicePackages(fallback: any[]) {
+  const db = await getDb();
+  if (!db) return;
+  const allServices = await db.select().from(services);
+  const allPkgs = await db.select().from(servicePackages);
+  for (const svc of allServices) {
+    const hasPackages = allPkgs.some(p => p.serviceId === svc.id);
+    if (hasPackages) continue;
+    const fb = fallback.find(
+      (f: any) =>
+        f.name === svc.name ||
+        (f.category || "").toLowerCase() === (svc.serviceType || "").toLowerCase()
+    );
+    if (fb?.packages) {
+      for (const pkg of fb.packages) {
+        await db.insert(servicePackages).values({
+          serviceId: svc.id,
+          ...pkg,
+        });
+      }
+      console.log(`[Seed] Added ${fb.packages.length} packages for "${svc.name}"`);
+    }
+  }
+}
+
 export async function adminDeleteProduct(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -674,16 +699,14 @@ export async function deductStockForOrder(
     const productNames = deductions
       .map(d => `${d.name || `Product #${d.productId}`} ×${d.qty}`)
       .join(", ");
-    await db
-      .insert(adminFollowUps)
-      .values({
-        orderId,
-        adminId: 1,
-        type: "status_update",
-        priority: "low",
-        status: "pending",
-        note: `Stock deducted for order #${orderId}: ${productNames}`,
-      });
+    await db.insert(adminFollowUps).values({
+      orderId,
+      adminId: 1,
+      type: "status_update",
+      priority: "low",
+      status: "pending",
+      note: `Stock deducted for order #${orderId}: ${productNames}`,
+    });
     console.log(`[Stock] Deducted for order #${orderId}: ${productNames}`);
   }
   return deductions;
@@ -900,6 +923,14 @@ export async function getDashboardStats() {
     .select({ count: sql<number>`count(*)` })
     .from(users);
 
+  const allServices = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(services);
+
+  const allPackages = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(servicePackages);
+
   return {
     totalRevenue,
     totalOrders,
@@ -910,6 +941,8 @@ export async function getDashboardStats() {
     newContacts,
     recentOrders,
     recentContacts,
+    totalServices: Number(allServices[0]?.count ?? 0),
+    totalPackages: Number(allPackages[0]?.count ?? 0),
   };
 }
 

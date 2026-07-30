@@ -17,7 +17,7 @@ const FEATURES = [
     icon: Sun,
     label: "Solar Power",
     desc: "Reliable energy solutions for home & business",
-    color: "text-amber-400",
+    color: "text-blue-400",
   },
   {
     icon: Camera,

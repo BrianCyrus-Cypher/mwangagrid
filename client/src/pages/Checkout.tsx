@@ -334,8 +334,8 @@ export default function Checkout() {
         <Card className="w-full max-w-xl p-6 sm:p-8 md:p-10 animate-slide-up border-0 shadow-xl">
           <div className="text-center mb-8">
             {paymentError ? (
-              <div className="mx-auto mb-5 w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center">
-                <AlertCircle className="h-10 w-10 text-amber-500" />
+              <div className="mx-auto mb-5 w-20 h-20 rounded-full bg-blue-500/10 flex items-center justify-center">
+                <AlertCircle className="h-10 w-10 text-blue-500" />
               </div>
             ) : (
               <div className="mx-auto mb-5 w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center animate-glow-pulse">
@@ -650,11 +650,11 @@ export default function Checkout() {
                     </div>
                     {hasInternetPackage ? (
                       <div
-                        className={`pt-3 border-t border-accent/10 ${internetCovered ? "text-emerald-600" : "text-amber-600"}`}
+                        className={`pt-3 border-t border-accent/10 ${internetCovered ? "text-emerald-600" : "text-blue-600"}`}
                       >
                         <p className="font-medium text-sm flex items-center gap-1.5">
                           <span
-                            className={`w-1.5 h-1.5 rounded-full ${internetCovered ? "bg-emerald-500" : "bg-amber-500"}`}
+                            className={`w-1.5 h-1.5 rounded-full ${internetCovered ? "bg-emerald-500" : "bg-blue-500"}`}
                           />
                           {internetCovered
                             ? "Internet demo coverage available in this area."

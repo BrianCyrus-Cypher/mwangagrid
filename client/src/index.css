@@ -46,89 +46,89 @@
   --color-gold-foreground: var(--gold-foreground);
 }
 
-/* ── Light Theme (Mwanga Grid brand: logo-matched palette) ── */
+/* ── Light Theme: Vivid Electric Blue + Grey-Blue Neon ── */
 :root {
-  --primary: oklch(0.18 0.038 255); /* Deep vibrant slate-blue */
+  --primary: oklch(0.52 0.19 255); /* Vivid electric blue */
   --primary-foreground: oklch(0.99 0 0);
-  --accent: oklch(0.5 0.062 220); /* Vibrant teal-cyan */
+  --accent: oklch(0.55 0.06 235); /* Cool blue-grey */
   --accent-foreground: oklch(0.99 0 0);
-  --gold: oklch(0.55 0.13 250); /* Vibrant medium blue */
-  --gold-foreground: oklch(0.99 0 0); /* White on blue */
-  --ring: oklch(0.5 0.062 220);
+  --gold: oklch(0.62 0.2 245); /* Bright neon blue highlight */
+  --gold-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.52 0.19 255);
 
-  --background: oklch(0.978 0.003 220); /* Clean light cool background */
-  --foreground: oklch(0.15 0.028 260); /* Rich deep slate text */
-  --card: oklch(0.995 0.002 220);
-  --card-foreground: oklch(0.15 0.028 260);
-  --popover: oklch(0.995 0.002 220);
-  --popover-foreground: oklch(0.15 0.028 260);
-  --secondary: oklch(0.88 0.01 220);
-  --secondary-foreground: oklch(0.28 0.03 260);
-  --muted: oklch(0.935 0.006 220);
-  --muted-foreground: oklch(0.5 0.04 230);
+  --background: oklch(0.985 0.005 240); /* Near-white, subtle blue */
+  --foreground: oklch(0.13 0.04 260); /* Deep navy */
+  --card: oklch(1 0.003 240);
+  --card-foreground: oklch(0.13 0.04 260);
+  --popover: oklch(1 0.003 240);
+  --popover-foreground: oklch(0.13 0.04 260);
+  --secondary: oklch(0.94 0.01 240); /* Light blue-grey */
+  --secondary-foreground: oklch(0.25 0.04 260);
+  --muted: oklch(0.91 0.008 240); /* Soft grey-blue */
+  --muted-foreground: oklch(0.45 0.04 245); /* Blue-grey text */
   --destructive: oklch(0.55 0.22 27);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.84 0.01 220);
-  --input: oklch(0.84 0.01 220);
+  --border: oklch(0.87 0.012 240); /* Light grey-blue border */
+  --input: oklch(0.87 0.012 240);
   --radius: 0.65rem;
 
   /* Charts */
-  --chart-1: oklch(0.55 0.13 250); /* Vibrant blue */
-  --chart-2: oklch(0.18 0.038 255); /* Deep vibrant slate */
-  --chart-3: oklch(0.5 0.062 220); /* Vibrant teal-cyan */
-  --chart-4: oklch(0.62 0.09 230); /* Mid blue */
-  --chart-5: oklch(0.45 0.07 240); /* Deep blue */
+  --chart-1: oklch(0.52 0.19 255); /* Vivid blue */
+  --chart-2: oklch(0.62 0.2 245); /* Neon blue */
+  --chart-3: oklch(0.55 0.06 235); /* Grey-blue */
+  --chart-4: oklch(0.42 0.16 260); /* Deep electric blue */
+  --chart-5: oklch(0.58 0.12 240); /* Muted blue */
 
   /* Sidebar */
-  --sidebar: oklch(0.995 0.002 220);
-  --sidebar-foreground: oklch(0.15 0.028 260);
-  --sidebar-primary: oklch(0.18 0.038 255);
+  --sidebar: oklch(0.985 0.005 240);
+  --sidebar-foreground: oklch(0.13 0.04 260);
+  --sidebar-primary: oklch(0.52 0.19 255);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.5 0.062 220);
+  --sidebar-accent: oklch(0.55 0.06 235);
   --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.84 0.01 220);
-  --sidebar-ring: oklch(0.5 0.062 220);
+  --sidebar-border: oklch(0.87 0.012 240);
+  --sidebar-ring: oklch(0.52 0.19 255);
 }
 
-/* ── Dark Theme ── */
+/* ── Dark Theme: Electric Neon Blue + Grey-Blue Surfaces ── */
 .dark {
-  --primary: oklch(0.24 0.04 255); /* Lighter vibrant slate */
-  --primary-foreground: oklch(0.95 0 0);
-  --accent: oklch(0.54 0.065 220); /* Lighter vibrant teal */
-  --accent-foreground: oklch(0.1 0 0);
-  --gold: oklch(0.6 0.14 250); /* Lighter vibrant blue */
-  --gold-foreground: oklch(0.1 0 0);
-  --ring: oklch(0.54 0.065 220);
+  --primary: oklch(0.62 0.22 255); /* Electric neon blue */
+  --primary-foreground: oklch(0.13 0.04 260);
+  --accent: oklch(0.6 0.08 235); /* Cool blue-grey */
+  --accent-foreground: oklch(0.13 0.04 260);
+  --gold: oklch(0.7 0.2 245); /* Bright neon blue */
+  --gold-foreground: oklch(0.13 0.04 260);
+  --ring: oklch(0.62 0.22 255);
 
-  --background: oklch(0.1 0.01 260); /* Dark rich slate */
-  --foreground: oklch(0.93 0.005 220); /* Light cool text */
-  --card: oklch(0.14 0.01 260);
-  --card-foreground: oklch(0.93 0.005 220);
-  --popover: oklch(0.14 0.01 260);
-  --popover-foreground: oklch(0.93 0.005 220);
-  --secondary: oklch(0.2 0.015 260);
-  --secondary-foreground: oklch(0.86 0.005 220);
-  --muted: oklch(0.17 0.01 260);
-  --muted-foreground: oklch(0.62 0.04 230);
+  --background: oklch(0.12 0.02 260); /* Deep navy */
+  --foreground: oklch(0.95 0.008 240); /* Light blue-white */
+  --card: oklch(0.16 0.015 260); /* Dark blue-grey */
+  --card-foreground: oklch(0.95 0.008 240);
+  --popover: oklch(0.16 0.015 260);
+  --popover-foreground: oklch(0.95 0.008 240);
+  --secondary: oklch(0.22 0.02 255); /* Medium dark blue-grey */
+  --secondary-foreground: oklch(0.88 0.01 240);
+  --muted: oklch(0.18 0.015 255); /* Dark grey-blue */
+  --muted-foreground: oklch(0.58 0.05 240); /* Blue-grey muted text */
   --destructive: oklch(0.65 0.18 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.24 0.015 260);
-  --input: oklch(0.24 0.015 260);
+  --border: oklch(0.28 0.02 255); /* Visible dark blue-grey */
+  --input: oklch(0.28 0.02 255);
 
-  --chart-1: oklch(0.6 0.14 250);
-  --chart-2: oklch(0.24 0.04 255);
-  --chart-3: oklch(0.54 0.065 220);
-  --chart-4: oklch(0.66 0.1 235);
-  --chart-5: oklch(0.5 0.08 245);
+  --chart-1: oklch(0.62 0.22 255); /* Electric neon blue */
+  --chart-2: oklch(0.7 0.2 245); /* Bright neon blue */
+  --chart-3: oklch(0.6 0.08 235); /* Cool grey-blue */
+  --chart-4: oklch(0.5 0.18 260); /* Deep vivid blue */
+  --chart-5: oklch(0.56 0.12 240); /* Muted blue */
 
-  --sidebar: oklch(0.14 0.01 260);
-  --sidebar-foreground: oklch(0.93 0.005 220);
-  --sidebar-primary: oklch(0.24 0.04 255);
-  --sidebar-primary-foreground: oklch(0.95 0 0);
-  --sidebar-accent: oklch(0.54 0.065 220);
-  --sidebar-accent-foreground: oklch(0.1 0 0);
-  --sidebar-border: oklch(0.24 0.015 260);
-  --sidebar-ring: oklch(0.54 0.065 220);
+  --sidebar: oklch(0.16 0.015 260);
+  --sidebar-foreground: oklch(0.95 0.008 240);
+  --sidebar-primary: oklch(0.62 0.22 255);
+  --sidebar-primary-foreground: oklch(0.13 0.04 260);
+  --sidebar-accent: oklch(0.6 0.08 235);
+  --sidebar-accent-foreground: oklch(0.13 0.04 260);
+  --sidebar-border: oklch(0.28 0.02 255);
+  --sidebar-ring: oklch(0.62 0.22 255);
 }
 /* ── Animations ── */
 @keyframes fade-in {
@@ -288,13 +288,13 @@
     background-image:
       radial-gradient(
         circle at top left,
-        color-mix(in oklab, oklch(0.55 0.12 250) 12%, transparent),
-        transparent 30%
+        color-mix(in oklab, oklch(0.52 0.19 255) 10%, transparent),
+        transparent 35%
       ),
       radial-gradient(
         circle at bottom right,
-        color-mix(in oklab, oklch(0.405 0.035 238) 10%, transparent),
-        transparent 28%
+        color-mix(in oklab, oklch(0.55 0.06 235) 8%, transparent),
+        transparent 30%
       );
     background-attachment: fixed;
   }
@@ -303,34 +303,34 @@
     background-image:
       radial-gradient(
         circle at 15% 25%,
-        color-mix(in oklab, oklch(0.6 0.14 250) 8%, transparent),
+        color-mix(in oklab, oklch(0.62 0.22 255) 8%, transparent),
         transparent 35%
       ),
       radial-gradient(
         circle at 85% 15%,
-        color-mix(in oklab, oklch(0.54 0.065 220) 6%, transparent),
+        color-mix(in oklab, oklch(0.6 0.08 235) 5%, transparent),
         transparent 30%
       ),
       radial-gradient(
         circle at 50% 80%,
-        color-mix(in oklab, oklch(0.165 0.025 260) 14%, transparent),
+        color-mix(in oklab, oklch(0.15 0.025 260) 14%, transparent),
         transparent 28%
       );
   }
 
   .dark .btn-primary-neon {
     box-shadow: 0 0 24px -6px
-      color-mix(in oklab, oklch(0.54 0.065 220) 30%, transparent);
+      color-mix(in oklab, oklch(0.62 0.22 255) 35%, transparent);
   }
   .dark .btn-primary-neon:hover {
     box-shadow: 0 0 32px -4px
-      color-mix(in oklab, oklch(0.54 0.065 220) 45%, transparent);
+      color-mix(in oklab, oklch(0.62 0.22 255) 50%, transparent);
   }
   .dark .input-neon:focus {
     box-shadow:
-      0 0 0 2px color-mix(in oklab, oklch(0.54 0.065 220) 20%, transparent),
-      0 0 20px -4px color-mix(in oklab, oklch(0.54 0.065 220) 15%, transparent);
-    border-color: oklch(0.54 0.065 220);
+      0 0 0 2px color-mix(in oklab, oklch(0.62 0.22 255) 25%, transparent),
+      0 0 20px -4px color-mix(in oklab, oklch(0.62 0.22 255) 20%, transparent);
+    border-color: oklch(0.62 0.22 255);
   }
 
   button:not(:disabled),

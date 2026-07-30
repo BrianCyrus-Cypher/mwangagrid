@@ -305,7 +305,7 @@ export default function ProductModal({
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${i < Math.floor(parseFloat(avgRating)) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"}`}
+                    className={`w-4 h-4 ${i < Math.floor(parseFloat(avgRating)) ? "fill-blue-400 text-blue-400" : "text-muted-foreground/30"}`}
                   />
                 ))}
               </div>
@@ -408,7 +408,7 @@ export default function ProductModal({
               Customer Reviews
             </h3>
             <Badge variant="secondary" className="text-xs gap-1">
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+              <Star className="w-3 h-3 fill-blue-400 text-blue-400" />
               {avgRating}
             </Badge>
           </div>
@@ -431,7 +431,7 @@ export default function ProductModal({
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-3 h-3 ${i < review.rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/20"}`}
+                        className={`w-3 h-3 ${i < review.rating ? "fill-blue-400 text-blue-400" : "text-muted-foreground/20"}`}
                       />
                     ))}
                   </div>

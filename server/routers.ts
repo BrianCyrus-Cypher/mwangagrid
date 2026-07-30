@@ -966,7 +966,34 @@ export const appRouter = router({
       const result = [];
       for (const svc of servicesList) {
         const pkgs = await getServicePackagesByServiceId(svc.id);
+        if (pkgs.length === 0) {
+          const fb = FALLBACK_SERVICES.find(
+            (f: any) =>
+              f.name === svc.name ||
+              (f.category || "").toLowerCase() === (svc.serviceType || "").toLowerCase()
+          );
+          if (fb?.packages) {
+            result.push({ ...svc, packages: fb.packages.map((p: any, i: number) => ({ id: -(i + 1), serviceId: svc.id, ...p })) });
+            continue;
+          }
+        }
         result.push({ ...svc, packages: pkgs });
+      }
+      if (result.length === 0) {
+        for (const fb of FALLBACK_SERVICES) {
+          result.push({
+            id: fb.id,
+            name: fb.name,
+            description: fb.description,
+            serviceType: fb.category,
+            startingPrice: fb.startingPrice,
+            isActive: fb.isActive,
+            featured: false,
+            packages: fb.packages || [],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          });
+        }
       }
       return result;
     }),
@@ -1386,6 +1413,8 @@ export const appRouter = router({
         newContacts: 0,
         recentOrders,
         recentContacts: [],
+        totalServices: 0,
+        totalPackages: 0,
       };
     }),
     sessions: router({
@@ -1686,7 +1715,8 @@ export const appRouter = router({
         .mutation(async ({ ctx, input }) => {
           if (ctx.user?.role !== "admin")
             throw new TRPCError({ code: "FORBIDDEN" });
-          return await adminCreateProduct(input);
+          const result = await adminCreateProduct(input);
+          return result;
         }),
       update: protectedProcedure
         .input(
@@ -1709,7 +1739,8 @@ export const appRouter = router({
           if (ctx.user?.role !== "admin")
             throw new TRPCError({ code: "FORBIDDEN" });
           const { id, ...data } = input;
-          return await adminUpdateProduct(id, data);
+          const result = await adminUpdateProduct(id, data);
+          return result;
         }),
       delete: protectedProcedure
         .input(z.object({ id: z.number() }))
@@ -1776,7 +1807,8 @@ export const appRouter = router({
         .mutation(async ({ ctx, input }) => {
           if (ctx.user?.role !== "admin")
             throw new TRPCError({ code: "FORBIDDEN" });
-          return await adminCreateService(input);
+          const result = await adminCreateService(input);
+          return result;
         }),
       update: protectedProcedure
         .input(
@@ -1793,7 +1825,8 @@ export const appRouter = router({
           if (ctx.user?.role !== "admin")
             throw new TRPCError({ code: "FORBIDDEN" });
           const { id, ...data } = input;
-          return await adminUpdateService(id, data);
+          const result = await adminUpdateService(id, data);
+          return result;
         }),
       delete: protectedProcedure
         .input(z.object({ id: z.number() }))
@@ -1831,7 +1864,8 @@ export const appRouter = router({
           .mutation(async ({ ctx, input }) => {
             if (ctx.user?.role !== "admin")
               throw new TRPCError({ code: "FORBIDDEN" });
-            return await adminCreateServicePackage(input);
+            const result = await adminCreateServicePackage(input);
+            return result;
           }),
         update: protectedProcedure
           .input(
@@ -1847,7 +1881,8 @@ export const appRouter = router({
             if (ctx.user?.role !== "admin")
               throw new TRPCError({ code: "FORBIDDEN" });
             const { id, ...data } = input;
-            return await adminUpdateServicePackage(id, data);
+            const result = await adminUpdateServicePackage(id, data);
+            return result;
           }),
         delete: protectedProcedure
           .input(z.object({ id: z.number() }))

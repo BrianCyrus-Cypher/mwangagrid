@@ -63,12 +63,12 @@ type Tab =
 type Period = "daily" | "weekly" | "monthly" | "yearly";
 
 const COLORS = [
-  "#E07856",
-  "#1a365d",
-  "#84cc16",
-  "#FDB913",
-  "#6b7280",
-  "#8b5cf6",
+  "#3B82F6",
+  "#1E40AF",
+  "#60A5FA",
+  "#93C5FD",
+  "#64748B",
+  "#818CF8",
 ];
 
 const statusColor = (s: string) => {
@@ -77,15 +77,14 @@ const statusColor = (s: string) => {
       "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300",
     confirmed:
       "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-    "en-route":
-      "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
+    "en-route": "bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-300",
     shipped:
-      "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+      "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300",
     delivered:
       "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
     cancelled: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
     new: "bg-blue-100 text-blue-800",
-    read: "bg-gray-100 text-gray-800",
+    read: "bg-slate-100 text-slate-800",
     replied: "bg-green-100 text-green-800",
     closed: "bg-gray-100 text-gray-500",
     in_progress: "bg-purple-100 text-purple-800",
@@ -366,10 +365,22 @@ export default function AdminDashboard() {
         color: "text-purple-500",
       },
       {
+        label: "Services",
+        value: d.totalServices ?? 0,
+        icon: Wrench,
+        color: "text-blue-500",
+      },
+      {
+        label: "Packages",
+        value: d.totalPackages ?? 0,
+        icon: Layers,
+        color: "text-purple-500",
+      },
+      {
         label: "Messages",
         value: d.newContacts ?? 0,
         icon: MessageSquare,
-        color: "text-amber-500",
+        color: "text-blue-500",
       },
     ];
   }, [dashQuery.data]);
@@ -401,7 +412,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Verification banner */}
       {user && !(user as any).emailVerified && (
-        <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2 flex items-center justify-center gap-3 text-sm text-amber-700 dark:text-amber-300">
+        <div className="bg-blue-500/10 border-b border-blue-500/20 px-4 py-2 flex items-center justify-center gap-3 text-sm text-blue-700 dark:text-blue-300">
           <span>
             Please verify your email address. Check your inbox for a
             verification link.
@@ -409,7 +420,7 @@ export default function AdminDashboard() {
           <Button
             size="sm"
             variant="outline"
-            className="h-7 text-xs gap-1 border-amber-500/30 text-amber-700 dark:text-amber-300 hover:bg-amber-500/20"
+            className="h-7 text-xs gap-1 border-blue-500/30 text-blue-700 dark:text-blue-300 hover:bg-blue-500/20"
             disabled={resendVerificationMut.isPending}
             onClick={async () => {
               try {
@@ -440,17 +451,19 @@ export default function AdminDashboard() {
                 Manage your store, orders, and analytics
               </p>
             </div>
-            <button
-              onClick={() => setTab("notifications")}
-              className="relative p-2.5 rounded-xl bg-muted/30 hover:bg-muted/60 transition-all"
-            >
-              <Bell className="w-5 h-5 text-foreground/60" />
-              {(newOrdersCountQuery.data ?? 0) > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center bg-accent text-white text-[10px] font-bold rounded-full ring-2 ring-background animate-pulse">
-                  {newOrdersCountQuery.data}
-                </span>
-              )}
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setTab("notifications")}
+                className="relative p-2.5 rounded-xl bg-muted/30 hover:bg-muted/60 transition-all"
+              >
+                <Bell className="w-5 h-5 text-foreground/60" />
+                {(newOrdersCountQuery.data ?? 0) > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center bg-accent text-white text-[10px] font-bold rounded-full ring-2 ring-background animate-pulse">
+                    {newOrdersCountQuery.data}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -509,7 +522,7 @@ export default function AdminDashboard() {
         {tab === "overview" && (
           <div className="space-y-6 animate-fade-in">
             {/* Premium stat cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
               {stats.map((s, i) => (
                 <Card
                   key={s.label}
@@ -567,12 +580,12 @@ export default function AdminDashboard() {
                       >
                         <stop
                           offset="5%"
-                          stopColor="#E07856"
+                          stopColor="#3B82F6"
                           stopOpacity={0.3}
                         />
                         <stop
                           offset="95%"
-                          stopColor="#E07856"
+                          stopColor="#3B82F6"
                           stopOpacity={0}
                         />
                       </linearGradient>
@@ -603,7 +616,7 @@ export default function AdminDashboard() {
                     <Area
                       type="monotone"
                       dataKey="revenue"
-                      stroke="#E07856"
+                      stroke="#3B82F6"
                       fill="url(#revenueGrad)"
                       strokeWidth={2.5}
                     />
@@ -619,8 +632,8 @@ export default function AdminDashboard() {
                   {
                     label: "Pending Orders",
                     value: dashQuery.data.pendingOrders,
-                    color: "text-amber-500",
-                    bg: "bg-amber-500/5",
+                    color: "text-blue-500",
+                    bg: "bg-blue-500/5",
                   },
                   {
                     label: "Delivered",
@@ -981,7 +994,7 @@ export default function AdminDashboard() {
                     <Legend />
                     <Bar
                       dataKey="revenue"
-                      fill="#E07856"
+                      fill="#3B82F6"
                       name="Revenue"
                       radius={[6, 6, 0, 0]}
                       maxBarSize={40}
@@ -1206,7 +1219,7 @@ export default function AdminDashboard() {
                           ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20"
                           : o.paymentStatus === "failed"
                             ? "text-red-600 bg-red-50 dark:bg-red-900/20"
-                            : "text-amber-600 bg-amber-50 dark:bg-amber-900/20"
+                            : "text-blue-600 bg-blue-50 dark:bg-blue-900/20"
                       }`}
                     >
                       {o.paymentStatus}
@@ -1361,7 +1374,7 @@ export default function AdminDashboard() {
                               ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20"
                               : o.paymentStatus === "failed"
                                 ? "text-red-600 bg-red-50 dark:bg-red-900/20"
-                                : "text-amber-600 bg-amber-50 dark:bg-amber-900/20"
+                                : "text-blue-600 bg-blue-50 dark:bg-blue-900/20"
                           }`}
                         >
                           {o.paymentStatus}
@@ -2242,7 +2255,7 @@ export default function AdminDashboard() {
                             ? "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20"
                             : o.paymentStatus === "failed"
                               ? "text-red-600 bg-red-50 dark:bg-red-900/20"
-                              : "text-amber-600 bg-amber-50 dark:bg-amber-900/20"
+                              : "text-blue-600 bg-blue-50 dark:bg-blue-900/20"
                         }`}
                       >
                         {o.paymentStatus}
@@ -2805,7 +2818,7 @@ function ProductsTab({
                               toast.error(e?.message || "Failed");
                             }
                           }}
-                          className={`p-1.5 rounded-lg transition-colors ${p.featured ? "text-amber-400 hover:text-amber-500" : "text-foreground/20 hover:text-foreground/40"}`}
+                          className={`p-1.5 rounded-lg transition-colors ${p.featured ? "text-blue-400 hover:text-blue-500" : "text-foreground/20 hover:text-foreground/40"}`}
                         >
                           <Star
                             className="w-4 h-4"
@@ -2947,7 +2960,7 @@ function ProductsTab({
                               toast.error(e?.message || "Failed");
                             }
                           }}
-                          className={`p-1.5 rounded-lg transition-colors ${p.featured ? "text-amber-400 hover:text-amber-500" : "text-foreground/20 hover:text-foreground/40"}`}
+                          className={`p-1.5 rounded-lg transition-colors ${p.featured ? "text-blue-400 hover:text-blue-500" : "text-foreground/20 hover:text-foreground/40"}`}
                         >
                           <Star
                             className="w-3.5 h-3.5"
@@ -3315,7 +3328,7 @@ function ServicesTab({
                         toast.error(e?.message || "Failed");
                       }
                     }}
-                    className={`p-1.5 rounded-lg transition-colors ${s.featured ? "text-amber-400 hover:text-amber-500" : "text-foreground/20 hover:text-foreground/40"}`}
+                    className={`p-1.5 rounded-lg transition-colors ${s.featured ? "text-blue-400 hover:text-blue-500" : "text-foreground/20 hover:text-foreground/40"}`}
                   >
                     <Star
                       className="w-4 h-4"
@@ -3521,7 +3534,7 @@ function ServicesTab({
                               toast.error(e?.message || "Failed");
                             }
                           }}
-                          className={`p-1.5 rounded-lg transition-colors ${s.featured ? "text-amber-400 hover:text-amber-500" : "text-foreground/20 hover:text-foreground/40"}`}
+                          className={`p-1.5 rounded-lg transition-colors ${s.featured ? "text-blue-400 hover:text-blue-500" : "text-foreground/20 hover:text-foreground/40"}`}
                         >
                           <Star
                             className="w-3.5 h-3.5"

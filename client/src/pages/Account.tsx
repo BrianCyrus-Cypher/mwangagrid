@@ -226,7 +226,7 @@ export default function Account() {
                       </>
                     ) : (
                       <>
-                        <MailWarning className="w-4 h-4 text-amber-500" /> No
+                        <MailWarning className="w-4 h-4 text-blue-500" /> No
                       </>
                     )}
                   </p>
@@ -328,7 +328,7 @@ export default function Account() {
                             : o.status === "cancelled"
                               ? "bg-red-100 text-red-700 dark:bg-red-900/30"
                               : o.status === "en-route"
-                                ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30"
+                                ? "bg-sky-100 text-sky-700 dark:bg-sky-900/30"
                                 : o.status === "shipped"
                                   ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30"
                                   : "bg-blue-100 text-blue-700 dark:bg-blue-900/30"
@@ -409,7 +409,7 @@ export default function Account() {
                               : order.status === "pending"
                                 ? "bg-yellow-100 text-yellow-700"
                                 : order.status === "en-route"
-                                  ? "bg-orange-100 text-orange-700"
+                                  ? "bg-sky-100 text-sky-700"
                                   : "bg-blue-100 text-blue-700"
                           }`}
                         >

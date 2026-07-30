@@ -56,9 +56,9 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(224,120,86,0.08)_0%,transparent_60%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(56,189,248,0.05)_0%,transparent_50%)]" />
+    <div className="min-h-screen bg-gradient-to-br from-[#060D1A] via-[#0B1426] via-50% to-[#1F3A5E] flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.1)_0%,transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(96,165,250,0.06)_0%,transparent_50%)]" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-accent/3 blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-blue-500/3 blur-3xl" />
 
@@ -70,12 +70,12 @@ export default function AdminLogin() {
           <h1 className="text-3xl font-bold text-white font-heading tracking-tight">
             Admin Panel
           </h1>
-          <p className="text-slate-400 text-sm mt-2">
+          <p className="text-blue-300/70 text-sm mt-2">
             Secure administrator access only
           </p>
         </div>
 
-        <Card className="border border-slate-800 bg-slate-900/80 backdrop-blur-xl shadow-2xl p-8">
+        <Card className="border border-blue-900/50 bg-[#111D35]/80 backdrop-blur-xl shadow-2xl p-8">
           <form onSubmit={handleLogin} className="space-y-5">
             {error && (
               <div
@@ -90,19 +90,19 @@ export default function AdminLogin() {
             <div className="space-y-1.5">
               <label
                 htmlFor="admin-email"
-                className="text-xs font-medium text-slate-400 uppercase tracking-wider"
+                className="text-xs font-medium text-blue-300/70 uppercase tracking-wider"
               >
                 Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400/50" />
                 <Input
                   id="admin-email"
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   placeholder="admin@mwangagrid.co.ke"
-                  className="h-11 pl-10 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-accent/50 focus:ring-accent/20 rounded-xl"
+                  className="h-11 pl-10 bg-[#182D4A]/50 border-blue-900/50 text-white placeholder:text-blue-300/30 focus:border-blue-400/50 focus:ring-blue-400/20 rounded-xl"
                   autoComplete="email"
                   required
                 />
@@ -112,26 +112,26 @@ export default function AdminLogin() {
             <div className="space-y-1.5">
               <label
                 htmlFor="admin-password"
-                className="text-xs font-medium text-slate-400 uppercase tracking-wider"
+                className="text-xs font-medium text-blue-300/70 uppercase tracking-wider"
               >
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400/50" />
                 <Input
                   id="admin-password"
                   type={showPw ? "text" : "password"}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="h-11 pl-10 pr-10 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-600 focus:border-accent/50 focus:ring-accent/20 rounded-xl"
+                  className="h-11 pl-10 pr-10 bg-[#182D4A]/50 border-blue-900/50 text-white placeholder:text-blue-300/30 focus:border-blue-400/50 focus:ring-blue-400/20 rounded-xl"
                   autoComplete="current-password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400/50 hover:text-blue-300 transition"
                 >
                   {showPw ? (
                     <EyeOff className="w-4 h-4" />
@@ -156,7 +156,7 @@ export default function AdminLogin() {
             </Button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-800">
+          <div className="mt-6 pt-4 border-t border-blue-900/50">
             <button
               type="button"
               onClick={() => {
@@ -166,14 +166,14 @@ export default function AdminLogin() {
                     duration: 3000,
                   });
               }}
-              className="mx-auto block text-[10px] text-slate-600 hover:text-slate-500 transition select-none"
+              className="mx-auto block text-[10px] text-blue-400/30 hover:text-blue-300/50 transition select-none"
             >
               Secure Area
             </button>
           </div>
         </Card>
 
-        <p className="text-center text-[10px] text-slate-700 mt-6">
+        <p className="text-center text-[10px] text-blue-400/20 mt-6">
           Authorized personnel only. All access is logged and monitored.
         </p>
       </div>

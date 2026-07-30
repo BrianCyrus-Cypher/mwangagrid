@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 const SUN_EMBLEM = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-  <circle cx="24" cy="24" r="22" fill="#1E2B38" stroke="#D4943A" stroke-width="2"/>
-  <circle cx="24" cy="24" r="8" fill="#F5A623"/>
-  <g stroke="#F5A623" stroke-width="2" stroke-linecap="round">
+  <circle cx="24" cy="24" r="22" fill="#0F172A" stroke="#3B82F6" stroke-width="2"/>
+  <circle cx="24" cy="24" r="8" fill="#60A5FA"/>
+  <g stroke="#60A5FA" stroke-width="2" stroke-linecap="round">
     <line x1="24" y1="4" x2="24" y2="12"/>
     <line x1="24" y1="36" x2="24" y2="44"/>
     <line x1="4" y1="24" x2="12" y2="24"/>
@@ -13,9 +13,9 @@ const SUN_EMBLEM = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" 
     <line x1="9.86" y1="38.14" x2="15.52" y2="32.48"/>
     <line x1="32.48" y1="15.52" x2="38.14" y2="9.86"/>
   </g>
-  <path d="M14 29 Q18 35 24 35 Q30 35 34 29" stroke="#D4943A" stroke-width="1.5" fill="none"/>
-  <circle cx="18" cy="19" r="2" fill="#D4943A"/>
-  <circle cx="30" cy="19" r="2" fill="#D4943A"/>
+  <path d="M14 29 Q18 35 24 35 Q30 35 34 29" stroke="#3B82F6" stroke-width="1.5" fill="none"/>
+  <circle cx="18" cy="19" r="2" fill="#3B82F6"/>
+  <circle cx="30" cy="19" r="2" fill="#3B82F6"/>
 </svg>`;
 
 export function AnimatedLogoLoader({ text = "Loading..." }: { text?: string }) {
@@ -35,7 +35,7 @@ export function AnimatedLogoLoader({ text = "Loading..." }: { text?: string }) {
         />
         <div
           className="relative w-16 h-16 animate-[spin_3s_linear_infinite]"
-          style={{ filter: "drop-shadow(0 0 20px oklch(0.74 0.11 70 / 0.3))" }}
+          style={{ filter: "drop-shadow(0 0 20px oklch(0.62 0.22 255 / 0.3))" }}
           dangerouslySetInnerHTML={{ __html: SUN_EMBLEM }}
         />
         <div

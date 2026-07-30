@@ -16,6 +16,7 @@ import { getLoginUrl } from "@/const";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useCart } from "@/contexts/CartContext";
 import { Spinner } from "@/components/ui/spinner";
+import { MwangaLogo } from "@/components/MwangaLogo";
 
 interface SiteLayoutProps {
   children: React.ReactNode;
@@ -32,146 +33,14 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 border-b border-white/15 bg-white/10 dark:bg-white/5 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.06)]">
-        <div className="absolute inset-0 bg-gradient-to-r from-accent/[0.03] via-transparent to-primary/[0.03] pointer-events-none" />
+      <nav className="sticky top-0 z-50 border-b border-white/10 bg-background/70 dark:bg-[#0B1426]/60 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.08)] supports-[backdrop-filter]:bg-background/50 dark:supports-[backdrop-filter]:bg-[#0B1426]/45">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.04] via-transparent to-accent/[0.03] pointer-events-none" />
         <div className="container relative py-3 sm:py-4 flex items-center justify-between">
           <div
-            className="flex items-center gap-2 cursor-pointer shrink-0"
+            className="flex items-center cursor-pointer shrink-0"
             onClick={() => navigate("/")}
           >
-            <div className="relative w-11 h-11 sm:w-12 sm:h-12 flex-shrink-0">
-              <div className="absolute inset-0 rounded-full bg-primary/30 blur-xl translate-y-0.5" />
-              <svg
-                viewBox="0 0 48 48"
-                className="w-11 h-11 sm:w-12 sm:h-12 drop-shadow-lg"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <filter id="nHd">
-                    <feGaussianBlur stdDeviation="1.2" result="b" />
-                    <feMerge>
-                      <feMergeNode in="b" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                  <filter id="nHdS">
-                    <feGaussianBlur stdDeviation="2" result="b" />
-                    <feMerge>
-                      <feMergeNode in="b" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="23"
-                  style={{ fill: "var(--primary)" }}
-                />
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="22"
-                  style={{ stroke: "var(--accent)" }}
-                  strokeWidth="0.5"
-                  opacity="0.12"
-                  fill="none"
-                />
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="21.5"
-                  stroke="white"
-                  strokeWidth="0.3"
-                  opacity="0.05"
-                  fill="none"
-                  strokeDasharray="1.5 2.5"
-                />
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="20.5"
-                  stroke="white"
-                  strokeWidth="0.4"
-                  opacity="0.06"
-                  fill="none"
-                />
-                <line
-                  x1="24"
-                  y1="3"
-                  x2="24"
-                  y2="45"
-                  stroke="white"
-                  strokeWidth="0.3"
-                  opacity="0.035"
-                />
-                <line
-                  x1="3"
-                  y1="24"
-                  x2="45"
-                  y2="24"
-                  stroke="white"
-                  strokeWidth="0.3"
-                  opacity="0.035"
-                />
-                <path
-                  d="M30 30a5 5 0 0 1 8 0"
-                  style={{ stroke: "var(--accent)" }}
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  fill="none"
-                  opacity="0.8"
-                  filter="url(#nHd)"
-                />
-                <path
-                  d="M27 34a8 8 0 0 1 14 0"
-                  style={{ stroke: "var(--accent)" }}
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  fill="none"
-                  opacity="0.5"
-                  filter="url(#nHd)"
-                />
-                <circle
-                  cx="16"
-                  cy="30"
-                  r="4.5"
-                  style={{ stroke: "var(--accent)" }}
-                  strokeWidth="1"
-                  fill="none"
-                  opacity="0.55"
-                />
-                <circle
-                  cx="16"
-                  cy="30"
-                  r="2.5"
-                  style={{ fill: "var(--accent)" }}
-                  opacity="0.45"
-                  filter="url(#nHd)"
-                />
-                <circle cx="16" cy="30" r="1" fill="white" opacity="0.25" />
-                <circle cx="38" cy="16" r="0.8" fill="white" opacity="0.12" />
-                <circle cx="40" cy="20" r="0.5" fill="white" opacity="0.08" />
-                <circle cx="8" cy="16" r="0.6" fill="white" opacity="0.1" />
-                <text
-                  x="24"
-                  y="25.5"
-                  textAnchor="middle"
-                  fontFamily="'Sora','Inter',sans-serif"
-                  fontWeight="700"
-                  fontSize="8"
-                  letterSpacing="0.5"
-                  style={{ fill: "var(--accent)" }}
-                  filter="url(#nHdS)"
-                  opacity="0.95"
-                >
-                  M.G
-                </text>
-              </svg>
-            </div>
-            <span className="font-bold text-lg text-foreground hidden sm:inline">
-              Mwanga Grid
-            </span>
+            <MwangaLogo size="sm" showWordmark={true} />
           </div>
 
           {/* Desktop Menu */}
@@ -389,134 +258,12 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
       <main className="flex-1 min-h-[100dvh]">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-border/70 bg-slate-950 text-slate-100">
+      <footer className="border-t border-border/70 bg-[#060D1A] text-blue-50">
         <div className="container py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shadow-sm">
-                  <svg
-                    viewBox="0 0 48 48"
-                    className="w-7 h-7"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <defs>
-                      <filter id="nHdF">
-                        <feGaussianBlur stdDeviation="1.2" result="b" />
-                        <feMerge>
-                          <feMergeNode in="b" />
-                          <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                      </filter>
-                      <filter id="nHdSF">
-                        <feGaussianBlur stdDeviation="2" result="b" />
-                        <feMerge>
-                          <feMergeNode in="b" />
-                          <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                      </filter>
-                    </defs>
-                    <circle
-                      cx="24"
-                      cy="24"
-                      r="23"
-                      style={{ fill: "var(--primary)" }}
-                    />
-                    <circle
-                      cx="24"
-                      cy="24"
-                      r="22"
-                      style={{ stroke: "var(--accent)" }}
-                      strokeWidth="0.5"
-                      opacity="0.12"
-                      fill="none"
-                    />
-                    <circle
-                      cx="24"
-                      cy="24"
-                      r="21.5"
-                      stroke="white"
-                      strokeWidth="0.3"
-                      opacity="0.05"
-                      fill="none"
-                      strokeDasharray="1.5 2.5"
-                    />
-                    <circle
-                      cx="24"
-                      cy="24"
-                      r="20.5"
-                      stroke="white"
-                      strokeWidth="0.4"
-                      opacity="0.06"
-                      fill="none"
-                    />
-                    <path
-                      d="M30 30a5 5 0 0 1 8 0"
-                      style={{ stroke: "var(--accent)" }}
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      fill="none"
-                      opacity="0.7"
-                      filter="url(#nHdF)"
-                    />
-                    <path
-                      d="M27 34a8 8 0 0 1 14 0"
-                      style={{ stroke: "var(--accent)" }}
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      fill="none"
-                      opacity="0.4"
-                      filter="url(#nHdF)"
-                    />
-                    <circle
-                      cx="16"
-                      cy="30"
-                      r="4.5"
-                      style={{ stroke: "var(--accent)" }}
-                      strokeWidth="1"
-                      fill="none"
-                      opacity="0.5"
-                    />
-                    <circle
-                      cx="16"
-                      cy="30"
-                      r="2.5"
-                      style={{ fill: "var(--accent)" }}
-                      opacity="0.4"
-                      filter="url(#nHdF)"
-                    />
-                    <circle cx="16" cy="30" r="1" fill="white" opacity="0.25" />
-                    <text
-                      x="24"
-                      y="25.5"
-                      textAnchor="middle"
-                      fontFamily="'Sora','Inter',sans-serif"
-                      fontWeight="700"
-                      fontSize="8"
-                      letterSpacing="0.5"
-                      style={{ fill: "var(--accent)" }}
-                      filter="url(#nHdSF)"
-                      opacity="0.9"
-                    >
-                      M.G
-                    </text>
-                    <circle
-                      cx="38"
-                      cy="16"
-                      r="0.8"
-                      fill="white"
-                      opacity="0.1"
-                    />
-                    <circle
-                      cx="8"
-                      cy="16"
-                      r="0.6"
-                      fill="white"
-                      opacity="0.08"
-                    />
-                  </svg>
-                </div>
-                <span className="font-bold">Mwanga Grid</span>
+                <MwangaLogo size="sm" showWordmark={true} light />
               </div>
               <p className="text-slate-300 text-sm">
                 Premium solar equipment, CCTV systems, and high-speed internet

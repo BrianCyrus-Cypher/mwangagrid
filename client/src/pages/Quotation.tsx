@@ -193,7 +193,7 @@ export default function Quotation() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="border-b border-border bg-white dark:bg-slate-950">
+      <div className="border-b border-border bg-white dark:bg-[#111D35]">
         <div className="container py-12">
           <h1 className="mb-2 text-4xl font-heading font-bold text-foreground">
             Request a Quote
@@ -433,7 +433,7 @@ export default function Quotation() {
 
             {selectedPackage.serviceId === "internet" ? (
               <p
-                className={`mb-5 rounded-lg p-3 text-sm ${isInternetCoverageTown(formData.town) ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}
+                className={`mb-5 rounded-lg p-3 text-sm ${isInternetCoverageTown(formData.town) ? "bg-emerald-50 text-emerald-700" : "bg-blue-50 text-blue-700"}`}
               >
                 {isInternetCoverageTown(formData.town)
                   ? "Internet survey is inside the Nairobi-Roysambu-Githurai demo corridor."

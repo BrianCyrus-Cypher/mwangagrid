@@ -231,7 +231,7 @@ export default function Home() {
                   className="overflow-hidden cursor-pointer group flex flex-col border-border/70 shadow-md bg-card/95 card-hover"
                   onClick={() => navigate("/products")}
                 >
-                  <div className="relative h-36 sm:h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 overflow-hidden flex items-center justify-center">
+                  <div className="relative h-36 sm:h-48 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-[#111D35] dark:to-[#182D4A] overflow-hidden flex items-center justify-center">
                     {product.imageUrl ? (
                       <img
                         src={product.imageUrl}
@@ -303,7 +303,7 @@ export default function Home() {
       </section>
 
       {/* ── Services ── */}
-      <section className="py-10 md:py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+      <section className="py-10 md:py-24 bg-gradient-to-br from-[#060D1A] via-[#0B1426] via-40% to-[#111D35] text-white">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">

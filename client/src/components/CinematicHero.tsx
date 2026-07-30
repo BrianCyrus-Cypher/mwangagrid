@@ -64,7 +64,7 @@ export default function CinematicHero() {
         style={{ scale, opacity, y }}
         className="absolute inset-0 z-0 flex items-center justify-center"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#060D1A] via-[#0B1426] via-40% to-[#182D4A]" />
         <img
           src="/logo.svg"
           alt=""
