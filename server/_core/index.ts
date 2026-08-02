@@ -260,8 +260,9 @@ async function startServer() {
     }
   });
 
-  // SEO routes
+  // SEO routes (cached to reduce crawler load & latency)
   app.get("/robots.txt", (_req, res) => {
+    res.setHeader("Cache-Control", "public, max-age=3600");
     res.type("text/plain").send(`User-agent: *
 Allow: /
 Sitemap: https://www.mwangagrid.co.ke/sitemap.xml
@@ -269,6 +270,7 @@ Sitemap: https://www.mwangagrid.co.ke/sitemap.xml
   });
 
   app.get("/sitemap.xml", async (_req, res) => {
+    res.setHeader("Cache-Control", "public, max-age=3600");
     const baseUrl = "https://www.mwangagrid.co.ke";
     const now = new Date().toISOString().split("T")[0];
     const urls = [
@@ -277,8 +279,12 @@ Sitemap: https://www.mwangagrid.co.ke/sitemap.xml
       { loc: "/services", priority: "0.8", changefreq: "weekly" },
       { loc: "/quotation", priority: "0.7", changefreq: "monthly" },
       { loc: "/contact", priority: "0.7", changefreq: "monthly" },
-      { loc: "/cart", priority: "0.5", changefreq: "monthly" },
+      { loc: "/faq", priority: "0.6", changefreq: "monthly" },
+      { loc: "/terms", priority: "0.4", changefreq: "yearly" },
+      { loc: "/privacy", priority: "0.4", changefreq: "yearly" },
+      { loc: "/cart", priority: "0.4", changefreq: "monthly" },
       { loc: "/auth", priority: "0.3", changefreq: "monthly" },
+      { loc: "/account", priority: "0.3", changefreq: "monthly" },
     ];
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemap.org/schemas/sitemap/0.9">
@@ -295,7 +301,6 @@ ${urls
 </urlset>`;
     res.type("application/xml").send(xml);
   });
-
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
