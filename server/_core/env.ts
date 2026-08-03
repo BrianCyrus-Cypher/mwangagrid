@@ -26,6 +26,11 @@ const envSchema = z.object({
   MPESA_SHORTCODE: z.string().default("174379"),
   MPESA_ENV: z.enum(["sandbox", "production"]).default("production"),
   MPESA_CALLBACK_URL: z.string().optional(),
+  AWS_REGION: z.string().optional(),
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  S3_BUCKET: z.string().optional(),
+  S3_PUBLIC_BASE_URL: z.string().optional(),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -67,5 +72,12 @@ export const ENV = {
     callbackUrl:
       envVars.MPESA_CALLBACK_URL ??
       "https://www.mwangagrid.co.ke/api/mpesa/callback",
+  },
+  s3: {
+    region: envVars.AWS_REGION ?? "",
+    accessKeyId: envVars.AWS_ACCESS_KEY_ID ?? "",
+    secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY ?? "",
+    bucket: envVars.S3_BUCKET ?? "",
+    publicBaseUrl: envVars.S3_PUBLIC_BASE_URL ?? "",
   },
 };
