@@ -116,7 +116,7 @@ pnpm start
 
 Runs:
 
-- `node dist/index.js`
+- `node dist/index.mjs`
 
 ---
 
@@ -270,7 +270,7 @@ Before you cut a release:
 
 - `pnpm dev` — watch `server/_core/index.ts`
 - `pnpm build` — `vite build` + bundle server into `dist/`
-- `pnpm start` — `node dist/index.js`
+- `pnpm start` — `node dist/index.mjs`
 - `pnpm check` — `tsc --noEmit`
 - `pnpm test` — `vitest run`
 - `pnpm db:push` — Drizzle generate + migrate

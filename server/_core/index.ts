@@ -397,7 +397,7 @@ async function startServer() {
 // Export the Express app as the default export so Vercel bundles it
 // into a single serverless function. `serveStatic` is registered so the
 // function serves both the API and the built SPA from dist/public.
-if (process.env.VERCEL) {
+function vercelHandler() {
   const app = express();
   if (!ENV_IS_VALID) {
     app.use((_req, res) => {
@@ -407,12 +407,15 @@ if (process.env.VERCEL) {
         hint: "Add these to the Vercel project (Settings → Environment Variables) and redeploy.",
       });
     });
-    module.exports = app;
-  } else {
-    const fullApp = createApp();
-    serveStatic(fullApp);
-    module.exports = fullApp;
+    return app;
   }
-} else {
+  const fullApp = createApp();
+  serveStatic(fullApp);
+  return fullApp;
+}
+
+export default process.env.VERCEL ? vercelHandler() : undefined;
+
+if (!process.env.VERCEL) {
   startServer().catch(console.error);
 }

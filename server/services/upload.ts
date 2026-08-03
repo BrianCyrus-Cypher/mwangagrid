@@ -1,5 +1,6 @@
 import path from "path";
 import crypto from "node:crypto";
+import fs from "fs";
 import multer from "multer";
 import express from "express";
 import { requireExpressAuth } from "../_core/context";
@@ -76,7 +77,6 @@ async function uploadToS3(
 async function uploadToDisk(
   file: Express.Multer.File
 ): Promise<{ url: string; key: string }> {
-  const fs = await import("fs");
   const ext = path.extname(file.originalname).toLowerCase();
   const key = objectKey(ext);
   fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -92,7 +92,6 @@ async function storeFile(file: Express.Multer.File) {
 }
 
 export function registerUploadRoutes(app: express.Express) {
-  const fs = require("fs");
   if (!fs.existsSync(UPLOAD_DIR)) {
     fs.mkdirSync(UPLOAD_DIR, { recursive: true });
   }
