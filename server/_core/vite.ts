@@ -57,10 +57,17 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath =
+  // Vercel bundles the function with dist/public included via includeFiles.
+  // __dirname differs between local (dist/) and the Vercel function root,
+  // so probe the candidate locations.
+  const candidates =
     process.env.NODE_ENV === "development"
-      ? path.resolve(__dirname, "../..", "dist", "public")
-      : path.resolve(__dirname, "public");
+      ? [path.resolve(__dirname, "../..", "dist", "public")]
+      : [
+          path.resolve(__dirname, "public"),
+          path.resolve(__dirname, "dist", "public"),
+        ];
+  const distPath = candidates.find(p => fs.existsSync(p)) ?? candidates[0];
   if (!fs.existsSync(distPath)) {
     console.error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`

@@ -49,10 +49,9 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
   throw new Error(`No available port found starting from ${startPort}`);
 }
 
-async function startServer() {
+function createApp() {
   const app = express();
   app.set("trust proxy", 1);
-  const server = createServer(app);
 
   // Request timeout — prevent hanging connections
   app.use((_req, _res, next) => {
@@ -342,6 +341,13 @@ ${urls
     );
   }
 
+  return app;
+}
+
+async function startServer() {
+  const app = createApp();
+  const server = createServer(app);
+
   // Seed fallback data on startup
   try {
     const { seedProductsIfEmpty, seedServicesIfEmpty, ensureServicePackages } = await import("../db");
@@ -387,4 +393,14 @@ ${urls
   process.on("SIGINT", () => shutdown("SIGINT"));
 }
 
-startServer().catch(console.error);
+// ── Vercel Serverless ──
+// Export the Express app as the default export so Vercel bundles it
+// into a single serverless function. `serveStatic` is registered so the
+// function serves both the API and the built SPA from dist/public.
+if (process.env.VERCEL) {
+  const app = createApp();
+  serveStatic(app);
+  module.exports = app;
+} else {
+  startServer().catch(console.error);
+}
