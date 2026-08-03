@@ -20,7 +20,7 @@ import {
   validateMpesaCallback,
   hasHtml,
 } from "./security";
-import { ENV } from "./env";
+import { ENV, ENV_IS_VALID, missingEnvVars } from "./env";
 
 // ── Crash Recovery ──
 process.on("uncaughtException", err => {
@@ -398,9 +398,21 @@ async function startServer() {
 // into a single serverless function. `serveStatic` is registered so the
 // function serves both the API and the built SPA from dist/public.
 if (process.env.VERCEL) {
-  const app = createApp();
-  serveStatic(app);
-  module.exports = app;
+  const app = express();
+  if (!ENV_IS_VALID) {
+    app.use((_req, res) => {
+      res.status(500).json({
+        error: "Missing required environment variables",
+        missing: missingEnvVars(),
+        hint: "Add these to the Vercel project (Settings → Environment Variables) and redeploy.",
+      });
+    });
+    module.exports = app;
+  } else {
+    const fullApp = createApp();
+    serveStatic(fullApp);
+    module.exports = fullApp;
+  }
 } else {
   startServer().catch(console.error);
 }

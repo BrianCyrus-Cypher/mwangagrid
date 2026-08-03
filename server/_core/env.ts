@@ -35,13 +35,24 @@ const envSchema = z.object({
 
 const parsedEnv = envSchema.safeParse(process.env);
 
-if (!parsedEnv.success) {
+const envError = parsedEnv.success ? null : parsedEnv.error;
+
+if (!parsedEnv.success && !process.env.VERCEL) {
   console.error("Invalid environment variables:");
   console.error(JSON.stringify(parsedEnv.error.format(), null, 2));
   process.exit(1);
 }
 
-const envVars = parsedEnv.data;
+const envVars = parsedEnv.data ?? {} as any;
+
+export const ENV_IS_VALID = parsedEnv.success;
+
+export function missingEnvVars(): string[] {
+  if (!envError) return [];
+  return Object.entries(envError.flatten().fieldErrors)
+    .filter(([, msgs]) => msgs?.length)
+    .map(([key]) => key);
+}
 
 const smtpPort = envVars.SMTP_PORT ? parseInt(envVars.SMTP_PORT, 10) : 587;
 
