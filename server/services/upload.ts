@@ -1,12 +1,16 @@
 import path from "path";
 import crypto from "node:crypto";
 import fs from "fs";
+import os from "os";
 import multer from "multer";
 import express from "express";
 import { requireExpressAuth } from "../_core/context";
 import { ENV } from "../_core/env";
 
-const UPLOAD_DIR = path.join(process.cwd(), "uploads");
+const UPLOAD_DIR = path.join(
+  process.env.VERCEL ? os.tmpdir() : process.cwd(),
+  "uploads"
+);
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_SIZE = 10 * 1024 * 1024;
@@ -92,8 +96,12 @@ async function storeFile(file: Express.Multer.File) {
 }
 
 export function registerUploadRoutes(app: express.Express) {
-  if (!fs.existsSync(UPLOAD_DIR)) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  try {
+    if (!fs.existsSync(UPLOAD_DIR)) {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+    }
+  } catch (err: any) {
+    console.warn("[Upload] Could not create upload dir:", err?.message || err);
   }
 
   app.use("/uploads", express.static(UPLOAD_DIR));
