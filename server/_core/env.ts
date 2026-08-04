@@ -82,7 +82,7 @@ export const ENV = {
     environment: envVars.MPESA_ENV,
     callbackUrl:
       envVars.MPESA_CALLBACK_URL ??
-      "https://www.mwangagrid.co.ke/api/mpesa/callback",
+      "https://mwangagrid.vercel.app/api/mpesa/callback",
   },
   s3: {
     region: envVars.AWS_REGION ?? "",

@@ -14,5 +14,5 @@ export const COMPANY = {
   address: "Roasters next to Naivasha Mountain Mall",
   city: "Nairobi",
   postalCode: "P.O Box 8117 00100 NRB",
-  domain: "www.mwangagrid.co.ke",
+  domain: "mwangagrid.vercel.app",
 } as const;

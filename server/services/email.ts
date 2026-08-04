@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { ENV } from "../_core/env";
+import { COMPANY } from "../../shared/const";
 
 const transporter = nodemailer.createTransport({
   host: ENV.smtp.host,
@@ -37,7 +38,7 @@ export async function sendVerificationEmail(
   name: string,
   token: string
 ) {
-  const verifyUrl = `https://www.mwangagrid.co.ke/verify-email?token=${token}`;
+  const verifyUrl = `https://${COMPANY.domain}/verify-email?token=${token}`;
   const html = `
     <div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;">
       <div style="background:#E07856;padding:20px;text-align:center;">
@@ -59,7 +60,7 @@ export async function sendVerificationEmail(
 }
 
 export async function sendPasswordResetEmail(email: string, token: string) {
-  const resetUrl = `https://www.mwangagrid.co.ke/reset-password?token=${token}`;
+  const resetUrl = `https://${COMPANY.domain}/reset-password?token=${token}`;
   const html = `
     <div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;">
       <div style="background:#E07856;padding:20px;text-align:center;">

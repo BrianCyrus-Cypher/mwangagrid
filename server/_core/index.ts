@@ -21,6 +21,7 @@ import {
   hasHtml,
 } from "./security";
 import { ENV, ENV_IS_VALID, missingEnvVars } from "./env";
+import { COMPANY } from "../../shared/const";
 
 // ── Crash Recovery ──
 process.on("uncaughtException", err => {
@@ -264,13 +265,13 @@ function createApp() {
     res.setHeader("Cache-Control", "public, max-age=3600");
     res.type("text/plain").send(`User-agent: *
 Allow: /
-Sitemap: https://www.mwangagrid.co.ke/sitemap.xml
+Sitemap: https://${COMPANY.domain}/sitemap.xml
 `);
   });
 
   app.get("/sitemap.xml", async (_req, res) => {
     res.setHeader("Cache-Control", "public, max-age=3600");
-    const baseUrl = "https://www.mwangagrid.co.ke";
+    const baseUrl = `https://${COMPANY.domain}`;
     const now = new Date().toISOString().split("T")[0];
     const urls = [
       { loc: "/", priority: "1.0", changefreq: "weekly" },
