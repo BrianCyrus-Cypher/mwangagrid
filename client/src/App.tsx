@@ -11,6 +11,7 @@ import { PageLoader } from "./components/ui/page-loader";
 import { getLoginUrl } from "./const";
 import { PageTransition } from "./components/PageTransition";
 import { MwangaLogo } from "./components/MwangaLogo";
+import { trackPageView } from "./lib/analytics";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Products = React.lazy(() => import("./pages/Products"));
@@ -217,6 +218,7 @@ function ScrollToTop() {
   const [location] = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
+    trackPageView(location);
   }, [location]);
   return null;
 }

@@ -227,7 +227,7 @@ docker build -t tunnelnet-ecommerce .
 To run the container locally for testing production behavior:
 
 ```bash
-docker run -p 3000:3000 --env-file .env.example tunnelnet-ecommerce
+docker run -p 3000:3000 --env-file .env tunnelnet-ecommerce
 ```
 
 ### CI/CD Pipeline

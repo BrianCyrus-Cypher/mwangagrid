@@ -92,21 +92,30 @@ Files in `client/public` are available at the root of your site—reference them
 
 ## Environment Variables
 
-Available pre-defined system envs:
+Configuration comes from environment variables. Create a local `.env` file
+(copy the values from your platform / deployment env — never commit secrets).
+On Vercel, set them under Project → Settings → Environment Variables.
 
-- `DATABASE_URL`: MySQL/TiDB connection string
-- `JWT_SECRET`: Session cookie signing secret
-- `VITE_APP_ID`: Manus OAuth application ID
-- `OAUTH_SERVER_URL`: Manus OAuth backend base URL
-- `VITE_OAUTH_PORTAL_URL`: Manus login portal URL (frontend)
-- `OWNER_OPEN_ID`, `OWNER_NAME`: Owner's info
-- `BUILT_IN_FORGE_API_URL`: Manus built-in apis (includes llm, storage, data_api, notification, etc...)
-- `BUILT_IN_FORGE_API_KEY`: Bearer token used by Manus built-in apis (server-side)
-- `VITE_FRONTEND_FORGE_API_KEY`: Bearer token for frontend access to Manus built-in apis
-- `VITE_FRONTEND_FORGE_API_URL`: Manus built-in apis URL for frontend
+Required:
 
-Do not edit these directly in code or commit `.env` files.
-The envs above are system envs, when use env in website code, refer `server/_core/env.ts` for available list.
+- `DATABASE_URL` — PostgreSQL connection string (e.g. Neon)
+- `JWT_SECRET` — session/cookie signing secret
+
+Optional but commonly used:
+
+- `SESSION_SECRET` — falls back to `JWT_SECRET` when unset
+- `PORT` — defaults to `3000`
+- `NODE_ENV` — `development` | `production` | `test`
+- M-Pesa (Daraja): `MPESA_CONSUMER_KEY`, `MPESA_CONSUMER_SECRET`,
+  `MPESA_PASSKEY`, `MPESA_SHORTCODE`, `MPESA_ENV`, `MPESA_CALLBACK_URL`
+- SMTP: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `FROM_EMAIL`
+- S3 uploads: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,
+  `S3_BUCKET`, `S3_PUBLIC_BASE_URL`
+- Analytics: `VITE_GA_MEASUREMENT_ID` (GA4, e.g. `G-XXXXXXX`) — must be set
+  in the build environment (Vercel env vars) so Vite injects it into the client
+
+The authoritative list of server env vars is `server/_core/env.ts`. Never commit
+`.env` files — `.env*` is gitignored.
 
 ---
 
