@@ -29,60 +29,54 @@ export function MwangaLogo({
         width={s.icon}
         height={s.icon}
         xmlns="http://www.w3.org/2000/svg"
-        className="drop-shadow-md flex-shrink-0"
+        className="drop-shadow-sm flex-shrink-0"
       >
         <defs>
           <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--primary)" />
             <stop offset="100%" stopColor="var(--accent)" />
           </linearGradient>
-          <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="var(--gold)" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
-          </radialGradient>
         </defs>
 
-        {/* Hexagonal Shield — Security */}
+        {/* 1. Security: The Hexagonal Shield */}
         <path 
           d="M100 20 L170 60 L170 140 L100 180 L30 140 L30 60 Z" 
           fill="url(#shieldGrad)" 
-          stroke="var(--gold)" 
-          strokeWidth="4" 
-          opacity="0.9"
         />
         
-        {/* Glow Effect — Solar Energy */}
-        <circle cx="100" cy="100" r="50" fill="url(#glowGrad)" />
-
-        {/* Network Grid — Connectivity */}
-        <g stroke="white" strokeWidth="1.5" opacity="0.3">
-          <circle cx="100" cy="100" r="40" fill="none" />
-          <circle cx="100" cy="100" r="25" fill="none" />
-          <line x1="100" y1="60" x2="100" y2="140" />
-          <line x1="60" y1="100" x2="140" y2="100" />
-          <line x1="71.7" y1="71.7" x2="128.3" y2="128.3" />
-          <line x1="71.7" y1="128.3" x2="128.3" y2="71.7" />
+        {/* 2. Solar: Solar Panel Grid Overlay */}
+        <g stroke="white" strokeWidth="2" opacity="0.2">
+          <line x1="30" y1="80" x2="170" y2="80" />
+          <line x1="30" y1="100" x2="170" y2="100" />
+          <line x1="30" y1="120" x2="170" y2="120" />
+          <line x1="70" y1="43" x2="70" y2="163" />
+          <line x1="100" y1="20" x2="100" y2="180" />
+          <line x1="130" y1="43" x2="130" y2="163" />
         </g>
 
-        {/* Connection Nodes */}
-        <g fill="var(--gold)">
-          <circle cx="100" cy="100" r="6" />
-          <circle cx="100" cy="60" r="3" />
-          <circle cx="100" cy="140" r="3" />
-          <circle cx="60" cy="100" r="3" />
-          <circle cx="140" cy="100" r="3" />
-          <circle cx="71.7" cy="71.7" r="3" />
-          <circle cx="128.3" cy="128.3" r="3" />
-          <circle cx="71.7" cy="128.3" r="3" />
-          <circle cx="128.3" cy="71.7" r="3" />
+        {/* 3. Network & Solar: The Central Core */}
+        <circle cx="100" cy="100" r="35" fill="none" stroke="var(--gold)" strokeWidth="8" />
+        <circle cx="100" cy="100" r="15" fill="white" />
+        
+        {/* Connections / Sun Rays */}
+        <g stroke="white" strokeWidth="5" strokeLinecap="round">
+          <line x1="100" y1="65" x2="100" y2="40" />
+          <line x1="100" y1="135" x2="100" y2="160" />
+          <line x1="65" y1="100" x2="40" y2="100" />
+          <line x1="135" y1="100" x2="160" y2="100" />
+          
+          {/* Diagonal Nodes */}
+          <circle cx="55" cy="55" r="5" fill="white" />
+          <circle cx="145" cy="55" r="5" fill="white" />
+          <circle cx="55" cy="145" r="5" fill="white" />
+          <circle cx="145" cy="145" r="5" fill="white" />
         </g>
 
-        {/* Solar Rays — Top Accents */}
-        <g stroke="var(--gold)" strokeWidth="3" strokeLinecap="round">
-          <line x1="100" y1="35" x2="100" y2="25" />
-          <line x1="85" y1="38" x2="80" y2="30" />
-          <line x1="115" y1="38" x2="120" y2="30" />
-        </g>
+        {/* Premium Border Overlay */}
+        <path 
+          d="M100 20 L170 60 L170 140 L100 180 L30 140 L30 60 Z" 
+          stroke="white" strokeWidth="4" strokeOpacity="0.2" fill="none" 
+        />
       </svg>
 
       {showWordmark && (

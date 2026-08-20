@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 
 const SUN_EMBLEM = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
-  <path d="M100 20 L170 60 L170 140 L100 180 L30 140 L30 60 Z" fill="#3B82F6" stroke="#60A5FA" stroke-width="8"/>
-  <circle cx="100" cy="100" r="40" stroke="white" stroke-width="4" opacity="0.4"/>
-  <circle cx="100" cy="100" r="10" fill="white" />
-  <g stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.6">
-    <line x1="100" y1="60" x2="100" y2="140" />
-    <line x1="60" y1="100" x2="140" y2="100" />
+  <path d="M100 20 L170 60 L170 140 L100 180 L30 140 L30 60 Z" fill="#1E3A8A" stroke="#60A5FA" stroke-width="8"/>
+  <circle cx="100" cy="100" r="35" fill="none" stroke="white" stroke-width="6" opacity="0.3"/>
+  <circle cx="100" cy="100" r="15" fill="white" />
+  <g stroke="white" stroke-width="5" stroke-linecap="round">
+    <line x1="100" y1="65" x2="100" y2="40" />
+    <line x1="100" y1="135" x2="100" y2="160" />
+    <line x1="65" y1="100" x2="40" y2="100" />
+    <line x1="135" y1="100" x2="160" y2="100" />
   </g>
 </svg>`;
 

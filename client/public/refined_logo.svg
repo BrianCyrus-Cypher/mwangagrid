@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Professional Blue Gradient -->
+  <defs>
+    <linearGradient id="mainBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E40AF" /> <!-- Deep Blue -->
+      <stop offset="100%" stop-color="#3B82F6" /> <!-- Electric Blue -->
+    </linearGradient>
+    <linearGradient id="accentCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60A5FA" />
+      <stop offset="100%" stop-color="#93C5FD" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Security: Hexagonal Shield Outline -->
+  <path d="M100 15 L175 55 L175 145 L100 185 L25 145 L25 55 Z" 
+        stroke="url(#mainBlue)" stroke-width="12" stroke-linejoin="round" fill="none" />
+
+  <!-- 2. Solar: Grid Pattern (Top Half) -->
+  <g stroke="url(#mainBlue)" stroke-width="6" stroke-linecap="round">
+    <path d="M50 70 L150 70" />
+    <path d="M40 95 L160 95" />
+    <!-- Vertical Slats -->
+    <line x1="80" y1="55" x2="80" y2="110" />
+    <line x1="100" y1="50" x2="100" y2="115" />
+    <line x1="120" y1="55" x2="120" y2="110" />
+  </g>
+
+  <!-- 3. Network: Nodes and Connections (Bottom Half) -->
+  <g stroke="url(#accentCyan)" stroke-width="4">
+    <!-- Central Node -->
+    <circle cx="100" cy="135" r="8" fill="url(#accentCyan)" />
+    <!-- Connection Lines -->
+    <line x1="100" y1="135" x2="65" y2="155" stroke-linecap="round" />
+    <line x1="100" y1="135" x2="135" y2="155" stroke-linecap="round" />
+    <line x1="100" y1="135" x2="100" y2="110" stroke-dasharray="2,4" />
+    
+    <!-- Outer Nodes -->
+    <circle cx="65" cy="155" r="5" fill="white" stroke="url(#accentCyan)" stroke-width="2" />
+    <circle cx="135" cy="155" r="5" fill="white" stroke="url(#accentCyan)" stroke-width="2" />
+  </g>
+
+  <!-- Solar Accent: Stylized Sun Ray at Top -->
+  <circle cx="100" cy="45" r="10" fill="url(#accentCyan)" opacity="0.8" />
+</svg>
