@@ -26,6 +26,7 @@ import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from "./DashboardLayoutSkeleton";
 import { Button } from "./ui/button";
+import { MwangaLogo } from "./MwangaLogo";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Page 1", path: "/" },
@@ -173,11 +174,11 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-semibold tracking-tight truncate">
-                    Navigation
-                  </span>
+                  <MwangaLogo size="sm" showWordmark={true} />
                 </div>
-              ) : null}
+              ) : (
+                <MwangaLogo size="sm" showWordmark={false} />
+              )}
             </div>
           </SidebarHeader>
 

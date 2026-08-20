@@ -1,21 +1,13 @@
 import { useEffect, useState } from "react";
 
-const SUN_EMBLEM = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-  <circle cx="24" cy="24" r="22" fill="#0F172A" stroke="#3B82F6" stroke-width="2"/>
-  <circle cx="24" cy="24" r="8" fill="#60A5FA"/>
-  <g stroke="#60A5FA" stroke-width="2" stroke-linecap="round">
-    <line x1="24" y1="4" x2="24" y2="12"/>
-    <line x1="24" y1="36" x2="24" y2="44"/>
-    <line x1="4" y1="24" x2="12" y2="24"/>
-    <line x1="36" y1="24" x2="44" y2="24"/>
-    <line x1="9.86" y1="9.86" x2="15.52" y2="15.52"/>
-    <line x1="32.48" y1="32.48" x2="38.14" y2="38.14"/>
-    <line x1="9.86" y1="38.14" x2="15.52" y2="32.48"/>
-    <line x1="32.48" y1="15.52" x2="38.14" y2="9.86"/>
+const SUN_EMBLEM = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <path d="M100 20 L170 60 L170 140 L100 180 L30 140 L30 60 Z" fill="#3B82F6" stroke="#60A5FA" stroke-width="8"/>
+  <circle cx="100" cy="100" r="40" stroke="white" stroke-width="4" opacity="0.4"/>
+  <circle cx="100" cy="100" r="10" fill="white" />
+  <g stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.6">
+    <line x1="100" y1="60" x2="100" y2="140" />
+    <line x1="60" y1="100" x2="140" y2="100" />
   </g>
-  <path d="M14 29 Q18 35 24 35 Q30 35 34 29" stroke="#3B82F6" stroke-width="1.5" fill="none"/>
-  <circle cx="18" cy="19" r="2" fill="#3B82F6"/>
-  <circle cx="30" cy="19" r="2" fill="#3B82F6"/>
 </svg>`;
 
 export function AnimatedLogoLoader({ text = "Loading..." }: { text?: string }) {

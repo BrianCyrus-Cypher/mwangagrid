@@ -25,154 +25,64 @@ export function MwangaLogo({
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       <svg
-        viewBox="0 0 48 52"
+        viewBox="0 0 200 200"
         width={s.icon}
         height={s.icon}
         xmlns="http://www.w3.org/2000/svg"
-        className="drop-shadow-sm flex-shrink-0"
+        className="drop-shadow-md flex-shrink-0"
       >
         <defs>
-          <clipPath id="shieldClip">
-            <path d="M24 8 L42 17 L40 37 C38 44 24 48 24 48 C24 48 10 44 8 37 L6 17 Z" />
-          </clipPath>
+          <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="var(--primary)" />
+            <stop offset="100%" stopColor="var(--accent)" />
+          </linearGradient>
+          <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="var(--gold)" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
+          </radialGradient>
         </defs>
 
-        {/* Solar rays — light/energy */}
-        <line
-          x1="24"
-          y1="0"
-          x2="24"
-          y2="6"
-          stroke="var(--primary)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          opacity="0.8"
+        {/* Hexagonal Shield — Security */}
+        <path 
+          d="M100 20 L170 60 L170 140 L100 180 L30 140 L30 60 Z" 
+          fill="url(#shieldGrad)" 
+          stroke="var(--gold)" 
+          strokeWidth="4" 
+          opacity="0.9"
         />
-        <line
-          x1="15"
-          y1="1.5"
-          x2="17.5"
-          y2="6"
-          stroke="var(--primary)"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          opacity="0.55"
-        />
-        <line
-          x1="33"
-          y1="1.5"
-          x2="30.5"
-          y2="6"
-          stroke="var(--primary)"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          opacity="0.55"
-        />
-        <line
-          x1="9"
-          y1="5"
-          x2="11.5"
-          y2="8.5"
-          stroke="var(--primary)"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          opacity="0.35"
-        />
-        <line
-          x1="39"
-          y1="5"
-          x2="36.5"
-          y2="8.5"
-          stroke="var(--primary)"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          opacity="0.35"
-        />
+        
+        {/* Glow Effect — Solar Energy */}
+        <circle cx="100" cy="100" r="50" fill="url(#glowGrad)" />
 
-        {/* Shield body — security */}
-        <path
-          d="M24 8 L42 17 L40 37 C38 44 24 48 24 48 C24 48 10 44 8 37 L6 17 Z"
-          fill="var(--primary)"
-        />
-
-        {/* Grid lines — network/connectivity */}
-        <g clipPath="url(#shieldClip)">
-          <line
-            x1="6"
-            y1="22"
-            x2="42"
-            y2="22"
-            stroke="white"
-            strokeWidth="0.7"
-            opacity="0.15"
-          />
-          <line
-            x1="6"
-            y1="30"
-            x2="42"
-            y2="30"
-            stroke="white"
-            strokeWidth="0.7"
-            opacity="0.12"
-          />
-          <line
-            x1="6"
-            y1="38"
-            x2="42"
-            y2="38"
-            stroke="white"
-            strokeWidth="0.7"
-            opacity="0.08"
-          />
-          <line
-            x1="16"
-            y1="17"
-            x2="16"
-            y2="46"
-            stroke="white"
-            strokeWidth="0.7"
-            opacity="0.15"
-          />
-          <line
-            x1="24"
-            y1="17"
-            x2="24"
-            y2="46"
-            stroke="white"
-            strokeWidth="0.7"
-            opacity="0.12"
-          />
-          <line
-            x1="32"
-            y1="17"
-            x2="32"
-            y2="46"
-            stroke="white"
-            strokeWidth="0.7"
-            opacity="0.15"
-          />
+        {/* Network Grid — Connectivity */}
+        <g stroke="white" strokeWidth="1.5" opacity="0.3">
+          <circle cx="100" cy="100" r="40" fill="none" />
+          <circle cx="100" cy="100" r="25" fill="none" />
+          <line x1="100" y1="60" x2="100" y2="140" />
+          <line x1="60" y1="100" x2="140" y2="100" />
+          <line x1="71.7" y1="71.7" x2="128.3" y2="128.3" />
+          <line x1="71.7" y1="128.3" x2="128.3" y2="71.7" />
         </g>
 
-        {/* Connection node — central hub */}
-        <circle cx="24" cy="30" r="2.5" fill="var(--accent)" opacity="0.7" />
-        <circle
-          cx="24"
-          cy="30"
-          r="4"
-          stroke="var(--accent)"
-          strokeWidth="0.6"
-          fill="none"
-          opacity="0.35"
-        />
+        {/* Connection Nodes */}
+        <g fill="var(--gold)">
+          <circle cx="100" cy="100" r="6" />
+          <circle cx="100" cy="60" r="3" />
+          <circle cx="100" cy="140" r="3" />
+          <circle cx="60" cy="100" r="3" />
+          <circle cx="140" cy="100" r="3" />
+          <circle cx="71.7" cy="71.7" r="3" />
+          <circle cx="128.3" cy="128.3" r="3" />
+          <circle cx="71.7" cy="128.3" r="3" />
+          <circle cx="128.3" cy="71.7" r="3" />
+        </g>
 
-        {/* Shield outline */}
-        <path
-          d="M24 8 L42 17 L40 37 C38 44 24 48 24 48 C24 48 10 44 8 37 L6 17 Z"
-          fill="none"
-          stroke="var(--accent)"
-          strokeWidth="0.8"
-          opacity="0.3"
-        />
+        {/* Solar Rays — Top Accents */}
+        <g stroke="var(--gold)" strokeWidth="3" strokeLinecap="round">
+          <line x1="100" y1="35" x2="100" y2="25" />
+          <line x1="85" y1="38" x2="80" y2="30" />
+          <line x1="115" y1="38" x2="120" y2="30" />
+        </g>
       </svg>
 
       {showWordmark && (
